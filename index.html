@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظام إدارة المخزون</title>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;background:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px) 0 0/34px 34px,linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px) 0 0/34px 34px,#0e1319;color:#e9eef4;font-size:15px;min-height:100vh}
+h1,h2,h3,.n,.btn,.qy,.av,.logo b{font-family:'Changa','IBM Plex Sans Arabic',sans-serif}
+button{touch-action:manipulation}
+.hid{display:none!important}
+.mut{color:#8fa0b0}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}}
+@keyframes br{from{transform:scaleY(.5)}}
+@keyframes sh{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}}
+/* الدخول */
+#loginView{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr}
+.lb{padding:44px 40px;border-inline-end:1px solid #26313e;display:flex;flex-direction:column;gap:18px}
+.c2{display:inline-flex;align-items:center;gap:8px;border:1px solid #33424f;border-radius:99px;padding:5px 13px;font-size:12px;color:#8fa0b0;width:max-content}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ddc97;animation:pu 2s infinite}
+@keyframes pu{70%{box-shadow:0 0 0 8px rgba(61,220,151,0)}}
+.lt{font-size:clamp(34px,5vw,54px);font-weight:800;line-height:1.3}
+.lt b{color:#ffb224}
+.lsub{color:#8fa0b0;line-height:1.9;max-width:420px}
+.rk{display:flex;align-items:flex-end;gap:12px;height:150px;border-bottom:3px solid #33424f;padding:0 4px}
+.rk i{flex:1;height:var(--h);background:var(--c);border-radius:5px 5px 0 0;opacity:.8;transform-origin:bottom;animation:br 2.8s ease-in-out infinite alternate}
+.lf{display:flex;align-items:center;justify-content:center;padding:30px 20px}
+.lcard{width:min(420px,100%);background:#161e28;border:1px solid #26313e;border-radius:14px;overflow:hidden}
+.lcard.shk{animation:sh .4s}
+.hz{height:7px;background:repeating-linear-gradient(-45deg,#ffb224 0 14px,#131a22 14px 28px)}
+.lp{padding:26px}
+.lp h2{font-size:25px}
+/* حقول وأزرار */
+label{display:block;font-size:13px;color:#8fa0b0;margin:13px 0 6px}
+.inp{width:100%;background:#0f151c;border:1px solid #33424f;border-radius:10px;padding:11px 13px;color:#e9eef4;font-size:16px;font-family:inherit}
+.inp:focus{outline:none;border-color:#ffb224;box-shadow:0 0 0 3px rgba(255,178,36,.13)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:11px 22px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
+.btn:active{transform:scale(.97)}
+.ba{background:#ffb224;color:#221604}.ba:hover{background:#ffc14d}
+.bg{background:#3ddc97;color:#06281a}.bg:hover{background:#5ceaa9}
+.br2{background:#ff6b5e;color:#2e0b06}.br2:hover{background:#ff8577}
+.gh{background:none;border:1px solid #33424f;color:#8fa0b0}
+.w100{width:100%;margin-top:20px}
+.ib{width:32px;height:32px;border-radius:8px;border:1px solid #33424f;background:none;color:#8fa0b0;display:inline-grid;place-items:center;cursor:pointer}
+.ib svg{width:16px;height:16px}
+.ib:hover{color:#ffb224;border-color:#ffb224}
+.ib.d:hover{color:#ff6b5e;border-color:#ff6b5e}
+.ib.g:hover{color:#3ddc97;border-color:#3ddc97}
+/* التطبيق */
+#appView{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+aside{background:#12181f;border-inline-end:1px solid #26313e;padding:16px 14px;display:flex;flex-direction:column;gap:5px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;padding:2px 6px 14px;margin-bottom:10px;border-bottom:1px dashed #33424f}
+.logo{width:40px;height:40px;border-radius:11px;background:#ffb224;color:#221604;display:grid;place-items:center;flex:none}
+.logo svg{width:22px;height:22px}
+.brand b{font-size:17px;display:block;line-height:1.2}
+.brand span{font-size:10.5px;color:#8fa0b0}
+.nb{display:flex;align-items:center;gap:10px;padding:10px 12px;border:0;border-radius:9px;background:none;color:#8fa0b0;font-size:14px;font-family:inherit;cursor:pointer;text-align:start}
+.nb svg{width:19px;height:19px;flex:none}
+.nb:hover{color:#e9eef4;background:rgba(255,255,255,.04)}
+.nb.on{background:rgba(255,178,36,.1);color:#e9eef4}
+.nc{margin-inline-start:auto;font-size:11px;border:1px solid #26313e;border-radius:99px;padding:1px 8px;color:#8fa0b0}
+main{padding:20px 24px 60px;min-width:0;max-width:100%}
+.tb{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.tb h1{font-size:24px}
+#todayTxt{direction:ltr;unicode-bidi:isolate;display:inline-block;font-size:12px}
+.chip{display:flex;align-items:center;gap:9px;background:#161e28;border:1px solid #26313e;border-radius:99px;padding:5px 7px 5px 13px}
+.av{width:31px;height:31px;border-radius:50%;background:#22303d;color:#ffd06b;display:grid;place-items:center;font-weight:700}
+.rt{font-size:10px;padding:2px 8px;border-radius:99px}
+.rt.a{background:rgba(255,178,36,.15);color:#ffb224}
+.rt.u{background:rgba(84,200,232,.12);color:#54c8e8}
+/* صفحات وبطاقات */
+.pg{display:none;min-width:0}
+.pg.on{display:block;animation:fu .3s}
+.cd{background:#161e28;border:1px solid #26313e;border-radius:13px;min-width:0;max-width:100%;overflow:hidden}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid #26313e;flex-wrap:wrap}
+.ch h3{font-size:16px}
+.cb{padding:16px}
+.ag{border-top:3px solid #3ddc97}.ar{border-top:3px solid #ff6b5e}.ac{border-top:3px solid #54c8e8}.aa{border-top:3px solid #ffb224}
+.sp{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.sp>*{min-width:0}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.fg>*{min-width:0}
+.ff{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.st{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:16px}
+.st>div{padding:14px 18px;border-inline-start:1px solid #26313e;min-width:0}
+.st>div:first-child{border-inline-start:0}
+.n{font-size:29px;font-weight:700;line-height:1.2}
+.l{color:#8fa0b0;font-size:12px}
+.ca{color:#ffb224}.cc{color:#54c8e8}.cr{color:#ff6b5e}
+.tw{overflow:auto;-webkit-overflow-scrolling:touch;min-width:0}
+table{width:100%;border-collapse:collapse;min-width:540px}
+th{font-size:11px;color:#8fa0b0;text-align:right;padding:10px 12px;border-bottom:1px solid #33424f;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid #26313e;font-size:14px}
+tbody tr:last-child td{border-bottom:0}
+.qy{font-weight:700;font-size:16px}
+.qi{width:100px;padding:7px!important;text-align:center}
+.bd{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.bd::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.ok{background:rgba(61,220,151,.1);color:#3ddc97}
+.lw{background:rgba(255,178,36,.12);color:#ffb224}
+.ot{background:rgba(255,107,94,.12);color:#ff6b5e}
+.ed{background:rgba(84,200,232,.12);color:#54c8e8}
+.mv{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed #26313e}
+.mv:last-child{border:0}
+.mq{font-family:'Changa';font-weight:700;min-width:48px;text-align:center}
+.mi{color:#3ddc97}.mo{color:#ff6b5e}.me{color:#54c8e8}
+.mn{flex:1;font-size:13.5px;min-width:0}
+.mm{color:#8fa0b0;font-size:11px;display:block}
+.mt{color:#8fa0b0;font-size:11px;white-space:nowrap}
+.em{padding:30px;text-align:center;color:#8fa0b0;font-size:13px}
+.sbx{position:relative}
+.sbx svg{position:absolute;inset-inline-start:11px;top:50%;translate:0 -50%;width:15px;height:15px;color:#8fa0b0}
+.sbx .inp{padding-inline-start:34px;width:200px;padding-top:8px;padding-bottom:8px}
+/* تنبيهات ونافذة */
+#toasts{position:fixed;bottom:14px;inset-inline-start:14px;z-index:99;display:flex;flex-direction:column;gap:8px}
+.ts{background:#1a232e;border:1px solid #33424f;border-inline-start:4px solid #ffb224;border-radius:10px;padding:11px 15px;font-size:13.5px;max-width:calc(100vw - 28px);animation:fu .3s}
+.ts.g{border-inline-start-color:#3ddc97}
+.ts.r{border-inline-start-color:#ff6b5e}
+.ov{position:fixed;inset:0;background:rgba(5,9,13,.75);display:grid;place-items:center;z-index:70}
+.md{width:min(400px,92vw);background:#1b2530;border:1px solid #33424f;border-radius:14px;padding:24px;text-align:center}
+.md h3{font-size:20px;margin-bottom:6px}
+.md p{font-size:13px;color:#8fa0b0;line-height:1.8}
+.mb{display:flex;gap:10px;justify-content:center;margin-top:20px}
+@media(max-width:960px){
+#loginView{grid-template-columns:1fr}
+.lb{padding:30px 22px;border:0;border-bottom:1px solid #26313e}
+.rk{height:100px}
+#appView{grid-template-columns:1fr}
+aside{position:static;height:auto;flex-direction:row;align-items:center;overflow-x:auto;gap:6px;padding:10px 12px;-webkit-overflow-scrolling:touch}
+.brand{border:0;padding:0;margin:0}
+.brand span{display:none}
+.nb{flex:none;width:auto;padding:9px 11px}
+main{padding:16px 14px 60px}
+.sp,.fg{grid-template-columns:1fr}
+.st{grid-template-columns:1fr 1fr}
+.st>div{padding:12px 14px}
+.st>div:nth-child(3){border-inline-start:0;border-top:1px solid #26313e}
+.st>div:nth-child(4){border-top:1px solid #26313e}
+.n{font-size:24px}
+.tb h1{font-size:21px}
+.sbx .inp{width:150px}
+}
+</style>
+</head>
+<body>
+
+<div id="loginView">
+  <div class="lb">
+    <div class="c2"><span class="dot"></span> النظام يعمل الآن</div>
+    <h1 class="lt">نظام إدارة <b>المخزون</b></h1>
+    <p class="lsub">تتبّع دخول المواد وخروجها، إدارة الكميات والصلاحيات، ومتابعة حركة المستودع — كل شيء في مكان واحد.</p>
+    <div class="rk">
+      <i style="--h:45%;--c:#ffb224"></i><i style="--h:80%;--c:#3ddc97"></i><i style="--h:58%;--c:#54c8e8"></i>
+      <i style="--h:92%;--c:#ffb224"></i><i style="--h:66%;--c:#3ddc97"></i><i style="--h:40%;--c:#54c8e8"></i>
+      <i style="--h:78%;--c:#ffb224"></i><i style="--h:55%;--c:#3ddc97"></i>
+    </div>
+  </div>
+  <div class="lf">
+    <div class="lcard" id="loginCard">
+      <div class="hz"></div>
+      <div class="lp">
+        <h2>تسجيل الدخول</h2>
+        <p class="mut" style="font-size:13px;margin-top:2px">أدخل بياناتك للوصول إلى النظام</p>
+        <form id="loginForm">
+          <label>اسم المستخدم</label>
+          <input class="inp" id="lUser" required>
+          <label>كلمة المرور</label>
+          <input class="inp" id="lPass" type="password" required>
+          <button class="btn ba w100">دخول النظام</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="appView" class="hid">
+<aside>
+  <div class="brand">
+    <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span>
+    <div><b>المَخزَن</b><span>نظام المستودعات</span></div>
+  </div>
+  <button class="nb" data-page="out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14V3"/><path d="M8 7l4-4 4 4"/><path d="M4 15v3a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-3"/></svg>خروج المواد</button>
+  <button class="nb" data-page="in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M8 10l4 4 4-4"/><path d="M4 15v3a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-3"/></svg>دخول المواد</button>
+  <button class="nb" data-page="stock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 6-10 6L2 8l10-6z"/><path d="M2 12.5l10 6 10-6"/><path d="M2 17l10 6 10-6"/></svg>المخزون<span class="nc" id="sideItemsCount">0</span></button>
+  <button class="nb hid" data-page="users" id="navUsers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/><path d="M16 4.8a3.4 3.4 0 0 1 0 6.4"/><path d="M17.8 15.5c1.9.8 3.2 2.3 3.7 4.5"/></svg>المستخدمون<span class="nc" id="sideUsersCount">0</span></button>
+</aside>
+<main>
+  <div class="tb">
+    <div><h1 id="pageTitle">المخزون</h1><span class="mut" id="todayTxt"></span></div>
+    <div class="chip">
+      <span class="av" id="avatarTxt">م</span>
+      <span><b id="userName" style="font-size:13px"></b> <span class="rt a" id="userRole">مدير</span></span>
+      <button class="ib" id="logoutBtn" title="خروج"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 12h11"/><path d="M17 8l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+
+  <section class="pg" id="page-out">
+    <div class="sp">
+      <div class="cd ar">
+        <div class="ch"><h3>إخراج مواد من المخزون</h3><span class="bd ot">صادر</span></div>
+        <div class="cb"><form id="outForm">
+          <div class="fg">
+            <div><label>اسم المادة</label><input class="inp" id="outName" list="itemsList" required><div class="mut" id="outAvail" style="font-size:12px;min-height:16px;margin-top:5px"></div></div>
+            <div><label>الكمية</label><input class="inp" id="outQty" type="number" inputmode="numeric" min="1" required style="text-align:center"></div>
+          </div>
+          <div class="ff"><span class="mut" style="font-size:12px">لا يمكن إخراج أكثر من المتاح</span><button class="btn br2">إخراج</button></div>
+        </form></div>
+      </div>
+      <div class="cd"><div class="ch"><h3>آخر الحركات</h3></div><div class="cb" id="movesOut"></div></div>
+    </div>
+  </section>
+
+  <section class="pg" id="page-in">
+    <div class="sp">
+      <div class="cd ag">
+        <div class="ch"><h3>إدخال مواد إلى المخزون</h3><span class="bd ok">وارد</span></div>
+        <div class="cb"><form id="inForm">
+          <div class="fg">
+            <div><label>اسم المادة</label><input class="inp" id="inName" list="itemsList" required></div>
+            <div><label>الكمية</label><input class="inp" id="inQty" type="number" inputmode="numeric" min="1" required style="text-align:center"></div>
+          </div>
+          <div class="ff"><span class="mut" style="font-size:12px">المادة الموجودة تُضاف كميتها لرصيدها</span><button class="btn bg">إدخال</button></div>
+        </form></div>
+      </div>
+      <div class="cd"><div class="ch"><h3>آخر الحركات</h3></div><div class="cb" id="movesIn"></div></div>
+    </div>
+  </section>
+
+  <section class="pg" id="page-stock">
+    <div class="cd st">
+      <div><div class="n ca" id="stKinds">0</div><div class="l">إجمالي الأصناف</div></div>
+      <div><div class="n cc" id="stQty">0</div><div class="l">إجمالي الكميات</div></div>
+      <div><div class="n ca" id="stLow">0</div><div class="l">أصناف منخفضة</div></div>
+      <div><div class="n cr" id="stOut">0</div><div class="l">خروج اليوم</div></div>
+    </div>
+    <div class="cd aa">
+      <div class="ch">
+        <h3>جرد المخزون</h3>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="sbx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="inp" id="stockSearch" placeholder="بحث…"></div>
+          <span class="bd ed" id="stockCount">0 صنف</span>
+        </div>
+      </div>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>المادة</th><th>الكمية</th><th>الحالة</th><th>تحديث</th><th>إجراءات</th></tr></thead>
+        <tbody id="stockBody"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="pg" id="page-users">
+    <div class="sp">
+      <div class="cd ac">
+        <div class="ch"><h3>إضافة مستخدم جديد</h3><span class="bd ot">للمدير فقط</span></div>
+        <div class="cb"><form id="userForm">
+          <label>اسم المستخدم</label><input class="inp" id="nuName" required>
+          <label>كلمة المرور</label><input class="inp" id="nuPass" type="text" required>
+          <label>الصلاحية</label>
+          <select class="inp" id="nuRole"><option value="user">موظف مخزن</option><option value="admin">مدير</option></select>
+          <button class="btn ba w100">إضافة المستخدم</button>
+        </form>
+        <p class="mut" style="font-size:12px;margin-top:14px;line-height:1.9">الموظف يدخل ويُخرج ويعدّل الكميات، لكن لا يحذف ولا يرى هذه الصفحة.</p>
+        </div>
+      </div>
+      <div class="cd"><div class="ch"><h3>قائمة المستخدمين</h3><span class="bd ed" id="usersCount"></span></div>
+        <div class="tw"><table>
+          <thead><tr><th>المستخدم</th><th>الصلاحية</th><th>الإضافة</th><th>إجراءات</th></tr></thead>
+          <tbody id="usersBody"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<datalist id="itemsList"></datalist>
+
+<div class="ov hid" id="overlay">
+  <div class="md">
+    <h3 id="cTitle"></h3><p id="cMsg"></p>
+    <div class="mb"><button class="btn gh" id="cCancel">إلغاء</button><button class="btn br2" id="cOk">تأكيد الحذف</button></div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script>
+(function(){
+"use strict";
+var store={
+ read:function(k,f){try{var v=JSON.parse(localStorage.getItem(k));return v==null?f:v}catch(e){return f}},
+ write:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+var users=store.read('inv_users',null);
+if(!users||!users.length){users=[{username:'احمد',password:'1997',role:'admin',created:Date.now()}];store.write('inv_users',users)}
+else if(!users.some(function(u){return u.username==='احمد'})){users.push({username:'احمد',password:'1997',role:'admin',created:Date.now()});store.write('inv_users',users)}
+var inventory=store.read('inv_items',[]),movements=store.read('inv_moves',[]),session=store.read('inv_session',null),editingId=null,confirmCb=null;
+function $(s){return document.querySelector(s)}
+function $$(s){return document.querySelectorAll(s)}
+function isAdmin(){return session&&session.role==='admin'}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function two(n){return String(n).length<2?'0'+n:String(n)}
+function fmtDate(ts){var d=new Date(ts);return '<span dir="ltr">'+d.getDate()+'-'+(d.getMonth()+1)+' '+two(d.getHours())+':'+two(d.getMinutes())+'</span>'}
+function save(){store.write('inv_items',inventory);store.write('inv_moves',movements)}
+function hideKeyboard(){var a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'))a.blur()}
+document.addEventListener('click',function(e){if(!e.target.closest('input,textarea,select'))hideKeyboard()});
+var I={
+ edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.6 4.4a2.1 2.1 0 0 1 3 3L8.2 18.8 4 20z"/></svg>',
+ trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10 11v6M14 11v6"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+function toast(msg,type){var t=document.createElement('div');t.className='ts'+(type?' '+type:'');t.innerHTML=msg;$('#toasts').appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},320)},3000)}
+function confirmBox(title,msg,cb){$('#cTitle').textContent=title;$('#cMsg').textContent=msg;$('#overlay').classList.remove('hid');confirmCb=cb}
+$('#cOk').onclick=function(){$('#overlay').classList.add('hid');var cb=confirmCb;confirmCb=null;if(cb)cb()};
+$('#cCancel').onclick=function(){$('#overlay').classList.add('hid')};
+$('#loginForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var u=$('#lUser').value.trim(),p=$('#lPass').value;
+ var f=null;for(var i=0;i<users.length;i++){if(users[i].username.toLowerCase()===u.toLowerCase()&&users[i].password===p){f=users[i];break}}
+ if(!f){var c=$('#loginCard');c.classList.remove('shk');void c.offsetWidth;c.classList.add('shk');toast('اسم المستخدم أو كلمة المرور غير صحيحة','r');return}
+ session={username:f.username,role:f.role};store.write('inv_session',session);hideKeyboard();enterApp();
+ toast('مرحباً بك، <b>'+esc(f.username)+'</b>','g');
+});
+$('#logoutBtn').onclick=function(){session=null;try{localStorage.removeItem('inv_session')}catch(e){}$('#appView').classList.add('hid');$('#loginView').classList.remove('hid');$('#lPass').value='';toast('تم تسجيل الخروج')};
+function enterApp(){$('#loginView').classList.add('hid');$('#appView').classList.remove('hid');renderNav();renderAll();showPage('stock')}
+var PAGES={out:'خروج المواد',in:'دخول المواد',stock:'المخزون',users:'المستخدمون'};
+function showPage(name){
+ if(name==='users'&&!isAdmin()){toast('هذه الصفحة للمدير فقط','r');return}
+ $$('.pg').forEach(function(p){p.classList.toggle('on',p.id==='page-'+name)});
+ $$('.nb').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-page')===name)});
+ $('#pageTitle').textContent=PAGES[name];
+}
+$$('.nb').forEach(function(b){b.addEventListener('click',function(){showPage(b.getAttribute('data-page'))})});
+function renderNav(){
+ $('#navUsers').classList.toggle('hid',!isAdmin());
+ $('#sideUsersCount').textContent=users.length;
+ $('#sideItemsCount').textContent=inventory.length;
+ $('#avatarTxt').textContent=session.username.charAt(0);
+ $('#userName').textContent=session.username;
+ var rt=$('#userRole');rt.textContent=isAdmin()?'مدير':'موظف';rt.className='rt '+(isAdmin()?'a':'u');
+}
+function renderStats(){
+ var today=new Date().toDateString(),tq=0,low=0,out=0;
+ for(var i=0;i<inventory.length;i++){tq+=inventory[i].qty;if(inventory[i].qty>0&&inventory[i].qty<=10)low++}
+ for(var j=0;j<movements.length;j++){if(movements[j].type==='out'&&new Date(movements[j].date).toDateString()===today)out++}
+ $('#stKinds').textContent=inventory.length;$('#stQty').textContent=tq;$('#stLow').textContent=low;$('#stOut').textContent=out;
+}
+function renderInventory(){
+ renderStats();
+ var q=($('#stockSearch').value||'').trim();
+ var list=inventory.filter(function(i){return !q||i.name.indexOf(q)>-1});
+ $('#stockCount').textContent=inventory.length+' صنف';
+ var tb=$('#stockBody');
+ if(!list.length){tb.innerHTML='<tr><td colspan="6"><div class="em">'+(inventory.length?'لا نتائج للبحث':'المخزون فارغ — ابدأ من صفحة «دخول المواد»')+'</div></td></tr>';return}
+ var html='';
+ for(var k=0;k<list.length;k++){
+  var it=list[k];
+  if(editingId===it.id){
+   html+='<tr><td>'+(k+1)+'</td><td><b>'+esc(it.name)+'</b></td><td><input id="editQty" class="inp qi" type="number" inputmode="numeric" min="0" value="'+it.qty+'"></td><td colspan="2"><span class="bd ed">قيد التعديل</span></td><td style="white-space:nowrap"><button class="ib g" data-act="save" data-id="'+it.id+'">'+I.check+'</button> <button class="ib" data-act="cancel">'+I.x+'</button></td></tr>';
+   continue;
+  }
+  var st=it.qty===0?'<span class="bd ot">نفد</span>':(it.qty<=10?'<span class="bd lw">منخفض</span>':'<span class="bd ok">متوفر</span>');
+  var del=isAdmin()?' <button class="ib d" data-act="del" data-id="'+it.id+'">'+I.trash+'</button>':'';
+  html+='<tr><td class="mut">'+(k+1)+'</td><td><b>'+esc(it.name)+'</b></td><td class="qy">'+it.qty+'</td><td>'+st+'</td><td class="mut" style="font-size:11px">'+fmtDate(it.updated)+'</td><td style="white-space:nowrap"><button class="ib" data-act="edit" data-id="'+it.id+'">'+I.edit+'</button>'+del+'</td></tr>';
+ }
+ tb.innerHTML=html;
+}
+$('#stockSearch').addEventListener('input',renderInventory);
+$('#stockBody').addEventListener('click',function(e){
+ var btn=e.target.closest('[data-act]');if(!btn)return;
+ var id=btn.getAttribute('data-id'),it=null;
+ for(var i=0;i<inventory.length;i++){if(inventory[i].id===id){it=inventory[i];break}}
+ if(!it)return;
+ var act=btn.getAttribute('data-act');
+ if(act==='edit'){editingId=id;renderInventory();var inp=$('#editQty');if(inp){inp.focus();inp.select()}}
+ else if(act==='cancel'){editingId=null;hideKeyboard();renderInventory()}
+ else if(act==='save'){
+  var v=parseInt($('#editQty').value,10);
+  if(isNaN(v)||v<0){toast('أدخل كمية صحيحة','r');return}
+  if(v!==it.qty){movements.unshift({id:uid(),type:'edit',name:it.name,qty:v,user:session.username,date:Date.now()});movements=movements.slice(0,200)}
+  it.qty=v;it.updated=Date.now();editingId=null;hideKeyboard();save();renderAll();
+  toast('تم تحديث كمية «'+esc(it.name)+'»','g');
+ }
+ else if(act==='del'){
+  if(!isAdmin()){toast('الحذف للمدير فقط','r');return}
+  confirmBox('حذف الصنف','سيتم حذف «'+it.name+'» نهائياً من المخزون.',function(){
+   inventory=inventory.filter(function(x){return x.id!==id});
+   save();renderAll();toast('تم حذف «'+esc(it.name)+'»','r');
+  });
+ }
+});
+$('#stockBody').addEventListener('keydown',function(e){
+ if(e.target.id!=='editQty')return;
+ if(e.key==='Enter'){e.preventDefault();var b=e.target.closest('tr').querySelector('[data-act="save"]');if(b)b.click()}
+ if(e.key==='Escape'){editingId=null;hideKeyboard();renderInventory()}
+});
+$('#inForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var name=$('#inName').value.trim(),qty=parseInt($('#inQty').value,10);
+ if(!name){toast('أدخل اسم المادة','r');return}
+ if(isNaN(qty)||qty<=0){toast('أدخل كمية صحيحة','r');return}
+ var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===name){it=inventory[i];break}}
+ if(it){it.qty+=qty;it.updated=Date.now()}else{inventory.push({id:uid(),name:name,qty:qty,updated:Date.now()})}
+ movements.unshift({id:uid(),type:'in',name:name,qty:qty,user:session.username,date:Date.now()});movements=movements.slice(0,200);
+ hideKeyboard();save();renderAll();e.target.reset();
+ toast('تم إدخال <b>'+qty+'</b> × «'+esc(name)+'»','g');
+});
+$('#outForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var name=$('#outName').value.trim(),qty=parseInt($('#outQty').value,10);
+ if(!name){toast('أدخل اسم المادة','r');return}
+ var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===name){it=inventory[i];break}}
+ if(!it){toast('المادة غير موجودة بالمخزون','r');return}
+ if(isNaN(qty)||qty<=0){toast('أدخل كمية صحيحة','r');return}
+ if(qty>it.qty){toast('الكمية غير كافية — المتاح <b>'+it.qty+'</b> فقط','r');return}
+ it.qty-=qty;it.updated=Date.now();
+ movements.unshift({id:uid(),type:'out',name:name,qty:qty,user:session.username,date:Date.now()});movements=movements.slice(0,200);
+ hideKeyboard();save();renderAll();e.target.reset();$('#outAvail').textContent='';
+ toast('تم إخراج <b>'+qty+'</b> × «'+esc(name)+'»','r');
+});
+$('#outName').addEventListener('input',function(e){
+ var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===e.target.value.trim()){it=inventory[i];break}}
+ $('#outAvail').innerHTML=it?('المتاح: <b>'+it.qty+'</b>'):'';
+});
+function renderMovements(){
+ var MM={in:['mi','+','دخول'],out:['mo','−','خروج'],edit:['me','±','تعديل']};
+ if(!movements.length){var em='<div class="em">لا توجد حركات بعد</div>';$('#movesIn').innerHTML=em;$('#movesOut').innerHTML=em;return}
+ var html='';
+ for(var i=0;i<movements.length&&i<9;i++){
+  var m=movements[i],mm=MM[m.type];
+  html+='<div class="mv"><span class="mq '+mm[0]+'">'+mm[1]+m.qty+'</span><span class="mn">'+esc(m.name)+'<span class="mm">'+mm[2]+' · '+esc(m.user)+'</span></span><span class="mt">'+fmtDate(m.date)+'</span></div>';
+ }
+ $('#movesIn').innerHTML=html;$('#movesOut').innerHTML=html;
+}
+function renderDatalist(){
+ var h='';for(var i=0;i<inventory.length;i++){h+='<option value="'+esc(inventory[i].name)+'">'}
+ $('#itemsList').innerHTML=h;
+}
+function renderUsers(){
+ if(!isAdmin())return;
+ $('#usersCount').textContent=users.length+' حساب';
+ var html='';
+ for(var i=0;i<users.length;i++){
+  var u=users[i],self=u.username===session.username;
+  var role=u.role==='admin'?'<span class="rt a">مدير</span>':'<span class="rt u">موظف</span>';
+  var del=self?'<span class="mut">—</span>':'<button class="ib d" data-uid="'+esc(u.username)+'">'+I.trash+'</button>';
+  html+='<tr><td><b>'+esc(u.username)+'</b>'+(self?' <span class="mut" style="font-size:11px">(أنت)</span>':'')+'</td><td>'+role+'</td><td class="mut" style="font-size:11px">'+fmtDate(u.created||Date.now())+'</td><td>'+del+'</td></tr>';
+ }
+ $('#usersBody').innerHTML=html;
+}
+$('#usersBody').addEventListener('click',function(e){
+ var btn=e.target.closest('[data-uid]');if(!btn)return;
+ var uname=btn.getAttribute('data-uid');
+ confirmBox('حذف المستخدم','سيفقد «'+uname+'» إمكانية الدخول للنظام.',function(){
+  users=users.filter(function(u){return u.username!==uname});
+  store.write('inv_users',users);renderNav();renderUsers();toast('تم حذف «'+esc(uname)+'»','r');
+ });
+});
+$('#userForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ var u=$('#nuName').value.trim(),p=$('#nuPass').value,r=$('#nuRole').value;
+ if(u.length<3){toast('اسم المستخدم 3 أحرف على الأقل','r');return}
+ if(p.length<4){toast('كلمة المرور 4 أحرف على الأقل','r');return}
+ for(var i=0;i<users.length;i++){if(users[i].username.toLowerCase()===u.toLowerCase()){toast('الاسم موجود مسبقاً','r');return}}
+ users.push({username:u,password:p,role:r,created:Date.now()});
+ store.write('inv_users',users);hideKeyboard();e.target.reset();renderNav();renderUsers();
+ toast('تمت إضافة «'+esc(u)+'» بنجاح','g');
+});
+function renderAll(){renderDatalist();renderInventory();renderMovements();renderUsers();$('#sideItemsCount').textContent=inventory.length}
+var now=new Date();
+$('#todayTxt').textContent=now.getDate()+'-'+(now.getMonth()+1)+'-'+now.getFullYear();
+if(session&&users.some(function(u){return u.username===session.username})){enterApp()}
+})();
+</script>
+</body>
+</html>
