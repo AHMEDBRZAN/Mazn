@@ -16,7 +16,6 @@ button{touch-action:manipulation}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}}
 @keyframes br{from{transform:scaleY(.5)}}
 @keyframes sh{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}}
-/* الدخول */
 #loginView{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr}
 .lb{padding:44px 40px;border-inline-end:1px solid #26313e;display:flex;flex-direction:column;gap:18px}
 .c2{display:inline-flex;align-items:center;gap:8px;border:1px solid #33424f;border-radius:99px;padding:5px 13px;font-size:12px;color:#8fa0b0;width:max-content}
@@ -33,7 +32,6 @@ button{touch-action:manipulation}
 .hz{height:7px;background:repeating-linear-gradient(-45deg,#ffb224 0 14px,#131a22 14px 28px)}
 .lp{padding:26px}
 .lp h2{font-size:25px}
-/* حقول وأزرار */
 label{display:block;font-size:13px;color:#8fa0b0;margin:13px 0 6px}
 .inp{width:100%;background:#0f151c;border:1px solid #33424f;border-radius:10px;padding:11px 13px;color:#e9eef4;font-size:16px;font-family:inherit}
 .inp:focus{outline:none;border-color:#ffb224;box-shadow:0 0 0 3px rgba(255,178,36,.13)}
@@ -49,7 +47,6 @@ label{display:block;font-size:13px;color:#8fa0b0;margin:13px 0 6px}
 .ib:hover{color:#ffb224;border-color:#ffb224}
 .ib.d:hover{color:#ff6b5e;border-color:#ff6b5e}
 .ib.g:hover{color:#3ddc97;border-color:#3ddc97}
-/* التطبيق */
 #appView{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
 aside{background:#12181f;border-inline-end:1px solid #26313e;padding:16px 14px;display:flex;flex-direction:column;gap:5px;position:sticky;top:0;height:100vh}
 .brand{display:flex;gap:10px;align-items:center;padding:2px 6px 14px;margin-bottom:10px;border-bottom:1px dashed #33424f}
@@ -71,7 +68,6 @@ main{padding:20px 24px 60px;min-width:0;max-width:100%}
 .rt{font-size:10px;padding:2px 8px;border-radius:99px}
 .rt.a{background:rgba(255,178,36,.15);color:#ffb224}
 .rt.u{background:rgba(84,200,232,.12);color:#54c8e8}
-/* صفحات وبطاقات */
 .pg{display:none;min-width:0}
 .pg.on{display:block;animation:fu .3s}
 .cd{background:#161e28;border:1px solid #26313e;border-radius:13px;min-width:0;max-width:100%;overflow:hidden}
@@ -114,7 +110,13 @@ tbody tr:last-child td{border-bottom:0}
 .sbx{position:relative}
 .sbx svg{position:absolute;inset-inline-start:11px;top:50%;translate:0 -50%;width:15px;height:15px;color:#8fa0b0}
 .sbx .inp{padding-inline-start:34px;width:200px;padding-top:8px;padding-bottom:8px}
-/* تنبيهات ونافذة */
+.rel{position:relative}
+.sug{position:absolute;top:100%;inset-inline:0;background:#1b2530;border:1px solid #33424f;border-radius:10px;margin-top:4px;z-index:60;overflow:hidden;box-shadow:0 12px 26px rgba(0,0,0,.45)}
+.sug div{padding:10px 13px;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.sug div:hover{background:rgba(255,178,36,.09);color:#ffd06b}
+.sug .q{color:#8fa0b0;font-size:11px}
+.mini{border:1px solid #33424f;background:none;color:#8fa0b0;border-radius:8px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:inherit}
+.mini:hover{color:#ff8577;border-color:#ff6b5e}
 #toasts{position:fixed;bottom:14px;inset-inline-start:14px;z-index:99;display:flex;flex-direction:column;gap:8px}
 .ts{background:#1a232e;border:1px solid #33424f;border-inline-start:4px solid #ffb224;border-radius:10px;padding:11px 15px;font-size:13.5px;max-width:calc(100vw - 28px);animation:fu .3s}
 .ts.g{border-inline-start-color:#3ddc97}
@@ -203,13 +205,13 @@ main{padding:16px 14px 60px}
         <div class="ch"><h3>إخراج مواد من المخزون</h3><span class="bd ot">صادر</span></div>
         <div class="cb"><form id="outForm">
           <div class="fg">
-            <div><label>اسم المادة</label><input class="inp" id="outName" list="itemsList" required><div class="mut" id="outAvail" style="font-size:12px;min-height:16px;margin-top:5px"></div></div>
+            <div class="rel"><label>اسم المادة</label><input class="inp" id="outName" required><div class="mut" id="outAvail" style="font-size:12px;min-height:16px;margin-top:5px"></div></div>
             <div><label>الكمية</label><input class="inp" id="outQty" type="number" inputmode="numeric" min="1" required style="text-align:center"></div>
           </div>
           <div class="ff"><span class="mut" style="font-size:12px">لا يمكن إخراج أكثر من المتاح</span><button class="btn br2">إخراج</button></div>
         </form></div>
       </div>
-      <div class="cd"><div class="ch"><h3>آخر الحركات</h3></div><div class="cb" id="movesOut"></div></div>
+      <div class="cd"><div class="ch"><h3>آخر الحركات</h3><span class="logctl hid" style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini" data-logact="in">مسح الدخول</button><button class="mini" data-logact="out">مسح الخروج</button><button class="mini" data-logact="all">مسح الكل</button></span></div><div class="cb" id="movesOut"></div></div>
     </div>
   </section>
 
@@ -219,13 +221,13 @@ main{padding:16px 14px 60px}
         <div class="ch"><h3>إدخال مواد إلى المخزون</h3><span class="bd ok">وارد</span></div>
         <div class="cb"><form id="inForm">
           <div class="fg">
-            <div><label>اسم المادة</label><input class="inp" id="inName" list="itemsList" required></div>
+            <div class="rel"><label>اسم المادة</label><input class="inp" id="inName" required></div>
             <div><label>الكمية</label><input class="inp" id="inQty" type="number" inputmode="numeric" min="1" required style="text-align:center"></div>
           </div>
           <div class="ff"><span class="mut" style="font-size:12px">المادة الموجودة تُضاف كميتها لرصيدها</span><button class="btn bg">إدخال</button></div>
         </form></div>
       </div>
-      <div class="cd"><div class="ch"><h3>آخر الحركات</h3></div><div class="cb" id="movesIn"></div></div>
+      <div class="cd"><div class="ch"><h3>آخر الحركات</h3><span class="logctl hid" style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini" data-logact="in">مسح الدخول</button><button class="mini" data-logact="out">مسح الخروج</button><button class="mini" data-logact="all">مسح الكل</button></span></div><div class="cb" id="movesIn"></div></div>
     </div>
   </section>
 
@@ -241,6 +243,7 @@ main{padding:16px 14px 60px}
         <h3>جرد المخزون</h3>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <div class="sbx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="inp" id="stockSearch" placeholder="بحث…"></div>
+          <button class="mini hid" id="clearStock" style="color:#ff8577;border-color:#ff6b5e">حذف كل المواد</button>
           <span class="bd ed" id="stockCount">0 صنف</span>
         </div>
       </div>
@@ -276,8 +279,6 @@ main{padding:16px 14px 60px}
 </main>
 </div>
 
-<datalist id="itemsList"></datalist>
-
 <div class="ov hid" id="overlay">
   <div class="md">
     <h3 id="cTitle"></h3><p id="cMsg"></p>
@@ -305,6 +306,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 function two(n){return String(n).length<2?'0'+n:String(n)}
 function fmtDate(ts){var d=new Date(ts);return '<span dir="ltr">'+d.getDate()+'-'+(d.getMonth()+1)+' '+two(d.getHours())+':'+two(d.getMinutes())+'</span>'}
 function save(){store.write('inv_items',inventory);store.write('inv_moves',movements)}
+function findItem(name){for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===name)return inventory[i]}return null}
 function hideKeyboard(){var a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'))a.blur()}
 document.addEventListener('click',function(e){if(!e.target.closest('input,textarea,select'))hideKeyboard()});
 var I={
@@ -317,6 +319,26 @@ function toast(msg,type){var t=document.createElement('div');t.className='ts'+(t
 function confirmBox(title,msg,cb){$('#cTitle').textContent=title;$('#cMsg').textContent=msg;$('#overlay').classList.remove('hid');confirmCb=cb}
 $('#cOk').onclick=function(){$('#overlay').classList.add('hid');var cb=confirmCb;confirmCb=null;if(cb)cb()};
 $('#cCancel').onclick=function(){$('#overlay').classList.add('hid')};
+
+/* ═══════ الاقتراحات التلقائية ═══════ */
+function suggest(input,onPick){
+  var box=document.createElement('div');box.className='sug hid';input.parentNode.appendChild(box);
+  function close(){box.classList.add('hid')}
+  input.addEventListener('input',function(){
+    var q=input.value.trim();
+    if(!q||!inventory.length){close();return}
+    var hits=[];for(var i=0;i<inventory.length&&hits.length<6;i++){if(inventory[i].name.indexOf(q)>-1)hits.push(inventory[i])}
+    if(!hits.length){close();return}
+    var h='';for(var j=0;j<hits.length;j++){h+='<div data-n="'+esc(hits[j].name)+'"><span>'+esc(hits[j].name)+'</span><span class="q">المتاح: '+hits[j].qty+'</span></div>'}
+    box.innerHTML=h;box.classList.remove('hid');
+  });
+  box.addEventListener('mousedown',function(e){
+    var d=e.target.closest('[data-n]');if(!d)return;
+    e.preventDefault();input.value=d.getAttribute('data-n');close();if(onPick)onPick(input.value);
+  });
+  input.addEventListener('blur',function(){setTimeout(close,180)});
+}
+
 $('#loginForm').addEventListener('submit',function(e){
  e.preventDefault();
  var u=$('#lUser').value.trim(),p=$('#lPass').value;
@@ -337,6 +359,8 @@ function showPage(name){
 $$('.nb').forEach(function(b){b.addEventListener('click',function(){showPage(b.getAttribute('data-page'))})});
 function renderNav(){
  $('#navUsers').classList.toggle('hid',!isAdmin());
+ $$('.logctl').forEach(function(el){el.classList.toggle('hid',!isAdmin())});
+ $('#clearStock').classList.toggle('hid',!isAdmin());
  $('#sideUsersCount').textContent=users.length;
  $('#sideItemsCount').textContent=inventory.length;
  $('#avatarTxt').textContent=session.username.charAt(0);
@@ -398,12 +422,19 @@ $('#stockBody').addEventListener('keydown',function(e){
  if(e.key==='Enter'){e.preventDefault();var b=e.target.closest('tr').querySelector('[data-act="save"]');if(b)b.click()}
  if(e.key==='Escape'){editingId=null;hideKeyboard();renderInventory()}
 });
+$('#clearStock').onclick=function(){
+ if(!isAdmin()){toast('للمدير فقط','r');return}
+ if(!inventory.length){toast('المخزون فارغ','r');return}
+ confirmBox('حذف كل المواد','سيتم حذف جميع المواد ('+inventory.length+') من المخزون نهائياً.',function(){
+  inventory=[];editingId=null;save();renderAll();toast('تم مسح المخزون بالكامل','r');
+ });
+};
 $('#inForm').addEventListener('submit',function(e){
  e.preventDefault();
  var name=$('#inName').value.trim(),qty=parseInt($('#inQty').value,10);
  if(!name){toast('أدخل اسم المادة','r');return}
  if(isNaN(qty)||qty<=0){toast('أدخل كمية صحيحة','r');return}
- var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===name){it=inventory[i];break}}
+ var it=findItem(name);
  if(it){it.qty+=qty;it.updated=Date.now()}else{inventory.push({id:uid(),name:name,qty:qty,updated:Date.now()})}
  movements.unshift({id:uid(),type:'in',name:name,qty:qty,user:session.username,date:Date.now()});movements=movements.slice(0,200);
  hideKeyboard();save();renderAll();e.target.reset();
@@ -413,7 +444,7 @@ $('#outForm').addEventListener('submit',function(e){
  e.preventDefault();
  var name=$('#outName').value.trim(),qty=parseInt($('#outQty').value,10);
  if(!name){toast('أدخل اسم المادة','r');return}
- var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===name){it=inventory[i];break}}
+ var it=findItem(name);
  if(!it){toast('المادة غير موجودة بالمخزون','r');return}
  if(isNaN(qty)||qty<=0){toast('أدخل كمية صحيحة','r');return}
  if(qty>it.qty){toast('الكمية غير كافية — المتاح <b>'+it.qty+'</b> فقط','r');return}
@@ -423,23 +454,39 @@ $('#outForm').addEventListener('submit',function(e){
  toast('تم إخراج <b>'+qty+'</b> × «'+esc(name)+'»','r');
 });
 $('#outName').addEventListener('input',function(e){
- var it=null;for(var i=0;i<inventory.length;i++){if(inventory[i].name.trim()===e.target.value.trim()){it=inventory[i];break}}
+ var it=findItem(e.target.value.trim());
  $('#outAvail').innerHTML=it?('المتاح: <b>'+it.qty+'</b>'):'';
 });
 function renderMovements(){
  var MM={in:['mi','+','دخول'],out:['mo','−','خروج'],edit:['me','±','تعديل']};
+ var adm=isAdmin();
  if(!movements.length){var em='<div class="em">لا توجد حركات بعد</div>';$('#movesIn').innerHTML=em;$('#movesOut').innerHTML=em;return}
  var html='';
  for(var i=0;i<movements.length&&i<9;i++){
   var m=movements[i],mm=MM[m.type];
-  html+='<div class="mv"><span class="mq '+mm[0]+'">'+mm[1]+m.qty+'</span><span class="mn">'+esc(m.name)+'<span class="mm">'+mm[2]+' · '+esc(m.user)+'</span></span><span class="mt">'+fmtDate(m.date)+'</span></div>';
+  html+='<div class="mv"><span class="mq '+mm[0]+'">'+mm[1]+m.qty+'</span><span class="mn">'+esc(m.name)+'<span class="mm">'+mm[2]+' · '+esc(m.user)+'</span></span><span class="mt">'+fmtDate(m.date)+'</span>'+(adm?'<button class="mini" data-mid="'+m.id+'">✕</button>':'')+'</div>';
  }
  $('#movesIn').innerHTML=html;$('#movesOut').innerHTML=html;
 }
-function renderDatalist(){
- var h='';for(var i=0;i<inventory.length;i++){h+='<option value="'+esc(inventory[i].name)+'">'}
- $('#itemsList').innerHTML=h;
-}
+/* مسح السجلات וחذف حركة واحدة — للمدير فقط */
+document.addEventListener('click',function(e){
+ var b=e.target.closest('[data-logact]');
+ if(b){
+  if(!isAdmin()){toast('للمدير فقط','r');return}
+  var act=b.getAttribute('data-logact');
+  if(act==='in')confirmBox('مسح سجل الدخول','سيتم حذف كل حركات الدخول من السجل.',function(){movements=movements.filter(function(m){return m.type!=='in'});save();renderMovements();toast('تم مسح سجل الدخول','r')});
+  else if(act==='out')confirmBox('مسح سجل الخروج','سيتم حذف كل حركات الخروج من السجل.',function(){movements=movements.filter(function(m){return m.type!=='out'});save();renderMovements();toast('تم مسح سجل الخروج','r')});
+  else confirmBox('مسح السجل كاملاً','سيتم حذف جميع الحركات نهائياً.',function(){movements=[];save();renderMovements();toast('تم مسح السجل بالكامل','r')});
+  return;
+ }
+ var mb=e.target.closest('[data-mid]');
+ if(mb){
+  if(!isAdmin()){toast('للمدير فقط','r');return}
+  var id=mb.getAttribute('data-mid');
+  movements=movements.filter(function(m){return m.id!==id});
+  save();renderMovements();toast('تم حذف الحركة');
+ }
+});
 function renderUsers(){
  if(!isAdmin())return;
  $('#usersCount').textContent=users.length+' حساب';
@@ -470,7 +517,10 @@ $('#userForm').addEventListener('submit',function(e){
  store.write('inv_users',users);hideKeyboard();e.target.reset();renderNav();renderUsers();
  toast('تمت إضافة «'+esc(u)+'» بنجاح','g');
 });
-function renderAll(){renderDatalist();renderInventory();renderMovements();renderUsers();$('#sideItemsCount').textContent=inventory.length}
+function renderAll(){renderInventory();renderMovements();renderUsers();$('#sideItemsCount').textContent=inventory.length}
+suggest($('#inName'),function(){renderInventory()});
+suggest($('#outName'),function(v){var it=findItem(v);$('#outAvail').innerHTML=it?('المتاح: <b>'+it.qty+'</b>'):''});
+suggest($('#stockSearch'),function(){renderInventory()});
 var now=new Date();
 $('#todayTxt').textContent=now.getDate()+'-'+(now.getMonth()+1)+'-'+now.getFullYear();
 if(session&&users.some(function(u){return u.username===session.username})){enterApp()}
