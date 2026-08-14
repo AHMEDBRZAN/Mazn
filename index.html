@@ -4,7 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دفتر التسعير — حاسبة الجملة والمفرد والربح</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+
+<!-- ===== PWA: تحويل الموقع لتطبيق ===== -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a2f2c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<!-- ====================================== -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -39,7 +49,6 @@ body::before{
 }
 .page{position:relative; z-index:1; max-width:1120px; margin:0 auto; padding:26px 20px 40px}
 
-/* ===== الترويسة ===== */
 .topbar{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px}
 .brand{display:flex; align-items:center; gap:16px}
 .brand-mark{
@@ -60,7 +69,6 @@ h1{font-family:'Lalezar',cursive; font-weight:400; margin:0; font-size:clamp(30p
   border-radius:999px; padding:9px 14px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
 }
 
-/* ===== البطاقات ===== */
 .grid{display:grid; grid-template-columns:1fr 1.15fr; gap:20px}
 .card{
   background:linear-gradient(180deg,var(--panel2),var(--panel));
@@ -73,7 +81,6 @@ h1{font-family:'Lalezar',cursive; font-weight:400; margin:0; font-size:clamp(30p
 .dot{width:10px;height:10px;border-radius:3px;background:var(--mint); box-shadow:0 0 12px rgba(90,223,174,.6)}
 .dot.gold{background:var(--gold); box-shadow:0 0 12px rgba(242,181,68,.7)}
 
-/* ===== لافتة التعديل ===== */
 .edit-banner{
   display:flex; align-items:center; justify-content:space-between; gap:10px;
   background:rgba(242,181,68,.12); border:1px dashed rgba(242,181,68,.55);
@@ -83,7 +90,6 @@ h1{font-family:'Lalezar',cursive; font-weight:400; margin:0; font-size:clamp(30p
 .edit-cancel{border:none; background:transparent; color:var(--danger); font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; padding:6px}
 .edit-cancel:hover{text-decoration:underline}
 
-/* ===== الحقول ===== */
 .field{margin-bottom:16px}
 label{display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:7px}
 .label-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:7px}
@@ -147,7 +153,6 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .btn.small{padding:8px 16px; font-size:13px; border-radius:10px; min-height:38px}
 .btn-row{display:flex; gap:10px; margin-top:20px; flex-wrap:wrap}
 
-/* ===== النتيجة ===== */
 .result-card{position:relative}
 .result-card::before{
   content:""; position:absolute; inset-inline-start:-1px; top:22px; width:4px; height:52px;
@@ -183,7 +188,6 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 }
 .profit-pill b{font-family:'Lalezar',cursive; font-weight:400; font-size:21px; color:var(--gold2); margin-inline-start:6px}
 
-/* ===== الجدول ===== */
 .table-card{grid-column:1/-1; display:flex; flex-direction:column}
 .table-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px}
 .table-head .card-title{margin:0}
@@ -193,7 +197,6 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .search input{width:100%; padding:9px 36px 9px 14px; font-size:13px; border-radius:999px}
 .search svg{position:absolute; right:12px; top:50%; translate:0 -50%; width:15px; stroke:var(--muted)}
 
-/* ارتفاع ثابت — الصفحة ما تكبر عند الإضافة */
 .table-scroll{overflow:auto; height:320px; border:1px solid var(--line); border-radius:12px; position:relative}
 table{width:100%; border-collapse:collapse; min-width:720px}
 th{
@@ -233,7 +236,6 @@ tfoot td{border-top:2px solid rgba(242,181,68,.4); font-weight:700; background:r
 
 footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 
-/* ===== حركات ===== */
 .reveal{animation:rise .6s both cubic-bezier(.2,.7,.3,1)}
 .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}
 @keyframes rise{from{opacity:0; transform:translateY(16px)}}
@@ -249,7 +251,22 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 .toast.show{opacity:1; transform:translateY(0)}
 .toast.warn{border-color:rgba(255,128,113,.5)}
 
-/* ===== الهاتف ===== */
+/* زر التثبيت */
+.install-bar{
+  position:fixed; bottom:20px; left:50%; translate:-50% 0; z-index:40;
+  background:linear-gradient(160deg,var(--gold2),var(--gold-deep));
+  color:#231a05; padding:12px 22px; border-radius:999px;
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+  display:flex; align-items:center; gap:12px; font-weight:700; font-size:14px;
+  opacity:0; pointer-events:none; transition:.3s; transform:translateY(20px);
+}
+.install-bar.show{opacity:1; pointer-events:auto; transform:translateY(0)}
+.install-bar button{
+  background:#231a05; color:var(--gold2); border:none; padding:7px 16px;
+  border-radius:999px; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;
+}
+.install-bar .close{background:transparent; color:#231a05; font-size:18px; padding:0 8px}
+
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}
   .ledger{flex-direction:column; gap:14px}
@@ -303,7 +320,6 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 
   <main class="grid">
 
-    <!-- بيانات المادة -->
     <section class="card reveal d1" id="inputCard">
       <h2 class="card-title"><span class="dot"></span> بيانات المادة</h2>
 
@@ -366,7 +382,6 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
       </div>
     </section>
 
-    <!-- النتيجة -->
     <section class="card result-card reveal d2">
       <h2 class="card-title"><span class="dot gold"></span> النتيجة</h2>
 
@@ -392,7 +407,6 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
       </div>
     </section>
 
-    <!-- قائمة المواد -->
     <section class="card table-card reveal d3">
       <div class="table-head">
         <h2 class="card-title"><span class="dot"></span> قائمة المواد</h2>
@@ -429,6 +443,13 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 
 <div class="toast" id="toast"></div>
 
+<!-- ===== شريط تثبيت التطبيق ===== -->
+<div class="install-bar" id="installBar">
+  <span>📱 ثبّت التطبيق على جهازك</span>
+  <button id="installBtn">تثبيت</button>
+  <button class="close" id="installClose">✕</button>
+</div>
+
 <script>
 const $ = s => document.querySelector(s);
 const CURRENCIES = ['د.ع','د.أ','د.ك','ر.س','د.إ','ج.م','$','€'];
@@ -446,7 +467,6 @@ const nameEl=$('#name'), costEl=$('#cost'), wmEl=$('#wm'), rmEl=$('#rm'),
       addBtn=$('#addBtn'), editBanner=$('#editBanner'), editNameEl=$('#editName');
 const ADD_LABEL = '＋ إضافة إلى القائمة';
 
-/* ---------- أدوات ---------- */
 const fmt = n => new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n);
 const r2 = v => Math.round(v*100)/100;
 const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
@@ -456,7 +476,7 @@ const parseNum = s => parseFloat(String(s).replace(/,/g,'')) || 0;
 function toast(msg,warn){
   toastEl.textContent = msg;
   toastEl.className = 'toast show' + (warn?' warn':'');
-  clearTimeout(toast._t);
+  clearTimeout(toastEl._t);
   toastEl._t = setTimeout(()=> toastEl.classList.remove('show'), 2400);
 }
 function setCurEverywhere(){ document.querySelectorAll('.cur').forEach(el=> el.textContent = currency); }
@@ -478,7 +498,6 @@ function countUp(el, val){
   })(t0);
 }
 
-/* ---------- حقل التكلفة ---------- */
 function formatCostInput(){
   const raw = costEl.value;
   const sel = costEl.selectionStart;
@@ -524,7 +543,6 @@ kBtn.onclick = ()=>{
   updateCostUI(); updateResults();
 };
 
-/* ---------- الحساب ---------- */
 function calc(){
   const cost = realCost();
   const wm = clamp(parseNum(wmEl.value),0,900);
@@ -552,7 +570,6 @@ function updateResults(){
   $('#barProfit').style.width = (100-costPct)+'%';
 }
 
-/* ---------- الجدول ---------- */
 function renderTable(highlightId){
   const q = $('#search').value.trim();
   const view = q ? products.filter(p=> p.name.includes(q)) : products;
@@ -590,7 +607,6 @@ function renderTable(highlightId){
     : '<b>لا توجد مواد بعد</b><br>أدخل اسم المادة وتكلفتها ثم اضغط «إضافة إلى القائمة»';
 }
 
-/* ---------- التعديل ---------- */
 function startEdit(id){
   const p = products.find(x=>x.id===id); if(!p) return;
   editingId = id;
@@ -611,7 +627,6 @@ function endEdit(){
   editBanner.classList.add('hidden');
 }
 
-/* ---------- الحفظ (إضافة أو تعديل) ---------- */
 function saveItem(){
   const name = nameEl.value.trim();
   const c = calc();
@@ -636,7 +651,6 @@ function saveItem(){
   nameEl.focus();
 }
 
-/* ---------- مسح الحقول ---------- */
 function clearForm(withFeedback = true){
   endEdit();
   nameEl.value=''; costEl.value='';
@@ -648,7 +662,6 @@ function clearForm(withFeedback = true){
   nameEl.focus();
 }
 
-/* ---------- أحداث ---------- */
 $('#addBtn').onclick = saveItem;
 $('#clearBtn').onclick = ()=> clearForm(true);
 $('#cancelEdit').onclick = ()=>{ endEdit(); clearForm(false); toast('تم إلغاء التعديل'); renderTable(); };
@@ -728,14 +741,12 @@ function saveSettings(){
   localStorage.setItem('daftar.settings', JSON.stringify({wm:wmEl.value, rm:rmEl.value}));
 }
 
-/* العملة */
 CURRENCIES.forEach(c=>{
   const o = document.createElement('option'); o.value=o.textContent=c; curSel.appendChild(o);
 });
 curSel.value = currency;
 curSel.onchange = ()=>{ currency = curSel.value; localStorage.setItem('daftar.currency',currency); setCurEverywhere(); updateCostUI(); renderTable(); };
 
-/* الإعدادات المحفوظة */
 try{
   const s = JSON.parse(localStorage.getItem('daftar.settings')||'{}');
   if(s.wm!==undefined) wmEl.value=s.wm;
@@ -744,8 +755,52 @@ try{
 
 $('#todayDate').textContent = new Intl.DateTimeFormat('ar',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
 
-/* تشغيل */
 setCurEverywhere(); syncChips(); updateCostUI(); renderTable(); updateResults();
+
+/* ===== نظام تثبيت التطبيق (PWA) ===== */
+let deferredPrompt = null;
+const installBar = $('#installBar');
+const installBtn = $('#installBtn');
+const installClose = $('#installClose');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const dismissed = localStorage.getItem('daftar.installDismissed');
+  if (!dismissed) {
+    setTimeout(() => installBar.classList.add('show'), 1500);
+  }
+});
+
+installBtn.onclick = async () => {
+  if (!deferredPrompt) return toast('التثبيت غير متاح حالياً', true);
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    toast('تم تثبيت التطبيق ✓');
+  }
+  deferredPrompt = null;
+  installBar.classList.remove('show');
+};
+
+installClose.onclick = () => {
+  installBar.classList.remove('show');
+  localStorage.setItem('daftar.installDismissed', '1');
+};
+
+window.addEventListener('appinstalled', () => {
+  installBar.classList.remove('show');
+  toast('تم تثبيت التطبيق على جهازك ✓');
+});
+</script>
+
+<!-- ===== تسجيل Service Worker (يعمل بدون إنترنت) ===== -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
