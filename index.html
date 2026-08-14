@@ -49,6 +49,7 @@ input,select{font-size:16px !important}
   height:14px; position:relative; z-index:2;
   background:repeating-linear-gradient(90deg,#123f3a 0 28px,var(--gold) 28px 56px);
   box-shadow:0 4px 22px rgba(0,0,0,.45);
+  margin-top:env(safe-area-inset-top,0px);
 }
 .page{position:relative; z-index:1; max-width:1120px; margin:0 auto; padding:26px 20px 40px}
 
@@ -285,8 +286,8 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 @media (max-width:640px){
   .awning{height:10px}
   .page{
-    padding:10px 10px 12px; display:flex; flex-direction:column;
-    height:calc(100dvh - 10px); min-height:0;
+    padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 10px); display:flex; flex-direction:column;
+    height:calc(100dvh - 10px - env(safe-area-inset-top,0px)); min-height:0;
   }
   .topbar{margin-bottom:10px; gap:8px}
   .brand{gap:10px}
@@ -870,6 +871,17 @@ window.addEventListener('appinstalled', () => {
   installBar.classList.remove('show');
   toast('تم تثبيت التطبيق على جهازك ✓');
 });
+
+/* ===== إخفاء الكيبورد عند الضغط خارج الحقول ===== */
+document.addEventListener('click', (e) => {
+  const tag = e.target.tagName;
+  if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+    const activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+      activeEl.blur();
+    }
+  }
+}, true);
 </script>
 
 <script>
