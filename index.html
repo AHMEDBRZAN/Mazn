@@ -175,7 +175,8 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .stat-value.big{font-size:52px; color:var(--gold2); text-shadow:0 0 26px rgba(242,181,68,.25)}
 .stat-value .unit{font-size:.42em; font-style:normal; color:var(--muted)}
 .stat-value.big .unit{color:var(--gold)}
-.stat-sub{display:block; font-size:13px; color:var(--muted); margin-top:4px}
+.stat-sub{display:block; font-size:14px; color:var(--muted); margin-top:4px}
+.stat-sub b{font-size:16px}
 .stat-sub b.mint{color:var(--mint)}
 .stat-sub b.gold{color:var(--gold2)}
 .pop{animation:pop .35s ease}
@@ -202,9 +203,9 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .table-head .card-title{margin:0}
 .count-badge{background:var(--gold); color:#231a05; font-weight:700; font-size:12px; border-radius:999px; padding:4px 12px}
 .spacer{flex:1}
-.search{position:relative; flex:1; min-width:160px; max-width:240px}
-.search input{width:100%; padding:9px 36px 9px 14px; border-radius:999px}
-.search svg{position:absolute; right:12px; top:50%; translate:0 -50%; width:15px; stroke:var(--muted)}
+.search{position:relative; flex:1; min-width:160px; max-width:260px}
+.search input{width:100%; padding:11px 38px 11px 14px; border-radius:999px}
+.search svg{position:absolute; right:13px; top:50%; translate:0 -50%; width:16px; stroke:var(--muted)}
 
 /* اقتراحات البحث */
 .search-suggest{
@@ -369,7 +370,8 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .stat-label{font-size:10px}
   .stat-value{font-size:21px}
   .stat-value.big{font-size:25px}
-  .stat-sub{font-size:10px}
+  .stat-sub{font-size:11.5px}
+  .stat-sub b{font-size:13px}
   .split-bar,.bar-legend,.profit-pill{display:none}
   .summary-row{margin-top:8px; padding-top:8px; justify-content:center}
   #copyBtn{min-height:32px; font-size:12px; padding:6px 14px}
@@ -378,8 +380,9 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .table-card{flex:1; min-height:0}
   .table-head{margin-bottom:8px; gap:8px}
   .search{order:0; flex:1; min-width:0; max-width:none}
-  .search input{padding:8px 32px 8px 10px}
-  #exportBtn,#wipeBtn{min-height:34px; padding:6px 10px; font-size:11px}
+  .search input{padding:11px 36px 11px 12px}
+  .search svg{width:15px; right:12px}
+  #exportBtn,#wipeBtn{min-height:36px; padding:6px 10px; font-size:11px}
   .table-scroll{flex:1; height:auto; min-height:100px}
   table{min-width:0; width:100%}
   th,td{padding:8px 5px; font-size:11.5px}
@@ -524,7 +527,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
           <input id="search" type="text" placeholder="بحث…" aria-label="بحث" autocomplete="off">
           <div class="search-suggest hidden" id="suggest"></div>
         </div>
-        <button id="exportBtn" class="btn ghost small">⬇ CSV</button>
+        <button id="exportBtn" class="btn ghost small">⬇ تصدير</button>
         <button id="wipeBtn" class="btn ghost small">🗑 الكل</button>
       </div>
 
@@ -550,7 +553,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
     </section>
   </main>
 
-  <footer>جميع البيانات تُحفظ تلقائيًا في جهازك داخل المتصفح • يمكنك تصديرها Excel (CSV) في أي وقت</footer>
+  <footer>جميع البيانات تُحفظ تلقائيًا في جهازك داخل المتصفح • يمكنك تصديرها كجدول منسق في أي وقت</footer>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -585,6 +588,10 @@ const r2 = v => Math.round(v*100)/100;
 const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
 const save = () => localStorage.setItem('daftar.products', JSON.stringify(products));
 const parseNum = s => parseFloat(String(s).replace(/,/g,'')) || 0;
+
+/* التاريخ: السنة يسارًا (تقرأ عربيًا يوم-شهر-سنة) */
+const _d = new Date();
+const DATE_STR = _d.getFullYear() + '-' + (_d.getMonth()+1) + '-' + _d.getDate();
 
 function toast(msg,warn){
   toastEl.textContent = msg;
@@ -782,6 +789,7 @@ function saveItem(){
     }
     return;
   }
+  /* المادة الجديدة تنزل أول القائمة */
   const item = {id:Date.now(), name, cost:c.cost, wm:c.wm, rm:c.rm, wp:c.wp, rp:c.rp, pw:c.pw, pr:c.pr};
   products.unshift(item); save(); renderTable(item.id);
   toast('تمت إضافة «'+name+'» ✓');
@@ -842,13 +850,69 @@ $('#wipeBtn').onclick = ()=>{
   }
 };
 
+/* ===== تصدير جدول منسق بفواصل الآلاف ===== */
 $('#exportBtn').onclick = ()=>{
   if(!products.length) return toast('لا توجد مواد للتصدير', true);
-  let csv = '\uFEFF' + 'اسم المادة,التكلفة,سعر الجملة,سعر المفرد,ربح الجملة,ربح المفرد\n';
-  products.forEach(p=> csv += `"${p.name}",${p.cost},${p.wp},${p.rp},${p.pw},${p.pr}\n`);
+  const sumCost = products.reduce((a,p)=>a+p.cost,0);
+  const sumProfit = products.reduce((a,p)=>a+p.pr,0);
+  const rows = products.map((p,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td class="n">${p.name.replace(/</g,'&lt;')}</td>
+      <td>${fmt(p.cost)}</td>
+      <td>${fmt(p.wp)}</td>
+      <td>${fmt(p.rp)}</td>
+      <td class="g">${fmt(p.pw)}</td>
+      <td class="m">${fmt(p.pr)}</td>
+    </tr>`).join('');
+  const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قائمة الأسعار — دفتر التسعير</title>
+<style>
+  body{font-family:Tahoma,Arial,sans-serif;background:#0a2f2c;color:#f4efe2;margin:0;padding:20px}
+  .wrap{max-width:920px;margin:auto}
+  h1{text-align:center;color:#ffd57e;margin:0 0 4px;font-size:24px}
+  .sub{text-align:center;color:#a3c0b7;font-size:12px;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;background:#104039;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  th{background:#155048;color:#ffd57e;padding:10px 6px;font-size:12px;border-bottom:2px solid #f2b544}
+  td{padding:9px 6px;font-size:12px;border-bottom:1px solid rgba(244,239,226,.12);text-align:center}
+  td.n{text-align:right;font-weight:700;padding-right:12px}
+  tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+  .g{color:#ffd57e;font-weight:700}.m{color:#5adfae;font-weight:700}
+  tfoot td{background:rgba(242,181,68,.15);font-weight:800;color:#ffd57e;border-top:2px solid #f2b544}
+  @media print{
+    body{background:#fff;color:#000;padding:0}
+    table{box-shadow:none;background:#fff}
+    th{background:#eee;color:#000;border-bottom:2px solid #000}
+    td{border-color:#ccc;color:#000}
+    .g,.m{color:#000}
+    tfoot td{background:#f5f5f5;color:#000}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏷️ دفتر التسعير — قائمة الأسعار</h1>
+  <div class="sub">التاريخ: ${DATE_STR} • عدد المواد: ${products.length} • العملة: ${currency}</div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>المادة</th><th>التكلفة</th><th>سعر الجملة</th><th>سعر المفرد</th><th>ربح الجملة</th><th>ربح المفرد</th></tr>
+    </thead>
+    <tbody>${rows}</tbody>
+    <tfoot>
+      <tr><td></td><td class="n">المجموع</td><td>${fmt(sumCost)}</td><td>—</td><td>—</td><td>—</td><td>${fmt(sumProfit)}</td></tr>
+    </tfoot>
+  </table>
+</div>
+</body>
+</html>`;
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = 'قائمة-الاسعار.csv'; a.click();
+  a.href = URL.createObjectURL(new Blob([html],{type:'text/html'}));
+  a.download = 'قائمة-الاسعار.html';
+  a.click();
   toast('تم تصدير القائمة ✓');
 };
 
@@ -895,9 +959,7 @@ try{
   if(s.rm!==undefined) rmEl.value=s.rm;
 }catch(e){}
 
-/* التاريخ بنسق 15-8-2026 (يوم-شهر-سنة) */
-const _d = new Date();
-$('#todayDate').textContent = _d.getDate() + '-' + (_d.getMonth()+1) + '-' + _d.getFullYear();
+$('#todayDate').textContent = DATE_STR;
 
 setCurEverywhere(); syncChips(); updateCostUI(); renderTable(); updateResults();
 
@@ -934,7 +996,7 @@ window.addEventListener('appinstalled', () => {
   toast('تم تثبيت التطبيق على جهازك ✓');
 });
 
-/* ===== إخفاء الكيبورد + إغلاق الاقتراحات عند الضغط خارجها ===== */
+/* ===== إخفاء الكيبورد + إغلاق الاقتراحات ===== */
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.search')) {
     suggestEl.classList.add('hidden');
