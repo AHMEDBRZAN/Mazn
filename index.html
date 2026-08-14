@@ -197,7 +197,7 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 }
 .profit-pill b{font-family:'Lalezar',cursive; font-weight:400; font-size:21px; color:var(--gold2); margin-inline-start:6px}
 
-.table-card{grid-column:1/-1; display:flex; flex-direction:column}
+.table-card{grid-column:1/-1; display:flex; flex-direction:column; position:relative}
 .table-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px}
 .table-head .card-title{margin:0}
 .count-badge{background:var(--gold); color:#231a05; font-weight:700; font-size:12px; border-radius:999px; padding:4px 12px}
@@ -206,35 +206,61 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .search input{width:100%; padding:9px 36px 9px 14px; border-radius:999px}
 .search svg{position:absolute; right:12px; top:50%; translate:0 -50%; width:15px; stroke:var(--muted)}
 
+/* اقتراحات البحث */
+.search-suggest{
+  position:absolute; top:calc(100% + 6px); right:0; left:0; z-index:40;
+  background:#0d3531; border:1px solid rgba(242,181,68,.4); border-radius:12px;
+  overflow:auto; max-height:200px; box-shadow:0 14px 34px rgba(0,0,0,.5);
+}
+.suggest-item{
+  padding:11px 14px; font-size:13px; font-weight:600; color:var(--ink);
+  border-bottom:1px solid var(--line); cursor:pointer; display:flex; justify-content:space-between; gap:8px;
+}
+.suggest-item:last-child{border-bottom:none}
+.suggest-item:active,.suggest-item:hover{background:rgba(242,181,68,.12); color:var(--gold2)}
+.suggest-item .s-cost{color:var(--muted); font-size:11px; font-weight:400}
+
+/* زر النزول للمجموع */
+.to-bottom{
+  position:absolute; bottom:12px; left:50%; translate:-50% 0; z-index:6;
+  width:38px;height:38px;border-radius:50%;
+  background:#0d3531; border:1px solid rgba(242,181,68,.55);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.45); transition:.2s;
+}
+.to-bottom:active{transform:scale(.9)}
+.to-bottom svg{width:17px;height:17px;stroke:var(--gold2)}
+
 .table-scroll{overflow:auto; height:320px; border:1px solid var(--line); border-radius:12px; position:relative; -webkit-overflow-scrolling:touch; overscroll-behavior:contain}
-table{width:100%; border-collapse:collapse; min-width:720px}
+table{width:100%; border-collapse:collapse; min-width:680px}
 th{
   font-size:12px; font-weight:700; color:var(--muted); text-align:right;
-  padding:12px 14px; position:sticky; top:0; background:#12463f; z-index:2; white-space:nowrap;
+  padding:12px 12px; position:sticky; top:0; background:#12463f; z-index:2; white-space:nowrap;
 }
-td{padding:12px 14px; border-top:1px solid var(--line); font-size:14px; white-space:nowrap}
+td{padding:12px 12px; border-top:1px solid var(--line); font-size:14px; white-space:nowrap}
 tbody tr{transition:background .15s}
 tbody tr:hover{background:rgba(255,255,255,.035)}
-td.name{font-weight:600; white-space:normal; min-width:130px}
+td.name{font-weight:600; white-space:normal; min-width:110px}
 td.num{font-weight:600}
 td.gold-t{color:var(--gold2); font-weight:700}
 td.mint-t{color:var(--mint); font-weight:700}
-td.actions{white-space:nowrap}
+td.actions{white-space:nowrap; text-align:center}
 tr.row-new{animation:flashRow 1.3s ease-out}
 @keyframes flashRow{from{background:rgba(242,181,68,.25)}}
 tr.row-editing{background:rgba(242,181,68,.08); box-shadow:inset 3px 0 0 var(--gold)}
 tr.row-leave{opacity:0; transform:translateX(-14px); transition:.25s}
-tfoot td{border-top:2px solid rgba(242,181,68,.4); font-weight:700; background:rgba(242,181,68,.06); position:sticky; bottom:0}
+tfoot td{border-top:2px solid rgba(242,181,68,.4); font-weight:700; background:rgba(242,181,68,.06)}
 
+/* أزرار أيقونات فقط */
 .row-btn{
-  border-radius:9px; padding:6px 12px; font-family:inherit; font-size:12px; font-weight:700;
-  cursor:pointer; transition:.15s; border:1px solid; background:transparent; min-height:32px;
+  border-radius:9px; padding:5px 9px; font-size:14px; line-height:1;
+  cursor:pointer; transition:.15s; border:1px solid; background:transparent; min-height:30px;
 }
-.row-btn + .row-btn{margin-inline-start:6px}
-.edit-btn{border-color:rgba(242,181,68,.5); color:var(--gold2)}
-.edit-btn:hover{background:var(--gold); color:#231a05}
-.del-btn{border-color:rgba(255,128,113,.45); color:var(--danger)}
-.del-btn:hover{background:var(--danger); color:#2a0f0b}
+.row-btn + .row-btn{margin-inline-start:5px}
+.edit-btn{border-color:rgba(242,181,68,.5)}
+.edit-btn:hover{background:var(--gold)}
+.del-btn{border-color:rgba(255,128,113,.45)}
+.del-btn:hover{background:var(--danger)}
 
 .empty{
   position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -308,7 +334,6 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .card-title{display:none}
   .result-card::before{display:none}
 
-  /* حقلين متساويين تماماً بنفس الهيكل */
   #inputCard{display:grid; grid-template-columns:1fr 1fr; gap:8px}
   #inputCard .edit-banner{grid-column:1/-1; margin:0; padding:8px 10px}
   .f-name,.f-cost{margin:0; display:flex; flex-direction:column}
@@ -338,7 +363,6 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .btn-row{grid-column:1/-1; margin-top:0; gap:8px}
   .btn-row .btn{min-height:46px; font-size:14px; padding:10px}
 
-  /* نتيجة مضغوطة */
   .ledger{flex-direction:row; gap:8px}
   .divider{display:none}
   .stat-label{font-size:10px}
@@ -349,16 +373,21 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .summary-row{margin-top:8px; padding-top:8px; justify-content:center}
   #copyBtn{min-height:32px; font-size:12px; padding:6px 14px}
 
-  /* الجدول */
+  /* الجدول: بدون تمرير أفقي */
   .table-card{flex:1; min-height:0}
   .table-head{margin-bottom:8px; gap:8px}
   .search{order:0; flex:1; min-width:0; max-width:none}
   .search input{padding:8px 32px 8px 10px}
   #exportBtn,#wipeBtn{min-height:34px; padding:6px 10px; font-size:11px}
   .table-scroll{flex:1; height:auto; min-height:100px}
-  table{min-width:540px}
-  th,td{padding:8px; font-size:12.5px}
-  .row-btn{padding:5px 8px; font-size:10.5px; min-height:28px}
+  table{min-width:0; width:100%}
+  th,td{padding:8px 5px; font-size:11.5px}
+  th{padding:10px 6px}
+  td.name{min-width:64px}
+  td.num,td.gold-t,td.mint-t{font-size:11px}
+  .row-btn{padding:4px 7px; font-size:12px; min-height:26px}
+  .row-btn + .row-btn{margin-inline-start:3px}
+  .to-bottom{width:34px;height:34px; bottom:10px}
   footer{display:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -491,7 +520,8 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
         <span class="spacer"></span>
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="search" type="text" placeholder="بحث…" aria-label="بحث">
+          <input id="search" type="text" placeholder="بحث…" aria-label="بحث" autocomplete="off">
+          <div class="search-suggest hidden" id="suggest"></div>
         </div>
         <button id="exportBtn" class="btn ghost small">⬇ CSV</button>
         <button id="wipeBtn" class="btn ghost small">🗑 الكل</button>
@@ -500,7 +530,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
       <div class="table-scroll" id="tableScroll">
         <table id="tableEl">
           <thead>
-            <tr><th>المادة</th><th>التكلفة</th><th>الجملة</th><th>المفرد</th><th>ربح القطعة</th><th>إجراءات</th></tr>
+            <tr><th>المادة</th><th>التكلفة</th><th>الجملة</th><th>المفرد</th><th>ربح القطعة</th><th>⚙️</th></tr>
           </thead>
           <tbody id="tbody"></tbody>
           <tfoot id="tfoot" class="hidden">
@@ -512,6 +542,10 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
           <p style="margin:0"><b>لا توجد مواد بعد</b><br>أدخل اسم المادة وتكلفتها ثم اضغط «إضافة إلى القائمة»</p>
         </div>
       </div>
+
+      <button id="toBottom" class="to-bottom hidden" aria-label="النزول إلى المجموع">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
     </section>
   </main>
 
@@ -540,7 +574,9 @@ const nameEl=$('#name'), costEl=$('#cost'), wmEl=$('#wm'), rmEl=$('#rm'),
       curSel=$('#currency'), tbody=$('#tbody'), inputCard=$('#inputCard'),
       emptyState=$('#emptyState'), tfoot=$('#tfoot'), tableEl=$('#tableEl'),
       toastEl=$('#toast'), kBtn=$('#kMode'), costHint=$('#costHint'),
-      addBtn=$('#addBtn'), editBanner=$('#editBanner'), editNameEl=$('#editName');
+      addBtn=$('#addBtn'), editBanner=$('#editBanner'), editNameEl=$('#editName'),
+      searchEl=$('#search'), suggestEl=$('#suggest'), tableScroll=$('#tableScroll'),
+      toBottomBtn=$('#toBottom');
 const ADD_LABEL = '＋ إضافة إلى القائمة';
 
 const fmt = n => new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n);
@@ -646,7 +682,7 @@ function updateResults(){
 }
 
 function renderTable(highlightId){
-  const q = $('#search').value.trim();
+  const q = searchEl.value.trim();
   const view = q ? products.filter(p=> p.name.includes(q)) : products;
 
   tbody.innerHTML = view.map(p=>{
@@ -661,8 +697,8 @@ function renderTable(highlightId){
       <td class="num gold-t">${fmt(p.rp)}</td>
       <td class="mint-t">${fmt(p.pr)}</td>
       <td class="actions">
-        <button class="row-btn edit-btn" data-edit="${p.id}">✏️ تعديل</button>
-        <button class="row-btn del-btn" data-del="${p.id}">🗑 حذف</button>
+        <button class="row-btn edit-btn" data-edit="${p.id}" aria-label="تعديل">✏️</button>
+        <button class="row-btn del-btn" data-del="${p.id}" aria-label="حذف">🗑️</button>
       </td>
     </tr>`;
   }).join('');
@@ -677,10 +713,37 @@ function renderTable(highlightId){
   emptyState.classList.toggle('hidden', !none);
   tableEl.classList.toggle('hidden', none);
   tfoot.classList.toggle('hidden', products.length===0 || !!q);
+  toBottomBtn.classList.toggle('hidden', products.length===0);
   emptyState.querySelector('p').innerHTML = (none && q)
     ? '<b>لا توجد نتيجة مطابقة</b>'
     : '<b>لا توجد مواد بعد</b><br>أدخل اسم المادة وتكلفتها ثم اضغط «إضافة إلى القائمة»';
 }
+
+/* ===== اقتراحات البحث ===== */
+function updateSuggestions(){
+  const q = searchEl.value.trim();
+  if(!q){ suggestEl.classList.add('hidden'); suggestEl.innerHTML=''; return; }
+  const matches = products.filter(p=> p.name.includes(q)).slice(0,6);
+  if(!matches.length){ suggestEl.classList.add('hidden'); suggestEl.innerHTML=''; return; }
+  suggestEl.innerHTML = matches.map(p=>
+    `<div class="suggest-item" data-name="${p.name.replace(/"/g,'&quot;')}">
+       <span>${p.name.replace(/</g,'&lt;')}</span>
+       <span class="s-cost">${fmt(p.cost)} ${currency}</span>
+     </div>`).join('');
+  suggestEl.classList.remove('hidden');
+}
+searchEl.addEventListener('input', ()=>{ renderTable(); updateSuggestions(); });
+suggestEl.addEventListener('click', e=>{
+  const it = e.target.closest('.suggest-item'); if(!it) return;
+  searchEl.value = it.dataset.name;
+  suggestEl.classList.add('hidden'); suggestEl.innerHTML='';
+  renderTable();
+});
+
+/* ===== زر النزول للمجموع ===== */
+toBottomBtn.onclick = ()=>{
+  tableScroll.scrollTo({top: tableScroll.scrollHeight, behavior:'smooth'});
+};
 
 function startEdit(id){
   const p = products.find(x=>x.id===id); if(!p) return;
@@ -750,15 +813,12 @@ costEl.addEventListener('focus', ()=> setTimeout(()=> costEl.setSelectionRange(c
   });
 });
 
-/* ===== Enter للتنقل السلس بين الحقول ===== */
 nameEl.addEventListener('keydown', e=>{
   if(e.key==='Enter'){ e.preventDefault(); costEl.focus(); }
 });
 costEl.addEventListener('keydown', e=>{
   if(e.key==='Enter'){ e.preventDefault(); saveItem(); }
 });
-
-$('#search').addEventListener('input', ()=> renderTable());
 
 tbody.addEventListener('click', e=>{
   const edit = e.target.closest('[data-edit]');
@@ -834,7 +894,7 @@ try{
   if(s.rm!==undefined) rmEl.value=s.rm;
 }catch(e){}
 
-/* التاريخ بنسق 14-8-2026 (يوم-شهر-سنة) — يتحدث كل يوم */
+/* التاريخ بنسق 15-8-2026 (يوم-شهر-سنة) */
 const _d = new Date();
 $('#todayDate').textContent = _d.getDate() + '-' + (_d.getMonth()+1) + '-' + _d.getFullYear();
 
@@ -873,9 +933,12 @@ window.addEventListener('appinstalled', () => {
   toast('تم تثبيت التطبيق على جهازك ✓');
 });
 
-/* ===== إخفاء الكيبورد عند الضغط خارج الحقول ===== */
+/* ===== إخفاء الكيبورد + إغلاق الاقتراحات عند الضغط خارجها ===== */
 document.addEventListener('click', (e) => {
   const tag = e.target.tagName;
+  if (!e.target.closest('.search')) {
+    suggestEl.classList.add('hidden');
+  }
   if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
