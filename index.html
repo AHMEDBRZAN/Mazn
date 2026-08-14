@@ -124,10 +124,10 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 
 .margins{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:6px}
 .margin-box{background:rgba(0,0,0,.16); border:1px solid var(--line); border-radius:13px; padding:14px}
-.margin-box label{margin-bottom:10px}
+.margin-box label{margin-bottom:10px; font-size:15px; font-weight:800}
 .stepper{display:flex; align-items:center; gap:8px}
 .stepper input{
-  width:64px; text-align:center; padding:9px 4px; font-weight:700;
+  width:72px; text-align:center; padding:10px 4px; font-weight:800; font-size:20px !important;
   background:#0b302c; border:1px solid var(--line); border-radius:10px; color:var(--ink); font-family:inherit;
 }
 .stepper input:focus{outline:none; border-color:var(--gold)}
@@ -355,10 +355,11 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .suffix{left:10px; font-size:11px}
   .cost-hint{grid-column:1/-1; margin:0; min-height:14px; font-size:10.5px; text-align:center}
   .margins{grid-column:1/-1; grid-template-columns:1fr 1fr; gap:8px; margin:0}
-  .margin-box{padding:8px}
-  .margin-box label{font-size:10px; margin-bottom:5px}
-  .stepper input{width:44px; padding:7px 2px}
-  .step{width:34px; height:36px; font-size:18px}
+  .margin-box{padding:10px}
+  .margin-box label{font-size:12.5px; margin-bottom:6px; font-weight:800}
+  .stepper input{width:52px; padding:8px 2px; font-size:19px !important; font-weight:800}
+  .step{width:38px; height:40px; font-size:20px}
+  .pct{font-size:14px}
   .chips{display:none}
   .btn-row{grid-column:1/-1; margin-top:0; gap:8px}
   .btn-row .btn{min-height:46px; font-size:14px; padding:10px}
@@ -935,10 +936,10 @@ window.addEventListener('appinstalled', () => {
 
 /* ===== إخفاء الكيبورد + إغلاق الاقتراحات عند الضغط خارجها ===== */
 document.addEventListener('click', (e) => {
-  const tag = e.target.tagName;
   if (!e.target.closest('.search')) {
     suggestEl.classList.add('hidden');
   }
+  const tag = e.target.tagName;
   if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
