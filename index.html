@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>دفتر التسعير — حاسبة الجملة والمفرد والربح</title>
 
-<!-- ===== PWA: تحويل الموقع لتطبيق ===== -->
+<!-- ===== PWA ===== -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0a2f2c">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
-<!-- ====================================== -->
+<!-- =========== -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,11 +42,8 @@ body::before{
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23f2b544' stroke-opacity='.06'%3E%3Crect x='16' y='16' width='40' height='40'/%3E%3Crect x='16' y='16' width='40' height='40' transform='rotate(45 36 36)'/%3E%3C/g%3E%3C/svg%3E");
 }
-
-/* ===== منع تكبير سفاري تلقائيًا ===== */
 button,input,select,textarea{touch-action:manipulation; -webkit-tap-highlight-color:transparent}
 input,select{font-size:16px !important}
-/* ===================================== */
 
 .awning{
   height:14px; position:relative; z-index:2;
@@ -168,7 +165,7 @@ input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 
 .divider{width:1px; background:linear-gradient(transparent,var(--line),transparent)}
 .stat{flex:1; min-width:0}
 .stat-label{display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:4px}
-.stat-value{font-family:'Lalezar',cursive; font-size:38px; line-height:1.15; display:flex; align-items:baseline; gap:7px}
+.stat-value{font-family:'Lalezar',cursive; font-size:38px; line-height:1.15; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap}
 .stat-value.big{font-size:52px; color:var(--gold2); text-shadow:0 0 26px rgba(242,181,68,.25)}
 .stat-value .unit{font-size:.42em; font-style:normal; color:var(--muted)}
 .stat-value.big .unit{color:var(--gold)}
@@ -279,20 +276,69 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
   .stat-value.big{font-size:44px}
   .table-scroll{height:260px}
 }
+
+/* ===== وضع الهاتف: كل شي بشاشة وحدة ===== */
 @media (max-width:640px){
-  .page{padding:16px 12px 34px}
-  .card{padding:18px 15px}
-  .brand-mark{width:48px;height:48px}
-  .btn-row .btn{flex:1; min-height:52px; font-size:16px}
-  .step{width:46px; height:46px; font-size:22px}
-  .stepper input{width:58px}
-  .margins{grid-template-columns:1fr; gap:12px}
-  .search{max-width:none; order:5; flex-basis:100%}
-  .table-scroll{height:240px}
-  th,td{padding:10px 10px}
-  table{min-width:560px}
-  .summary-row{flex-direction:column; align-items:stretch; text-align:center}
-  .date-pill{display:none}
+  .page{
+    padding:10px 10px 12px; display:flex; flex-direction:column;
+    height:calc(100vh - 14px); height:calc(100dvh - 14px);
+  }
+  .topbar{margin-bottom:10px}
+  .brand{gap:10px}
+  .brand-mark{width:40px;height:40px;border-radius:12px}
+  .brand-mark svg{width:22px;height:22px}
+  h1{font-size:24px}
+  .tag,.date-pill{display:none}
+  .currency select{padding:7px 10px}
+
+  .grid{display:flex; flex-direction:column; gap:10px; flex:1; min-height:0}
+  .card{padding:12px}
+  .card-title{display:none}
+  .result-card::before{display:none}
+
+  /* إدخال مضغوط: اسم + تكلفة بصف واحد */
+  #inputCard{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  #inputCard .edit-banner{grid-column:1/-1; margin:0; padding:8px 10px}
+  .f-name,.f-cost{margin:0}
+  .f-name > label{display:none}
+  .f-cost .label-row label{display:none}
+  .label-row{margin-bottom:4px}
+  .k-toggle{font-size:10px; padding:3px 9px; min-height:24px}
+  #inputCard input[type=text]{padding:10px 12px}
+  .suffix-wrap input{padding-left:56px}
+  .suffix{left:10px; font-size:11px}
+  .cost-hint{font-size:10.5px; min-height:14px; margin-top:3px}
+  .margins{grid-column:1/-1; grid-template-columns:1fr 1fr; gap:8px; margin:0}
+  .margin-box{padding:8px}
+  .margin-box label{font-size:10px; margin-bottom:5px}
+  .stepper input{width:44px; padding:7px 2px}
+  .step{width:34px; height:36px; font-size:18px}
+  .chips{display:none}
+  .btn-row{grid-column:1/-1; margin-top:0; gap:8px}
+  .btn-row .btn{min-height:46px; font-size:14px; padding:10px}
+
+  /* نتيجة مضغوطة: ٣ أرقام بصف واحد */
+  .ledger{flex-direction:row; gap:8px}
+  .divider{display:none}
+  .stat-label{font-size:10px}
+  .stat-value{font-size:21px}
+  .stat-value.big{font-size:25px}
+  .stat-sub{font-size:10px}
+  .split-bar,.bar-legend,.profit-pill{display:none}
+  .summary-row{margin-top:8px; padding-top:8px; justify-content:center}
+  #copyBtn{min-height:32px; font-size:12px; padding:6px 14px}
+
+  /* الجدول ياخذ باقي الشاشة */
+  .table-card{flex:1; min-height:0}
+  .table-head{margin-bottom:8px; gap:8px}
+  .search{order:0; flex:1; min-width:0; max-width:none}
+  .search input{padding:8px 32px 8px 10px}
+  #exportBtn,#wipeBtn{min-height:34px; padding:6px 10px; font-size:11px}
+  .table-scroll{flex:1; height:auto; min-height:110px}
+  table{min-width:540px}
+  th,td{padding:8px; font-size:12.5px}
+  .row-btn{padding:5px 8px; font-size:10.5px; min-height:28px}
+  footer{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important; transition:none!important}
@@ -334,18 +380,18 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
         <button type="button" class="edit-cancel" id="cancelEdit">✕ إلغاء التعديل</button>
       </div>
 
-      <div class="field">
+      <div class="field f-name">
         <label for="name">اسم المادة</label>
-        <input id="name" type="text" placeholder="مثال: شاي سيلاني 450 غ" autocomplete="off">
+        <input id="name" type="text" placeholder="اسم المادة…" autocomplete="off">
       </div>
 
-      <div class="field">
+      <div class="field f-cost">
         <div class="label-row">
           <label for="cost">التكلفة (سعر الشراء)</label>
           <button type="button" id="kMode" class="k-toggle active" aria-pressed="true">بالآلاف ×1000</button>
         </div>
         <div class="suffix-wrap">
-          <input id="cost" type="text" inputmode="decimal" placeholder="اكتب 120 تعني 120,000" autocomplete="off">
+          <input id="cost" type="text" inputmode="decimal" placeholder="التكلفة…" autocomplete="off">
           <span class="suffix cur">د.ع</span>
         </div>
         <div class="cost-hint" id="costHint"></div>
@@ -353,7 +399,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
 
       <div class="margins">
         <div class="margin-box">
-          <label>نسبة ربح الجملة ٪</label>
+          <label>ربح الجملة ٪</label>
           <div class="stepper">
             <button type="button" class="step" data-t="wm" data-d="-1" aria-label="إنقاص">−</button>
             <input id="wm" type="text" inputmode="numeric" value="10">
@@ -367,7 +413,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
         </div>
 
         <div class="margin-box">
-          <label>نسبة ربح المفرد ٪</label>
+          <label>ربح المفرد ٪</label>
           <div class="stepper">
             <button type="button" class="step" data-t="rm" data-d="-1" aria-label="إنقاص">−</button>
             <input id="rm" type="text" inputmode="numeric" value="25">
@@ -395,7 +441,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
         <div class="stat">
           <span class="stat-label">سعر الجملة</span>
           <span class="stat-value"><b id="wpOut">—</b><i class="unit cur">د.ع</i></span>
-          <span class="stat-sub">ربح الجملة: <b class="mint" id="wProfit">—</b> <span style="opacity:.7">(هامش <span id="wmOut">10</span>٪)</span></span>
+          <span class="stat-sub">ربح: <b class="mint" id="wProfit">—</b> (<span id="wmOut">10</span>٪)</span>
         </div>
         <div class="divider"></div>
         <div class="stat">
@@ -403,7 +449,7 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
           <span class="stat-value big"><b id="rpOut">—</b><i class="unit cur">د.ع</i></span>
           <div class="split-bar" aria-hidden="true"><span class="seg cost" id="barCost" style="width:100%"></span><span class="seg profit" id="barProfit" style="width:0%"></span></div>
           <div class="bar-legend"><span><i class="sw c"></i>التكلفة</span><span><i class="sw p"></i>الربح</span></div>
-          <span class="stat-sub">ربح المفرد: <b class="gold" id="rProfit">—</b> <span style="opacity:.7">(هامش <span id="rmOut">25</span>٪)</span></span>
+          <span class="stat-sub">ربح: <b class="gold" id="rProfit">—</b> (<span id="rmOut">25</span>٪)</span>
         </div>
       </div>
 
@@ -420,10 +466,10 @@ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:12.5px}
         <span class="spacer"></span>
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="search" type="text" placeholder="بحث عن مادة…" aria-label="بحث">
+          <input id="search" type="text" placeholder="بحث…" aria-label="بحث">
         </div>
-        <button id="exportBtn" class="btn ghost small">⬇ تصدير CSV</button>
-        <button id="wipeBtn" class="btn ghost small">🗑 مسح الكل</button>
+        <button id="exportBtn" class="btn ghost small">⬇ CSV</button>
+        <button id="wipeBtn" class="btn ghost small">🗑 الكل</button>
       </div>
 
       <div class="table-scroll" id="tableScroll">
@@ -534,7 +580,6 @@ function realCost(){ return kModeOn ? r2(rawCost()*1000) : rawCost(); }
 function updateCostUI(){
   kBtn.classList.toggle('active', kModeOn);
   kBtn.setAttribute('aria-pressed', kModeOn);
-  costEl.placeholder = kModeOn ? 'اكتب 120 تعني 120,000' : '0';
   const raw = rawCost();
   costHint.textContent = (kModeOn && raw>0) ? ('= ' + fmt(realCost()) + ' ' + currency) : '';
 }
@@ -623,7 +668,6 @@ function startEdit(id){
   editNameEl.textContent = p.name;
   editBanner.classList.remove('hidden');
   renderTable();
-  inputCard.scrollIntoView({behavior:'smooth', block:'start'});
   nameEl.focus();
 }
 function endEdit(){
@@ -762,7 +806,7 @@ $('#todayDate').textContent = new Intl.DateTimeFormat('ar',{weekday:'long',day:'
 
 setCurEverywhere(); syncChips(); updateCostUI(); renderTable(); updateResults();
 
-/* ===== نظام تثبيت التطبيق (PWA) ===== */
+/* ===== تثبيت التطبيق ===== */
 let deferredPrompt = null;
 const installBar = $('#installBar');
 const installBtn = $('#installBtn');
@@ -796,7 +840,6 @@ window.addEventListener('appinstalled', () => {
 });
 </script>
 
-<!-- ===== تسجيل Service Worker (يعمل بدون إنترنت) ===== -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
