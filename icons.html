@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صانع أيقونات التطبيق</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0a2f2c;color:#f4efe2;margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center}
+canvas{width:180px;height:180px;border-radius:24px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+button{background:linear-gradient(160deg,#ffd57e,#c98d1e);border:0;color:#231a05;font-weight:800;font-size:17px;padding:14px 30px;border-radius:14px;cursor:pointer;margin:4px}
+p{color:#a3c0b7;font-size:14px;max-width:340px;line-height:1.7}
+</style>
+</head>
+<body>
+<h2 style="margin:0">🏷️ صانع الأيقونات</h2>
+<canvas id="c" width="512" height="512"></canvas>
+<div>
+<button id="b192">⬇ تنزيل icon-192.png</button>
+<button id="b512">⬇ تنزيل icon-512.png</button>
+</div>
+<p>اضغط الزرين وراح ينزلون ملفين PNG بهاتفك. بعدها ارفعهما للمستودع على GitHub.</p>
+<script>
+function draw(ctx,s){
+  ctx.clearRect(0,0,s,s);
+  var r=s*0.18;
+  ctx.beginPath();
+  ctx.moveTo(r,0);ctx.arcTo(s,0,s,s,r);ctx.arcTo(s,s,0,s,r);ctx.arcTo(0,s,0,0,r);ctx.arcTo(0,0,s,0,r);ctx.closePath();
+  ctx.fillStyle='#0a2f2c';ctx.fill();
+  ctx.save();ctx.clip();
+  var h=s*0.09,w=s/8;
+  for(var i=0;i<8;i++){ctx.fillStyle=i%2?'#f2b544':'#123f3a';ctx.fillRect(i*w,0,w+1,h);}
+  var g=ctx.createLinearGradient(0,s*0.2,s,s);
+  g.addColorStop(0,'#ffd57e');g.addColorStop(1,'#c98d1e');
+  ctx.translate(s*0.53,s*0.58);ctx.rotate(-Math.PI/4);
+  var w2=s*0.46,h2=s*0.32,rr=s*0.06;
+  ctx.beginPath();
+  ctx.moveTo(-w2/2+rr,-h2/2);ctx.arcTo(w2/2,-h2/2,w2/2,h2/2,rr);ctx.arcTo(w2/2,h2/2,-w2/2,h2/2,rr);ctx.arcTo(-w2/2,h2/2,-w2/2,-h2/2,rr);ctx.arcTo(-w2/2,-h2/2,w2/2,-h2/2,rr);ctx.closePath();
+  ctx.fillStyle=g;ctx.fill();
+  ctx.beginPath();ctx.arc(-w2/2+s*0.075,0,s*0.035,0,7);ctx.fillStyle='#0a2f2c';ctx.fill();
+  ctx.restore();
+}
+function dl(px){
+  var c2=document.createElement('canvas');c2.width=c2.height=px;
+  draw(c2.getContext('2d'),px);
+  c2.toBlob(function(b){
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download='icon-'+px+'.png';
+    document.body.appendChild(a);a.click();a.remove();
+  },'image/png');
+}
+draw(document.getElementById('c').getContext('2d'),512);
+document.getElementById('b192').onclick=function(){dl(192)};
+document.getElementById('b512').onclick=function(){dl(512)};
+</script>
+</body>
+</html>
