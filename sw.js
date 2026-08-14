@@ -1,4 +1,4 @@
-const CACHE = 'daftar-v1';
+const CACHE = 'daftar-v3';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', e => {
@@ -12,13 +12,14 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(hit => {
-      if (hit) return hit;
-      return fetch(e.request).then(res => {
+    fetch(e.request).then(res => {
+      if (res.ok) {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, copy));
-        return res;
-      }).catch(() => caches.match('./index.html'));
-    })
+      }
+      return res;
+    }).catch(() =>
+      caches.match(e.request, { ignoreSearch: true }).then(hit => hit || caches.match('./index.html'))
+    )
   );
 });
