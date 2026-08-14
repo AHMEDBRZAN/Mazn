@@ -74,23 +74,36 @@ h1{font-family:'Lalezar',cursive; font-weight:400; margin:0; font-size:clamp(30p
 /* ===== الحقول ===== */
 .field{margin-bottom:16px}
 label{display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:7px}
-input[type=text],input[type=number],select.field-select{
+.label-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:7px}
+.label-row label{margin:0}
+input[type=text],select.field-select{
   width:100%; background:#0b302c; border:1px solid var(--line); border-radius:11px;
-  color:var(--ink); padding:13px 15px; font-family:inherit; font-size:16px; transition:.2s;
+  color:var(--ink); padding:13px 15px; font-family:inherit; font-size:17px; font-weight:600; transition:.2s;
 }
-input::placeholder{color:rgba(163,192,183,.5)}
+input::placeholder{color:rgba(163,192,183,.5); font-weight:400}
 input:focus,select:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(242,181,68,.18)}
-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
-input[type=number]{-moz-appearance:textfield; appearance:textfield}
 .suffix-wrap{position:relative}
 .suffix-wrap input{padding-left:70px}
 .suffix{position:absolute; left:15px; top:50%; translate:0 -50%; color:var(--gold); font-weight:700; font-size:13px}
+.cost-hint{margin-top:7px; font-size:13.5px; color:var(--gold2); font-weight:700; min-height:19px}
 
-.margins{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px}
+.k-toggle{
+  border:1px solid var(--line); background:rgba(255,255,255,.04); color:var(--muted);
+  font-family:inherit; font-size:12px; font-weight:700; padding:5px 13px; border-radius:999px;
+  cursor:pointer; transition:.15s; white-space:nowrap;
+}
+.k-toggle:hover{border-color:var(--gold); color:var(--gold2)}
+.k-toggle.active{background:var(--gold); border-color:var(--gold); color:#231a05; box-shadow:0 4px 14px -4px rgba(242,181,68,.5)}
+
+.margins{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:6px}
 .margin-box{background:rgba(0,0,0,.16); border:1px solid var(--line); border-radius:13px; padding:14px}
 .margin-box label{margin-bottom:10px}
 .stepper{display:flex; align-items:center; gap:8px}
-.stepper input{width:64px; text-align:center; padding:9px 4px; font-weight:700; font-size:17px}
+.stepper input{
+  width:64px; text-align:center; padding:9px 4px; font-weight:700; font-size:17px;
+  background:#0b302c; border:1px solid var(--line); border-radius:10px; color:var(--ink); font-family:inherit;
+}
+.stepper input:focus{outline:none; border-color:var(--gold)}
 .step{
   width:34px;height:38px; border-radius:10px; border:1px solid var(--line); cursor:pointer;
   background:rgba(255,255,255,.04); color:var(--gold2); font-size:19px; transition:.15s;
@@ -259,11 +272,15 @@ footer{margin-top:26px; text-align:center; color:var(--muted); font-size:12.5px}
       </div>
 
       <div class="field">
-        <label for="cost">التكلفة (سعر الشراء)</label>
+        <div class="label-row">
+          <label for="cost">التكلفة (سعر الشراء)</label>
+          <button type="button" id="kMode" class="k-toggle active" aria-pressed="true">بالآلاف ×1000</button>
+        </div>
         <div class="suffix-wrap">
-          <input id="cost" type="number" min="0" step="any" placeholder="0" inputmode="decimal">
+          <input id="cost" type="text" inputmode="decimal" placeholder="اكتب 120 تعني 120,000" autocomplete="off">
           <span class="suffix cur">د.ع</span>
         </div>
+        <div class="cost-hint" id="costHint"></div>
       </div>
 
       <div class="margins">
@@ -271,7 +288,7 @@ footer{margin-top:26px; text-align:center; color:var(--muted); font-size:12.5px}
           <label>نسبة ربح الجملة ٪</label>
           <div class="stepper">
             <button type="button" class="step" data-t="wm" data-d="-1" aria-label="إنقاص">−</button>
-            <input id="wm" type="number" min="0" max="900" value="10">
+            <input id="wm" type="text" inputmode="numeric" value="10">
             <span class="pct">٪</span>
             <button type="button" class="step" data-t="wm" data-d="1" aria-label="زيادة">+</button>
           </div>
@@ -285,7 +302,7 @@ footer{margin-top:26px; text-align:center; color:var(--muted); font-size:12.5px}
           <label>نسبة ربح المفرد ٪</label>
           <div class="stepper">
             <button type="button" class="step" data-t="rm" data-d="-1" aria-label="إنقاص">−</button>
-            <input id="rm" type="number" min="0" max="900" value="25">
+            <input id="rm" type="text" inputmode="numeric" value="25">
             <span class="pct">٪</span>
             <button type="button" class="step" data-t="rm" data-d="1" aria-label="زيادة">+</button>
           </div>
@@ -295,18 +312,6 @@ footer{margin-top:26px; text-align:center; color:var(--muted); font-size:12.5px}
             <button type="button" class="chip">40</button>
           </div>
         </div>
-      </div>
-
-      <div class="field">
-        <label for="rounding">تقريب السعر</label>
-        <select id="rounding" class="field-select">
-          <option value="1">بدون تقريب</option>
-          <option value="50">لأقرب 50</option>
-          <option value="100">لأقرب 100</option>
-          <option value="250" selected>لأقرب 250</option>
-          <option value="500">لأقرب 500</option>
-          <option value="1000">لأقرب 1000</option>
-        </select>
       </div>
 
       <div class="btn-row">
@@ -386,16 +391,19 @@ const CURRENCIES = ['د.ع','د.أ','د.ك','ر.س','د.إ','ج.م','$','€'];
 let products = [];
 try{ products = JSON.parse(localStorage.getItem('daftar.products')||'[]'); }catch(e){}
 let currency = localStorage.getItem('daftar.currency') || 'د.ع';
+let kModeOn = localStorage.getItem('daftar.kmode') !== '0'; // وضع الآلاف: فعّال افتراضيًا
 
 const nameEl=$('#name'), costEl=$('#cost'), wmEl=$('#wm'), rmEl=$('#rm'),
-      roundEl=$('#rounding'), curSel=$('#currency'), tbody=$('#tbody'),
-      emptyState=$('#emptyState'), tfoot=$('#tfoot'), toastEl=$('#toast');
+      curSel=$('#currency'), tbody=$('#tbody'),
+      emptyState=$('#emptyState'), tfoot=$('#tfoot'), toastEl=$('#toast'),
+      kBtn=$('#kMode'), costHint=$('#costHint');
 
 /* ---------- أدوات ---------- */
 const fmt = n => new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n);
-const roundTo = (v,s) => s<=1 ? Math.round(v*100)/100 : Math.round(v/s)*s;
+const r2 = v => Math.round(v*100)/100;
 const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
 const save = () => localStorage.setItem('daftar.products', JSON.stringify(products));
+const parseNum = s => parseFloat(String(s).replace(/,/g,'')) || 0;
 
 function toast(msg,warn){
   toastEl.textContent = msg;
@@ -418,20 +426,59 @@ function countUp(el, val){
   const t0 = performance.now(), dur = 380;
   (function step(t){
     const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
-    el.textContent = fmt(from + (val-from)*e);
+    el.textContent = fmt(r2(from + (val-from)*e));
     if(p<1) requestAnimationFrame(step);
   })(t0);
 }
 
-/* ---------- الحساب ---------- */
+/* ---------- حقل التكلفة: فواصل آلاف أثناء الكتابة ---------- */
+function formatCostInput(){
+  const raw = costEl.value;
+  const sel = costEl.selectionStart;
+  const digitsBefore = raw.slice(0, sel).replace(/[^0-9.]/g,'').length;
+
+  let cleaned = raw.replace(/[^0-9.]/g,'');
+  const parts = cleaned.split('.');
+  let int = parts[0].slice(0,12);
+  const frac = parts.length>1 ? '.'+parts.slice(1).join('').slice(0,2) : '';
+  const formattedInt = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const formatted = formattedInt + frac;
+
+  costEl.value = formatted;
+  let pos=0, count=0;
+  for(let i=0;i<formatted.length;i++){
+    pos=i+1;
+    if(/[0-9.]/.test(formatted[i])) count++;
+    if(count===digitsBefore) break;
+  }
+  costEl.setSelectionRange(pos,pos);
+}
+
+/* ---------- وضع الآلاف ---------- */
+function rawCost(){ return parseNum(costEl.value); }
+function realCost(){ return kModeOn ? r2(rawCost()*1000) : rawCost(); }
+
+function updateCostUI(){
+  kBtn.classList.toggle('active', kModeOn);
+  kBtn.setAttribute('aria-pressed', kModeOn);
+  costEl.placeholder = kModeOn ? 'اكتب 120 تعني 120,000' : '0';
+  const raw = rawCost();
+  costHint.textContent = (kModeOn && raw>0) ? ('= ' + fmt(realCost()) + ' ' + currency) : '';
+}
+kBtn.onclick = ()=>{
+  kModeOn = !kModeOn;
+  localStorage.setItem('daftar.kmode', kModeOn ? '1':'0');
+  updateCostUI(); updateResults();
+};
+
+/* ---------- الحساب (بدون تقريب) ---------- */
 function calc(){
-  const cost = parseFloat(costEl.value)||0;
-  const wm = clamp(parseFloat(wmEl.value)||0,0,900);
-  const rm = clamp(parseFloat(rmEl.value)||0,0,900);
-  const step = parseInt(roundEl.value)||1;
-  const wp = roundTo(cost*(1+wm/100), step);
-  const rp = roundTo(cost*(1+rm/100), step);
-  return {cost, wm, rm, wp, rp, pw:Math.max(0,wp-cost), pr:Math.max(0,rp-cost)};
+  const cost = realCost();
+  const wm = clamp(parseNum(wmEl.value),0,900);
+  const rm = clamp(parseNum(rmEl.value),0,900);
+  const wp = r2(cost*(1+wm/100));
+  const rp = r2(cost*(1+rm/100));
+  return {cost, wm, rm, wp, rp, pw:r2(Math.max(0,wp-cost)), pr:r2(Math.max(0,rp-cost))};
 }
 
 function updateResults(){
@@ -489,16 +536,29 @@ function addItem(){
   const item = {id:Date.now(), name, cost:c.cost, wm:c.wm, rm:c.rm, wp:c.wp, rp:c.rp, pw:c.pw, pr:c.pr};
   products.unshift(item); save(); renderTable(item.id);
   toast('تمت إضافة «'+name+'» ✓');
-  nameEl.value=''; costEl.value=''; nameEl.focus(); updateResults();
+  nameEl.value=''; costEl.value=''; updateCostUI(); nameEl.focus(); updateResults();
+}
+
+function saveSettings(){
+  localStorage.setItem('daftar.settings', JSON.stringify({wm:wmEl.value, rm:rmEl.value}));
 }
 
 /* ---------- أحداث ---------- */
 $('#addBtn').onclick = addItem;
-[costEl, wmEl, rmEl].forEach(el=> el.addEventListener('input', ()=>{ syncChips(); updateResults(); }));
-roundEl.addEventListener('change', ()=>{ saveSettings(); updateResults(); });
+
+costEl.addEventListener('input', ()=>{ formatCostInput(); updateCostUI(); updateResults(); });
+costEl.addEventListener('focus', ()=> setTimeout(()=> costEl.setSelectionRange(costEl.value.length, costEl.value.length),0));
+
+[wmEl, rmEl].forEach(el=>{
+  el.addEventListener('input', ()=>{
+    el.value = el.value.replace(/[^0-9.]/g,'').slice(0,5);
+    syncChips(); updateResults(); saveSettings();
+  });
+});
+
 [nameEl, costEl].forEach(el=> el.addEventListener('keydown', e=>{ if(e.key==='Enter') addItem(); }));
 
-$('#clearBtn').onclick = ()=>{ nameEl.value=''; costEl.value=''; nameEl.focus(); updateResults(); };
+$('#clearBtn').onclick = ()=>{ nameEl.value=''; costEl.value=''; updateCostUI(); nameEl.focus(); updateResults(); };
 
 $('#search').addEventListener('input', ()=> renderTable());
 
@@ -535,7 +595,7 @@ $('#copyBtn').onclick = async ()=>{
 /* أزرار +/− والنِسَب الجاهزة */
 document.querySelectorAll('.step').forEach(b=> b.onclick = ()=>{
   const el = $('#'+b.dataset.t);
-  el.value = clamp((parseFloat(el.value)||0) + (+b.dataset.d), 0, 900);
+  el.value = clamp(parseNum(el.value) + (+b.dataset.d), 0, 900);
   syncChips(); updateResults(); saveSettings();
 });
 document.querySelectorAll('.chips').forEach(box=>{
@@ -547,7 +607,7 @@ document.querySelectorAll('.chips').forEach(box=>{
 });
 function syncChips(){
   document.querySelectorAll('.chips').forEach(box=>{
-    const v = parseFloat($('#'+box.dataset.t).value);
+    const v = parseNum($('#'+box.dataset.t).value);
     box.querySelectorAll('.chip').forEach(ch=> ch.classList.toggle('active', +ch.textContent===v));
   });
 }
@@ -557,25 +617,20 @@ CURRENCIES.forEach(c=>{
   const o = document.createElement('option'); o.value=o.textContent=c; curSel.appendChild(o);
 });
 curSel.value = currency;
-curSel.onchange = ()=>{ currency = curSel.value; localStorage.setItem('daftar.currency',currency); setCurEverywhere(); renderTable(); };
+curSel.onchange = ()=>{ currency = curSel.value; localStorage.setItem('daftar.currency',currency); setCurEverywhere(); updateCostUI(); renderTable(); };
 
 /* الإعدادات المحفوظة */
-function saveSettings(){
-  localStorage.setItem('daftar.settings', JSON.stringify({wm:wmEl.value, rm:rmEl.value, r:roundEl.value}));
-}
 try{
   const s = JSON.parse(localStorage.getItem('daftar.settings')||'{}');
   if(s.wm!==undefined) wmEl.value=s.wm;
   if(s.rm!==undefined) rmEl.value=s.rm;
-  if(s.r!==undefined)  roundEl.value=s.r;
 }catch(e){}
-[wmEl,rmEl].forEach(el=> el.addEventListener('change', saveSettings));
 
 /* التاريخ */
 $('#todayDate').textContent = new Intl.DateTimeFormat('ar',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
 
 /* تشغيل */
-setCurEverywhere(); syncChips(); renderTable(); updateResults();
+setCurEverywhere(); syncChips(); updateCostUI(); renderTable(); updateResults();
 </script>
 </body>
 </html>
