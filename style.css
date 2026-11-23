@@ -4,6 +4,8 @@
   --amber:#f59e0b; --blue:#2563eb; --green:#16a34a; --red:#dc2626; --magenta:#db2777;
   --scrim:rgba(8,26,25,.62);
 }
+/* الإصلاح الحاسم: أي عنصر hidden يختفي دائماً مهما كانت قاعدة display */
+[hidden]{display:none !important}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:"Cairo","Segoe UI",Tahoma,sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;overflow-x:hidden}
@@ -117,8 +119,9 @@ tr.detail table{min-width:0;font-size:.74rem}
 .passList li.run::before{content:"◉";color:var(--amber);animation:pulse 1s infinite}
 .passList li.done::before{content:"✓";color:var(--green)}
 @keyframes pulse{50%{opacity:.4}}
+#lightbox{cursor:zoom-out}
 #lightbox img{max-width:94vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 70px rgba(0,0,0,.6)}
-.lbClose{position:fixed;top:16px;left:16px;width:42px;height:42px;border-radius:50%;border:none;background:var(--red);color:#fff;font-size:22px;cursor:pointer}
+.lbClose{position:fixed;top:16px;left:16px;width:42px;height:42px;border-radius:50%;border:none;background:var(--red);color:#fff;font-size:22px;cursor:pointer;z-index:61}
 .toasts{position:fixed;bottom:16px;inset-inline:16px;display:flex;flex-direction:column;gap:8px;z-index:70;align-items:center;pointer-events:none}
 .toast{background:var(--petrol);color:#fff;padding:10px 18px;border-radius:12px;font-size:.85rem;font-weight:700;box-shadow:0 8px 26px rgba(0,0,0,.35);animation:tin .3s}
 .toast.ok{background:var(--green)}.toast.bad{background:var(--red)}
