@@ -1,0 +1,4167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>فاتورة المورد ← ملف استيراد سراج</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1c2733;--mut:#5d6b7a;--line:#dde3ea;--pri:#1f3a5f;--ok:#1d7a46;--okbg:#e6f4ea;--bad:#b3261e;--badbg:#fdecea;--warn:#8a5a00;--warnbg:#fff4d6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",Tahoma,Arial,sans-serif}
+header{background:var(--pri);color:#fff;padding:14px 18px}
+header h1{margin:0;font-size:18px}header p{margin:2px 0 0;font-size:13px;opacity:.85}
+main{max-width:980px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.card h2{margin:0 0 8px;font-size:16px;color:var(--pri)}
+.step{display:inline-block;background:var(--pri);color:#fff;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:13px;margin-left:6px}
+button{font:inherit;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;background:var(--pri);color:#fff}
+button.sec{background:#e8edf3;color:var(--ink)}button.danger{background:var(--bad)}button:disabled{opacity:.45;cursor:not-allowed}
+input,select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fff;color:var(--ink)}
+input[type=number]{width:110px;direction:ltr;text-align:left}
+.msg{padding:10px 12px;border-radius:8px;margin:8px 0;font-size:14px}
+.msg.ok{background:var(--okbg);color:var(--ok)}.msg.bad{background:var(--badbg);color:var(--bad)}.msg.warn{background:var(--warnbg);color:var(--warn)}.msg.info{background:#eaf1fb;color:var(--pri)}
+.msg ul{margin:4px 0 0;padding-right:20px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border:1px solid var(--line);padding:5px 7px;text-align:right;vertical-align:middle}th{background:#eef2f7}
+td.n{direction:ltr;text-align:left;font-variant-numeric:tabular-nums}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.thumbs div{width:150px;font-size:12px;color:var(--mut)}.thumbs img{width:150px;height:190px;object-fit:contain;background:#eee;border:1px solid var(--line);border-radius:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.grid2 label{font-size:12.5px;color:var(--mut);display:block}.grid2 input{width:100%}
+.pl{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
+.pl.done{border-color:#9fd3b2;background:#fbfefc}.pl.todo{border-color:#f0c36d}
+.chip{display:inline-block;margin:2px;padding:3px 9px;border-radius:14px;background:#eef2f7;border:1px solid var(--line);cursor:pointer;font-size:13px}
+.chip:hover{background:#dfe8f3}
+.small{font-size:12.5px;color:var(--mut)}
+.sr{max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:6px;margin-top:4px}.sr div{padding:5px 8px;cursor:pointer;border-bottom:1px solid #f0f2f5}.sr div:hover{background:#eef2f7}
+.bignum{font-size:20px;font-weight:700;direction:ltr;display:inline-block}
+.hw{background:var(--warnbg);border-radius:6px;padding:4px 6px;font-size:12.5px}
+table.rt{border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rt th{background:#eef2f7;color:var(--pri);font-weight:600;white-space:nowrap}
+.rt th,.rt td{border:0;border-bottom:1px solid var(--line);padding:7px 9px}
+.rt tr:last-child td,.rt tr:last-child th{border-bottom:0}
+@media(min-width:721px){.rt tbody tr:nth-child(even) td{background:#fafbfd}.rt td.nm{width:38%}}
+.rt td input{width:100%;min-width:70px}
+.rt td input[type=number]{width:100%;min-width:90px}
+.rt td.nm input{min-width:240px}
+.rt td.idx{width:34px;color:var(--mut);text-align:center}
+.rt td.n,.rt th.n{white-space:nowrap}
+.rt tr.tot td{background:#eef2f7!important;font-weight:700}
+.stat{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.stat span{background:#eef2f7;border-radius:14px;padding:2px 10px;font-size:12.5px;color:var(--mut)}
+.stat b{color:var(--ink)}
+.mats{margin-top:10px}
+.mats>summary{cursor:pointer;list-style:none;background:#eef2f7;color:var(--pri);font-weight:700;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mats>summary::-webkit-details-marker{display:none}
+.mats>summary::after{content:'▾';font-size:16px}
+.mats[open]>summary::after{content:'▴'}
+.mats[open]>summary{margin-bottom:6px}
+.hidden{display:none!important}
+@media(max-width:720px){
+  main{padding:10px}.card{padding:12px}
+  .rt-wrap{overflow:visible!important}
+  table.rt,.rt tbody{display:block;border:0;border-radius:0;overflow:visible}
+  .rt tr.h{display:none}
+  .rt tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;background:#fff}
+  .rt td{display:flex;flex-direction:column;gap:3px;border:0;padding:0;min-width:0;background:transparent;text-align:right}
+  .rt td::before{content:attr(data-lb);font-size:11.5px;color:var(--mut);line-height:1.2}
+  .rt td.full{grid-column:1/-1}
+  .rt td.idx{width:auto;grid-column:1/-1;flex-direction:row;align-items:center;gap:6px;text-align:right;color:var(--pri);font-weight:700}
+  .rt td.idx::before{content:'مادة رقم';color:var(--mut);font-weight:400;font-size:12px}
+  .rt td.e{display:none}
+  .rt td input,.rt td input[type=number],.rt td.nm input{width:100%;min-width:0;padding:8px}
+  .rt td.n{direction:rtl;text-align:right;align-items:flex-start;font-weight:600}
+  .rt td button{width:100%}
+  .rt tr.tot{background:#eef2f7}
+  .rt tr.tot td{grid-column:auto}
+  .rt tr.tot td.full{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<header><h1>فاتورة المورد ← ملف استيراد سراج</h1><p>اختر الشركة، ثم صوّر الفاتورة الورقية: تُقرأ مرتين بشكل مستقل (المطبوع فقط) وتُفحص حسابياً، ثم يُنتج ملف الاستيراد. أي شك يوقف العملية.</p></header>
+<main>
+<div id="boot" class="msg info">جارٍ تحميل كتالوج الأصناف…</div>
+
+<section class="card" id="s1">
+  <h2><span class="step">1</span>الشركة ثم التقاط الفاتورة</h2>
+  <div class="row" style="margin-bottom:8px"><label><b>الشركة (المورد):</b></label><select id="grp"><option value="">— اختر الشركة أولاً —</option></select><span class="small" id="grpInfo"></span></div>
+  <div class="small">صوّر الفاتورة كاملة بالعرض أو الطول، على سطح مستوٍ، بإضاءة كافية دون لمعان أو ظل، والكاميرا موازية للورقة. إن كانت الفاتورة أكثر من صفحة: اختر كل الصفحات دفعة واحدة، أو أضفها واحدة بعد الأخرى (كل صورة جديدة تُضاف بعد السابقة). رتّب الصفحات بزرّي التقديم والتأخير، ولا تخلط صفحات فاتورتين.</div>
+  <div class="row" style="margin-top:8px"><input type="file" id="file" accept="image/*" multiple disabled><button class="sec" id="clear">مسح الصور</button><button class="sec" id="sortNm">ترتيب الصفحات بحسب اسم الملف</button></div>
+  <div id="thumbs" class="thumbs"></div>
+  <div id="localMsg"></div>
+  <div class="row"><button id="readBtn" disabled>اقرأ الفاتورة</button><span id="readStatus" class="small"></span></div>
+</section>
+
+<section class="card hidden" id="s2">
+  <h2><span class="step">2</span>نتيجة القراءة والفحص</h2>
+  <div id="gate"></div>
+  <div id="review"></div>
+</section>
+
+<section class="card hidden" id="s3">
+  <h2><span class="step">3</span>ربط مواد الورقة بأصناف سراج</h2>
+  <div class="small">تُطابَق المواد تلقائياً مع أصناف الشركة المختارة، ولا تظهر هنا إلا المواد التي لم يتحدد مقابلها في سراج بيقين (مثل سطر «جميع الألوان» الذي يفصله سراج). وزّع كمية السطر على أصناف سراج بحيث يساوي المجموع كمية الورقة تماماً.</div>
+  <div id="map"></div>
+</section>
+
+<section class="card hidden" id="s4">
+  <h2><span class="step">4</span>ملف الاستيراد</h2>
+  <div id="out"></div>
+</section>
+</main>
+
+<script>
+/* Siraj "حفظ الى ملف" writer (purchase-invoice lines).  Port of the verified Python generator. */
+const Siraj = (() => {
+  const b64d = s => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+  const f8 = x => { const b = new Uint8Array(8); new DataView(b.buffer).setFloat64(0, x, true); return b; };
+  const i8 = x => { const b = new Uint8Array(8); new DataView(b.buffer).setBigInt64(0, BigInt(x), true); return b; };
+  const u16 = s => { const b = new Uint8Array(s.length * 2), v = new DataView(b.buffer); for (let i = 0; i < s.length; i++) v.setUint16(i * 2, s.charCodeAt(i), true); return b; };
+  const u32 = n => { const b = new Uint8Array(4); new DataView(b.buffer).setUint32(0, n, true); return b; };
+  const cat = parts => { let n = 0; for (const p of parts) n += p.length; const o = new Uint8Array(n); let k = 0; for (const p of parts) { o.set(p, k); k += p.length; } return o; };
+  const qtxt = (q, unit) => (Number.isInteger(q) ? q.toLocaleString('en-US') : String(Number(q.toPrecision(6)))) + ' ' + unit;
+  const OVR_NAMES = ['in_det_id','in_det_order','in_det_order_max','in_det_list_id','in_det_order_offer','auto_id','in_det_qty_rec','in_det_qty','calc_qty_remain','in_det_price','in_det_price_one','in_det_price_after_dis','in_det_price_after_tax','in_det_price_befor_tax','in_det_total_val','in_det_total_net','in_det_total_before_tax','in_det_net_with_tax','in_det_qty_with_unit','in_det_datetime','in_det_cost','in_det_cost_total','in_det_trans_id_temp','in_det_date_mfg','in_det_date_exp','is_new_rec'];
+
+  function load(rows) {            // rows = parsed catalog.json
+    const meta = rows[0];
+    const idx = {}; meta.fields.forEach((f, i) => idx[f[0]] = i);
+    const base = meta.base.map(b64d);
+    const items = new Map();
+    for (let r = 1; r < rows.length; r++) {
+      const it = rows[r]; if (items.has(it.c)) continue;
+      const raw = b64d(it.v), dv = new DataView(raw.buffer), vals = []; let p = 0;
+      for (let k = 0; k < meta.vary.length; k++) { const n = dv.getUint32(p, true); p += 4; vals.push(raw.subarray(p, p + n)); p += n; }
+      items.set(it.c, { code: it.c, name: it.n, cls: it.k, grp: it.g, unit: it.u, vals });
+    }
+    return { meta, idx, base, items, hdr: b64d(meta.hdr) };
+  }
+
+  // lines: [{code, qty, price, total}]  ->  Uint8Array (file)
+  function build(cat_, lines, opts = {}) {
+    const { meta, idx, base, items, hdr } = cat_;
+    const listId = BigInt(opts.listId ?? (102180000000000000n + BigInt(Date.now() % 1000000000) * 1000n));
+    const w = opts.when || new Date();
+    const ms = Date.UTC(w.getFullYear(), w.getMonth(), w.getDate(), w.getHours(), w.getMinutes(), w.getSeconds()) + 62135596800000;
+    const recs = [];
+    lines.forEach((ln, k0) => {
+      const k = k0 + 1, it = items.get(ln.code);
+      if (!it) throw new Error('صنف غير موجود في الكتالوج: ' + ln.code);
+      const r = base.map(x => x.slice());
+      meta.vary.forEach((n, j) => { r[n] = it.vals[j]; });
+      const S = (nm, b) => { r[idx[nm]] = b; };
+      S('in_det_id', i8(listId + BigInt(k))); S('in_det_order', i8(k)); S('in_det_order_max', i8(1)); S('in_det_list_id', i8(listId));
+      S('in_det_order_offer', i8(listId + BigInt(k))); S('auto_id', i8(k));
+      for (const n of ['in_det_qty_rec', 'in_det_qty', 'calc_qty_remain']) S(n, f8(ln.qty));
+      for (const n of ['in_det_price', 'in_det_price_one', 'in_det_price_after_dis', 'in_det_price_after_tax', 'in_det_price_befor_tax']) S(n, f8(ln.price));
+      for (const n of ['in_det_total_val', 'in_det_total_net', 'in_det_total_before_tax', 'in_det_net_with_tax']) S(n, f8(ln.total));
+      S('in_det_qty_with_unit', u16(qtxt(ln.qty, it.unit))); S('in_det_datetime', f8(ms));
+      S('in_det_cost', f8(ln.price)); S('in_det_cost_total', f8(ln.total)); S('in_det_trans_id_temp', i8(listId + 100000n + BigInt(k)));
+      S('in_det_date_mfg', new Uint8Array(0)); S('in_det_date_exp', new Uint8Array(0)); S('is_new_rec', new Uint8Array(2));
+      recs.push(r);
+    });
+    const parts = [hdr, u32(recs.length)];
+    for (const r of recs) for (const b of r) { parts.push(u32(b.length)); parts.push(b); }
+    return cat(parts);
+  }
+  return { load, build };
+})();
+if (typeof module !== 'undefined') module.exports = Siraj;
+
+const YMAP={
+"سبري بويه كورال جميع الالوان ك *12": {
+"codes": [
+"1720",
+"1654",
+"1662",
+"1883",
+"1663",
+"1664",
+"1656",
+"1657",
+"1655",
+"1660",
+"1658",
+"1659",
+"1661",
+"9004"
+],
+"factor": 12
+},
+"سطل بنتلايت مستحلب مائي (المرجان - الياقوت) جميع الالوان": {
+"codes": [
+"26005",
+"26023"
+],
+"primary": "26005",
+"factor": 1
+},
+"سطل بلاستيكي (فاينل سيلك) المرجان (لماع - نصف لمعة)": {
+"codes": [
+"26006"
+],
+"factor": 1
+},
+"سطل معجون جدران المرجان داخلي": {
+"codes": [
+"26007"
+],
+"factor": 1
+},
+"غالون مانع الصدأ (اوكسيد الحديد الاحمر) (المرجان - الياقوت)": {
+"codes": [
+"26009"
+],
+"factor": 1
+},
+"غالون مانع الصدأ (اساس المعادن الرصاصي) المرجان": {
+"codes": [
+"26010"
+],
+"factor": 1
+},
+"غالون بوية دهني لماع وطافي (المرجان - الياقوت) جميع الالوان": {
+"codes": [
+"123001",
+"42005",
+"53004",
+"132001",
+"49003",
+"126002",
+"127002",
+"128002",
+"120003",
+"26026",
+"129002",
+"26022",
+"73003",
+"68003",
+"130002",
+"1838",
+"133001",
+"19002",
+"26024",
+"26030"
+],
+"factor": 1
+},
+"سطل 3.6 مستحلب مائي بنتلايت المرجان": {
+"codes": [
+"26011"
+],
+"factor": 1
+},
+"غالون زيت الكتان المائي (مغلي مرتين)": {
+"codes": [
+"136001"
+],
+"factor": 1
+},
+"غالون بوية دهني لماع برونزي - شمباني": {
+"codes": [
+"123004",
+"123002"
+],
+"primary": "123004",
+"factor": 1
+},
+"سطل 4.5 لتر بلاستيكي (فاينل سيلك) المرجان (لماع - نصف لمعة)": {
+"codes": [
+"26013"
+],
+"factor": 1
+},
+"غالون بوية دهني فضي المرجان ( دي لوكس ) جميع الالوان": {
+"codes": [
+"123005"
+],
+"factor": 1
+},
+"غالون معجون جدران المرجان داخلي": {
+"codes": [
+"26014"
+],
+"factor": 1
+},
+"غالون وارنيش رائق (المرجان - الياقوت)": {
+"codes": [
+"152001"
+],
+"factor": 1
+},
+"لتر مانع الصدأ (اوكسيد الحديد الاحمر) (المرجان - الياقوت)": {
+"codes": [
+"26016"
+],
+"factor": 1
+},
+"لتر مانع الصدأ (اساس المعادن الرصاصي) المرجان": {
+"codes": [
+"26017"
+],
+"factor": 1
+},
+"لتر بنتلايت مستحلب مائي (المرجان - الياقوت) جميع الالوان": {
+"codes": [
+"42006",
+"53007",
+"126003",
+"26029",
+"26027",
+"1991",
+"26028",
+"19005",
+"26025"
+],
+"factor": 1
+},
+"لتر بوية دهني لماع وطافي (المرجان - الياقوت) جميع الالوان": {
+"codes": [
+"42008",
+"53009",
+"56004",
+"49005",
+"126005",
+"127004",
+"128004",
+"1873",
+"158002",
+"129004",
+"1653",
+"73005",
+"26015",
+"68005",
+"1874",
+"26031"
+],
+"factor": 1
+},
+"لتر زيت الكتان المائي (مغلي مرتين)": {
+"codes": [
+"136002"
+],
+"factor": 1
+},
+"لتر بوية دهني لماع برونزي - دي لوكس (جميع الالوان)": {
+"codes": [
+"123007",
+"123006"
+],
+"primary": "123007",
+"factor": 1
+},
+"لتر بوية دهني فضي المرجان": {
+"codes": [
+"123008"
+],
+"factor": 1
+},
+"لتر معجون جدران المرجان داخلي": {
+"codes": [
+"26019"
+],
+"factor": 1
+},
+"لتر وارنيش رائق (المرجان - الياقوت)": {
+"codes": [
+"123009"
+],
+"factor": 1
+},
+"سطل 12.5 كغم بنتلايت مستحلب مائي (المرجان - الياقوت)جميع الالوان": {
+"codes": [
+"26021"
+],
+"factor": 1
+},
+"½ لتر بوية دهني لماع وطافي (المرجان - الياقوت) جميع الالوان": {
+"codes": [
+"26032",
+"1892",
+"1886",
+"1888",
+"1887",
+"1891",
+"1889",
+"1893",
+"1890"
+],
+"factor": 1
+},
+"½ لتر مانع الصدأ (اوكسيد الحديد الاحمر) (المرجان - الياقوت)": {
+"codes": [
+"1894"
+],
+"factor": 1
+},
+"½ لتر مانع الصدأ (اساس المعادن الرصاصي) المرجان": {
+"codes": [
+"1895"
+],
+"factor": 1
+},
+"سطل تكس الياقوت (خشن - ناعم)": {
+"codes": [
+"19001"
+],
+"factor": 1
+},
+"لباد عراقي العرض 1متر الياقوت طول 14 متر": {
+"codes": [
+"107002"
+],
+"factor": 1
+},
+"سطل بنتلايت BY سوبر درجه اولى ابيض": {
+"codes": [
+"05065"
+],
+"primary": "05065",
+"factor": 1
+},
+"سطل رووف 15 لتر ابيض": {
+"codes": [
+"05064"
+],
+"primary": "05064",
+"factor": 1
+},
+"سطل برايمر مائي داخلي B.Y": {
+"codes": [
+"05059"
+],
+"primary": "05059",
+"factor": 1
+},
+"سطل برايمر مائي خارجي B.Y": {
+"codes": [
+"1644"
+],
+"primary": "1644",
+"factor": 1
+},
+"سطل اكشل ابيض BY": {
+"codes": [
+"32235"
+],
+"primary": "32235",
+"factor": 1
+},
+"سطل اكشل الوان by": {
+"codes": [
+"1634"
+],
+"factor": 1,
+"manual": true
+},
+"غالون معجونة داخلي BY": {
+"codes": [
+"33005"
+],
+"primary": "33005",
+"factor": 1
+},
+"غالون معجونه BY": {
+"codes": [
+"33005"
+],
+"primary": "33005",
+"factor": 1
+},
+"5 كيلو معجونه BY": {
+"codes": [
+"33005"
+],
+"primary": "33005",
+"factor": 1
+},
+"لتر معجونة داخلي B.Y": {
+"codes": [
+"5087"
+],
+"primary": "5087",
+"factor": 1
+},
+"سطل معجون BY": {
+"codes": [
+"1896"
+],
+"primary": "1896",
+"factor": 1
+},
+"سطل معجون الياف": {
+"codes": [
+"1725"
+],
+"primary": "1725",
+"factor": 1
+},
+"سطل معجونة فواصل 10 كيلو": {
+"codes": [
+"1911"
+],
+"primary": "1911",
+"factor": 1
+},
+"غالون معجونة فواصل": {
+"codes": [
+"32248"
+],
+"primary": "32248",
+"factor": 1
+},
+"سطل معجونة خارجي": {
+"codes": [
+"1724"
+],
+"primary": "1724",
+"factor": 1
+},
+"سطل معجون خارجي": {
+"codes": [
+"1724"
+],
+"primary": "1724",
+"factor": 1
+},
+"سطل بنتلايت سوبر 10 كيلو B.Y": {
+"codes": [
+"33007"
+],
+"primary": "33007",
+"factor": 1
+},
+"سطل بنتلايت سوبر 366": {
+"codes": [
+"32247"
+],
+"primary": "32247",
+"factor": 1
+},
+"سطل بنتلايت by PLUS": {
+"codes": [
+"5082"
+],
+"primary": "5082",
+"factor": 1
+},
+"غالون بنتلايت سوبر ابيض BY": {
+"codes": [
+"33002"
+],
+"primary": "33002",
+"factor": 1
+},
+"لتر بنتلايت سوبر ابيض BY": {
+"codes": [
+"5074"
+],
+"primary": "5074",
+"factor": 1
+},
+"سطل بلاستيكي لمعة B.Y": {
+"codes": [
+"33001"
+],
+"primary": "33001",
+"factor": 1
+},
+"سطل بلاستيكي BY": {
+"codes": [
+"33001"
+],
+"primary": "33001",
+"factor": 1
+},
+"غالون بلاستيكي لمعة B.Y": {
+"codes": [
+"32236"
+],
+"primary": "32236",
+"factor": 1
+},
+"غالون رووف كوت B.Y": {
+"codes": [
+"135001"
+],
+"primary": "135001",
+"factor": 1
+},
+"غالون مخشن سيراميك B.Y": {
+"codes": [
+"5080"
+],
+"primary": "5080",
+"factor": 1
+},
+"سطل مخشن سيراميك 12كيلو حديد": {
+"codes": [
+"5089"
+],
+"primary": "5089",
+"factor": 1
+},
+"بكج ايبوكسي جرانيت": {
+"codes": [
+"5097"
+],
+"primary": "5097",
+"factor": 1
+},
+"غالون ميتاليك 500": {
+"codes": [
+"139001"
+],
+"primary": "139001",
+"factor": 1
+},
+"غالون ميتاليك 501": {
+"codes": [
+"140001"
+],
+"primary": "140001",
+"factor": 1
+},
+"غالون ميتاليك 503": {
+"codes": [
+"142001"
+],
+"primary": "142001",
+"factor": 1
+},
+"غالون ميتاليك 504": {
+"codes": [
+"143001"
+],
+"primary": "143001",
+"factor": 1
+},
+"غالون ميتاليك 505": {
+"codes": [
+"144001"
+],
+"primary": "144001",
+"factor": 1
+},
+"غالون ميتاليك 506": {
+"codes": [
+"145001"
+],
+"primary": "145001",
+"factor": 1
+},
+"غالون ميتاليك 507": {
+"codes": [
+"146001"
+],
+"primary": "146001",
+"factor": 1
+},
+"غالون ميتاليك 508": {
+"codes": [
+"147001"
+],
+"primary": "147001",
+"factor": 1
+},
+"غالون ميتاليك 509": {
+"codes": [
+"148001"
+],
+"primary": "148001",
+"factor": 1
+},
+"غالون ميتاليك 511": {
+"codes": [
+"149001"
+],
+"primary": "149001",
+"factor": 1
+},
+"غالون ميتاليك 512": {
+"codes": [
+"150001"
+],
+"primary": "150001",
+"factor": 1
+},
+"غالون ميتاليك 514 طافي": {
+"codes": [
+"5069"
+],
+"primary": "5069",
+"factor": 1
+},
+"غالون ميتاليك 514 لمعة": {
+"codes": [
+"5070"
+],
+"primary": "5070",
+"factor": 1
+},
+"لتر ميتاليك 503": {
+"codes": [
+"142002"
+],
+"primary": "142002",
+"factor": 1
+},
+"لتر ميتاليك 507": {
+"codes": [
+"5076"
+],
+"primary": "5076",
+"factor": 1
+},
+"لتر ميتاليك 511": {
+"codes": [
+"5075"
+],
+"primary": "5075",
+"factor": 1
+},
+"لتر ميتاليك 514": {
+"codes": [
+"5096",
+"1665"
+],
+"factor": 1
+},
+"غالون اندر كوت": {
+"codes": [
+"135002"
+],
+"primary": "135002",
+"factor": 1
+},
+"لتر اندر كوت": {
+"codes": [
+"135003"
+],
+"primary": "135003",
+"factor": 1
+},
+"اندر كوت مائي 1K": {
+"codes": [
+"05058"
+],
+"primary": "05058",
+"factor": 1
+},
+"غالون بوية لمعة B.Y": {
+"codes": [
+"33003",
+"5073",
+"27002",
+"1897"
+],
+"factor": 1
+},
+"غالون بوية لمعة B.Y طافي": {
+"codes": [
+"5073"
+],
+"primary": "5073",
+"factor": 1
+},
+"غالون بوية لمعة B.Y ابيض": {
+"codes": [
+"33003"
+],
+"factor": 1
+},
+"لتر بوية لمعة B.Y": {
+"codes": [
+"5092",
+"5093"
+],
+"factor": 1
+},
+"بويه لتر اسود طافي by": {
+"codes": [
+"5093"
+],
+"primary": "5093",
+"factor": 1
+},
+"عجينه BY ذهبي 250 ملم": {
+"codes": [
+"5083"
+],
+"primary": "5083",
+"factor": 1
+},
+"SBR 5كيلو": {
+"codes": [
+"5088"
+],
+"primary": "5088",
+"factor": 1
+},
+"غالون تغيير لون السيراميك دهني": {
+"codes": [
+"134001"
+],
+"primary": "134001",
+"factor": 1
+},
+"غالون تغيير لون الخشب": {
+"codes": [
+"1719"
+],
+"primary": "1719",
+"factor": 1
+},
+"تغيير لون سيراميك + برايمر": {
+"codes": [
+"134001",
+"5094"
+],
+"factor": 1
+},
+"غالون برايمر ثنري": {
+"codes": [
+"27003"
+],
+"primary": "27003",
+"factor": 1
+},
+"سطل ميزر خشن BY": {
+"codes": [
+"05063",
+"5068"
+],
+"primary": "05063",
+"factor": 1
+},
+"NANO TECH مائي": {
+"codes": [
+"1722"
+],
+"primary": "1722",
+"factor": 1
+},
+"NANO TECH دهني": {
+"codes": [
+"1722"
+],
+"primary": "1722",
+"factor": 1
+},
+"عازل B.Y 2K": {
+"codes": [
+"1723"
+],
+"primary": "1723",
+"factor": 1
+},
+"سطل تخطيط الطرق BY": {
+"codes": [
+"5078",
+"1473"
+],
+"factor": 1
+},
+"غالون اكشل B.Y": {
+"codes": [
+"1635"
+],
+"primary": "1635",
+"factor": 1
+},
+"ملمع مرمر": {
+"codes": [
+"5091"
+],
+"primary": "5091",
+"factor": 1
+},
+"علبة برايمر سيراميك حديد": {
+"codes": [
+"5094"
+],
+"primary": "5094",
+"factor": 1
+},
+"طلاء كوزميك داخلي ابيض مكس1 15 لتر": {
+"codes": [
+"188181"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-1 15LT": {
+"codes": [
+"188181"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس1 7,5 لتر": {
+"codes": [
+"188194"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-1 7.5LT": {
+"codes": [
+"188194"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس2 15 لتر": {
+"codes": [
+"188182"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-2 15LT": {
+"codes": [
+"188182"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس5 15 لتر": {
+"codes": [
+"188185"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-5 15LT": {
+"codes": [
+"188185"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا داخلي مكس 1 7,5 لتر": {
+"codes": [
+"187733"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC MIX-1 7.5LT": {
+"codes": [
+"187733"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا داخلي مكس 1 2.5 لتر": {
+"codes": [
+"187728"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC MIX-1 2.5LT": {
+"codes": [
+"187728"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون مات مكس1 20كغ": {
+"codes": [
+"187903"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-1 20KG": {
+"codes": [
+"187903"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون مات مكس 1 10كغ": {
+"codes": [
+"1419"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-1 10KG": {
+"codes": [
+"1419"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون مات مكس 1 3.5 كغ": {
+"codes": [
+"1526"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-1 3.5KG": {
+"codes": [
+"1526"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون طافي داخلي مكس2 20 كغ": {
+"codes": [
+"187904"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-2 20KG": {
+"codes": [
+"187904"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون طافي داخلي مكس2 10كغ": {
+"codes": [
+"187901"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-2 10KG": {
+"codes": [
+"187901"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء اكسترا تقان للاسقف 10كغم": {
+"codes": [
+"187791"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR EXTRA TAVAN 10 KG": {
+"codes": [
+"187791"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس داخلي احترافي 20كغم": {
+"codes": [
+"187764"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PRO ASTAR IC 20KG": {
+"codes": [
+"187764"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس داخلي احترافي 10كغم": {
+"codes": [
+"187763"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PRO ASTAR IC 10KG": {
+"codes": [
+"187763"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس داخلي احترافي 3.5كغم": {
+"codes": [
+"187765"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PRO ASTAR IC 3.5KG": {
+"codes": [
+"187765"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس دنسوم للاسطح المطلية سابقا 20كغم": {
+"codes": [
+"187754"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR DONUSUM ASTAR IC 20KG": {
+"codes": [
+"187754"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس دنسوم للاسطح المطلية سابقا 10كغم": {
+"codes": [
+"187753"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR DONUSUM ASTAR IC 10KG": {
+"codes": [
+"187753"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس دنسوم للاسطح المطلية سابقا 3.5كغم": {
+"codes": [
+"187755"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR DONUSUM ASTAR IC 3.5KG": {
+"codes": [
+"187755"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس شفاف 20لتر": {
+"codes": [
+"187766"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SEFFAF ASTAR 20 LT": {
+"codes": [
+"187766"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس شفاف 5لتر": {
+"codes": [
+"187767"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SEFFAF ASTAR 5 LT": {
+"codes": [
+"187767"
+],
+"factor": 1,
+"fw": 1
+},
+"معجون 1,10 كيلوجرام": {
+"codes": [
+"188236"
+],
+"factor": 1,
+"fw": 1
+},
+"FAWORI MACUN FW 1,10 KG": {
+"codes": [
+"188236"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء تخطيط الشوارع اكريلك اسود 25 كيلوجرام": {
+"codes": [
+"187970"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWR SOL.AKR.YOL C.B.BLACK 25KG": {
+"codes": [
+"187970"
+],
+"factor": 1,
+"fw": 1
+},
+"ثنر سيليلوزي 3لتر": {
+"codes": [
+"187797"
+],
+"factor": 1,
+"fw": 1
+},
+"FAWORI SELULOZIK TINER 3 LT": {
+"codes": [
+"187797"
+],
+"factor": 1,
+"fw": 1
+},
+"عازل للماء بدون الياف ابيض 10كغم": {
+"codes": [
+"187894"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SUSAV BEYAZ 10KG": {
+"codes": [
+"187894"
+],
+"factor": 1,
+"fw": 1
+},
+"عازل للماء بدون الياف ابيض 3كغم": {
+"codes": [
+"187896"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SUSAV BEYAZ 3KG": {
+"codes": [
+"187896"
+],
+"factor": 1,
+"fw": 1
+},
+"عازل ماء بالالياف (راف كوود) 20كغم ابيض": {
+"codes": [
+"187891"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ELYAFLI SUSAV BEYAZ 20KG": {
+"codes": [
+"187891"
+],
+"factor": 1,
+"fw": 1
+},
+"عازل ماء بالالياف (روف كوت) 10كغم ابيض": {
+"codes": [
+"187890"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ELYAFLI SUSAV BEYAZ 10KG": {
+"codes": [
+"187890"
+],
+"factor": 1,
+"fw": 1
+},
+"عازل ماء بالالياف (روف كوت) 3كغم ابيض": {
+"codes": [
+"187892"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ELYAFLI SUSAV BEYAZ 3KG": {
+"codes": [
+"187892"
+],
+"factor": 1,
+"fw": 1
+},
+"T1 مادة طلس اسمنتي 25كغم": {
+"codes": [
+"187790"
+],
+"factor": 1,
+"fw": 1
+},
+"FAWORI T1 25 KG- TAMIR HARCI": {
+"codes": [
+"187790"
+],
+"factor": 1,
+"fw": 1
+},
+"رولة فاوري الخارجية 25سم (جديدة)": {
+"codes": [
+"187823"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR DIS CEPHE RULO 25CM (YENI)": {
+"codes": [
+"187823"
+],
+"factor": 1,
+"fw": 1
+},
+"رولة كوزمك داخلي جديد 25 سم": {
+"codes": [
+"187822"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR KOZMIK IP.RULO 25CM": {
+"codes": [
+"187822"
+],
+"factor": 1,
+"fw": 1
+},
+"شريط لاصق 5سم (36PK)": {
+"codes": [
+"187802"
+],
+"factor": 36,
+"fw": 1
+},
+"FWR MASKELEME BANDI 5 CM (36PK)": {
+"codes": [
+"187802"
+],
+"factor": 36,
+"fw": 1
+},
+"سبري مقاوم للحرارة لون اسود 400 مل": {
+"codes": [
+"187877"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ISIYA DAY.SPREY BOYA SIYAH 400ML": {
+"codes": [
+"187877"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري مقاوم للحرارة لون المنيوم 400 مل": {
+"codes": [
+"187841"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ISIYA DAY.SPREY BOYA ALUMINYUM 400ML": {
+"codes": [
+"187841"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري عجلات 400مل JANT BOY F690": {
+"codes": [
+"187839"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR OZEL AMACLI SPR.F690 JANT BOY. 400ML": {
+"codes": [
+"187839"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك اسود لامع 400ML 9005 RAL": {
+"codes": [
+"187870"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR.SPREY RAL9005 PARLAK SIYAH 400ML": {
+"codes": [
+"187870"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك اسود طافي 400ML 9005 RAL": {
+"codes": [
+"187869"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR SPREY RAL 9005 MAT SIYAH 400ML": {
+"codes": [
+"187869"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء تخطيط الارصفة اكريليك ابيض 25كيلوجرام": {
+"codes": [
+"187968"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWR SOL.AKR.YOL C.B.WHITE 25KG": {
+"codes": [
+"187968"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء تخطيط الشوارع اكريلك اصفر 25 كيلوجرام": {
+"codes": [
+"187972"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWR SOL.AKR.YOL C.B.YELLOW 25KG": {
+"codes": [
+"187972"
+],
+"factor": 1,
+"fw": 1
+},
+"ثنر سيليلوزي 1لتر": {
+"codes": [
+"187796"
+],
+"factor": 1,
+"fw": 1
+},
+"FAWORI SELULOZIK TINER 1 LT": {
+"codes": [
+"187796"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8035) 0.75 لتر": {
+"codes": [
+"188218"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN BURMA (8035) 0,75LT": {
+"codes": [
+"188218"
+],
+"factor": 1,
+"fw": 1
+},
+"معجون داخلي 25كيلوجرام": {
+"codes": [
+"188239"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR IC MACUN 25KG": {
+"codes": [
+"188239"
+],
+"factor": 1,
+"fw": 1
+},
+"معجون داخلي 4 كيلوجرام": {
+"codes": [
+"188240"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR IC MACUN 4 KG": {
+"codes": [
+"188240"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس3 15لتر": {
+"codes": [
+"187718"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-3 15LT": {
+"codes": [
+"187718"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس3 7.5لتر": {
+"codes": [
+"187713"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-3 7,5LT": {
+"codes": [
+"187713"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس3 2.5لتر": {
+"codes": [
+"187708"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-3 2,5LT": {
+"codes": [
+"187708"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس4 2.5لتر": {
+"codes": [
+"187709"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-4 2,5LT": {
+"codes": [
+"187709"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس5 7.5لتر": {
+"codes": [
+"187715"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-5 7,5LT": {
+"codes": [
+"187715"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس5 2.5لتر": {
+"codes": [
+"187710"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-5 2,5LT": {
+"codes": [
+"187710"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 4 15لتر": {
+"codes": [
+"187928"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-4 15LT": {
+"codes": [
+"187928"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 4 7,5لتر": {
+"codes": [
+"187936"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-4 7.5LT": {
+"codes": [
+"187936"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 4 2,5لتر": {
+"codes": [
+"187932"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-4 2.5LT": {
+"codes": [
+"187932"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس بريميوم خارجي 20كغ": {
+"codes": [
+"187757"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREM.EXT PRIMER 20KG": {
+"codes": [
+"187757"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس بريميوم خارجي 10كغ": {
+"codes": [
+"187756"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREM.EXT PRIMER 10KG": {
+"codes": [
+"187756"
+],
+"factor": 1,
+"fw": 1
+},
+"اساس بريميوم خارجي 3.5كغ": {
+"codes": [
+"1420"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREM.EXT PRIMER 3,5 KG": {
+"codes": [
+"1420"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر OXIDGELP 01 ( لتر 1)": {
+"codes": [
+"187977"
+],
+"factor": 1,
+"fw": 1
+},
+"01 OXIDGELP 1 LT": {
+"codes": [
+"187977"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر OXIDSCHWARZ 02 ( لتر 1)": {
+"codes": [
+"187978"
+],
+"factor": 1,
+"fw": 1
+},
+"02 OXIDSCHWARZ 1 LT": {
+"codes": [
+"187978"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر OXIDBRAUN 16 ( لتر 1)": {
+"codes": [
+"187988"
+],
+"factor": 1,
+"fw": 1
+},
+"16 OXIDBRAUN 1 LT": {
+"codes": [
+"187988"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر WHITE 51 ( لتر 1)": {
+"codes": [
+"187993"
+],
+"factor": 1,
+"fw": 1
+},
+"51 WHITE 1 LT": {
+"codes": [
+"187993"
+],
+"factor": 1,
+"fw": 1
+},
+"صبغ دهني سينتتيك ابيض 7.5 لتر": {
+"codes": [
+"187782"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK PARLAK BEYAZ 7,5LT": {
+"codes": [
+"187782"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك ابيض لامع 2,5لتر": {
+"codes": [
+"187781"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK PARLAK BEYAZ 2,5LT": {
+"codes": [
+"187781"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك مكس1 2,14لتر": {
+"codes": [
+"187779"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MIX-1 2.14LT": {
+"codes": [
+"187779"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سينتتيك اسود طافي 9005 2,5لتر": {
+"codes": [
+"187772"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MAT SIYAH 9005 2,5 LT.": {
+"codes": [
+"187772"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك رال 7008 2,5لتر": {
+"codes": [
+"188175"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK RAL (7008) 2,5LT": {
+"codes": [
+"188175"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سينتتيك رال 1019 0,75لتر": {
+"codes": [
+"188201"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK RAL 1019 0,75LT": {
+"codes": [
+"188201"
+],
+"factor": 1,
+"fw": 1
+},
+"ورنيش مارين داخلي خارجي 2,5 لتر": {
+"codes": [
+"188264"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR MARIN YAT VERNIK 2,5LT": {
+"codes": [
+"188264"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8029) 2.5 لتر": {
+"codes": [
+"188250"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN RUSTIK A.MESE (8029) 2,5LT": {
+"codes": [
+"188250"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8026) 2.5 لتر": {
+"codes": [
+"188247"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN ACIK MESE (8026) 2,5 LT": {
+"codes": [
+"188247"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8028) 2.5 لتر": {
+"codes": [
+"188249"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN RUSTIK KOYU MESE (8028) 2,5LT": {
+"codes": [
+"188249"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8036) 2.5 لتر": {
+"codes": [
+"188252"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN TEAK (8036) 2,5LT": {
+"codes": [
+"188252"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(6035) 2.5 لتر": {
+"codes": [
+"188246"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN CEVIZ (6035) 2,5LT": {
+"codes": [
+"188246"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(6034) 2.5 لتر": {
+"codes": [
+"188245"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN ORMAN YESILI (6034) 2,5LT": {
+"codes": [
+"188245"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء اخشاب شفاف 0,75لتر": {
+"codes": [
+"187974"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN SEFFAF 0,75LT": {
+"codes": [
+"187974"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(1039) 0.75 لتر": {
+"codes": [
+"188209"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN SARI MESE (1039) 0,75LT": {
+"codes": [
+"188209"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8029) 0.75 لتر": {
+"codes": [
+"188215"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN RUSTIK ACIK MESE (8029) 0,75LT": {
+"codes": [
+"188215"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8026) 0.75 لتر": {
+"codes": [
+"188213"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN ACIK MESE (8026) 0,75LT": {
+"codes": [
+"188213"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8030) 0.75 لتر": {
+"codes": [
+"188216"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN KIRAZ (8030) 0,75LT": {
+"codes": [
+"188216"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8028) 0.75 لتر": {
+"codes": [
+"1600"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN RUSTIK KOYU MESE (8028) 0,75LT": {
+"codes": [
+"1600"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(8036) 0.75 لتر": {
+"codes": [
+"188219"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN TEAK (8036) 0,75LT": {
+"codes": [
+"188219"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(6035) 0.75 لتر": {
+"codes": [
+"188211"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN CEVIZ (6035) 0,75LT": {
+"codes": [
+"188211"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خشب صاجي(6034) 0.75 لتر": {
+"codes": [
+"188253"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR WOOD STAIN ORMAN YESILI (6034) 0,75LT": {
+"codes": [
+"188253"
+],
+"factor": 1,
+"fw": 1
+},
+"سيباكس سليكون ماستيك اسود 450غ(24) LS46": {
+"codes": [
+"1253"
+],
+"factor": 24,
+"fw": 1
+},
+"SIBAX LS46 SILICONE SEALANT MASTIK BLACK 450G (24)": {
+"codes": [
+"1253"
+],
+"factor": 24,
+"fw": 1
+},
+"سيباكس سليكون ماستيك شمباني 450غ(24) LS46": {
+"codes": [
+"1254"
+],
+"factor": 24,
+"fw": 1
+},
+"SIBAX LS46 SILICONE SEAL MASTIK SAMPANYA 450G (24)": {
+"codes": [
+"1254"
+],
+"factor": 24,
+"fw": 1
+},
+"سيليكون لوزان 120كغ ابيض 280مل سيباكس (12)": {
+"codes": [
+"1712"
+],
+"factor": 12,
+"fw": 1
+},
+"NS58 SIBAX AKRILIK SIVI CIVI 280ML (12)": {
+"codes": [
+"1712"
+],
+"factor": 12,
+"fw": 1
+},
+"دوراكس ابيض لامع 2.5لتر 9010": {
+"codes": [
+"1677"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 9010 GLOS WHITE": {
+"codes": [
+"1677"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ابيض طافي 2.5لتر 9010": {
+"codes": [
+"1678"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 9010 MAT WHITE": {
+"codes": [
+"1678"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس رصاصي رال 2.5لتر 7016": {
+"codes": [
+"1679"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 7016 ANTHRACITE GREY": {
+"codes": [
+"1679"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس اسود لؤلؤي رال 2.5لتر 825": {
+"codes": [
+"1680"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 825 PEARL BLACK": {
+"codes": [
+"1680"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ازرق رال 2.5لتر 5015": {
+"codes": [
+"1681"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 5015 SKY BLUE": {
+"codes": [
+"1681"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس اخضر فاتح رال 2.5لتر 6027": {
+"codes": [
+"1682"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 6027 LIGHT GRENN": {
+"codes": [
+"1682"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس اصفر رال 2.5لتر 1032": {
+"codes": [
+"1683"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 1032 BROOM YELLOW": {
+"codes": [
+"1683"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس احمر كود 2.5لتر 3001": {
+"codes": [
+"1684"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 3001 RED": {
+"codes": [
+"1684"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس كود 2.5لتر 8011": {
+"codes": [
+"1685"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 8011 NUT BROWN": {
+"codes": [
+"1685"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس كود 2.5لتر 8012": {
+"codes": [
+"1686"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 8012 RED BROWN": {
+"codes": [
+"1686"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس كريمي رال 2.5لتر 9001": {
+"codes": [
+"1687"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 9001 CREAM WHITE": {
+"codes": [
+"1687"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس رصاصي ميتاليك 2.5لتر 270": {
+"codes": [
+"1688"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 270 METALLIC ANTRACITE": {
+"codes": [
+"1688"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس اسود لامع 2.5لتر 9005": {
+"codes": [
+"1689"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX METAL SHIELD 2,5 LT 9005 GLOSS BLACK": {
+"codes": [
+"1689"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك شمباني 705 2.5لتر": {
+"codes": [
+"1690"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 705 CHAMPAIGNE": {
+"codes": [
+"1690"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك غرانيت 718 2.5لتر": {
+"codes": [
+"1691"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 718 GRANITE": {
+"codes": [
+"1691"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك بني طوخ 765 2.5لتر": {
+"codes": [
+"1692"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 765 DARK BROWN": {
+"codes": [
+"1692"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك رصاصي طوخ 769 2.5لتر": {
+"codes": [
+"1693"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 769 SMOKE GREY": {
+"codes": [
+"1693"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك رصاصي 771 2.5لتر": {
+"codes": [
+"1694"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 771 ANTRACITE": {
+"codes": [
+"1694"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك لون شوكولاتة 782 2.5لتر": {
+"codes": [
+"1695"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 782 CHOCOLATE": {
+"codes": [
+"1695"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك شمباني 753 2.5لتر": {
+"codes": [
+"1696"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 753 ELEGANC CHMPAGNE": {
+"codes": [
+"1696"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ميتاليك شمباني 754 2.5لتر": {
+"codes": [
+"1697"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX MIOFE OXYDE BOYA 2.5LT 754 PRSTIG CHMPAGNE": {
+"codes": [
+"1697"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر كود 445 2.5لتر": {
+"codes": [
+"1698"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER 2,5 LT 445 GREY COFFE": {
+"codes": [
+"1698"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر رصاصي 304 2.5لتر": {
+"codes": [
+"1699"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER BOYA 2,5 LT 304 GREY": {
+"codes": [
+"1699"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر اسود 305 2.5لتر": {
+"codes": [
+"1700"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER BOYA 2,5 LT 305 BLACK": {
+"codes": [
+"1700"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر لون شوكولاه 317 2.5لتر": {
+"codes": [
+"1701"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER BOYA 2,5 LT 317 CHOCOLATE": {
+"codes": [
+"1701"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر غرانيت ذهبي 518 2.5لتر": {
+"codes": [
+"1702"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER BOYA 2,5 LT 518 SPECIAL GRANITE": {
+"codes": [
+"1702"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر رصاصي 470 2.5لتر": {
+"codes": [
+"1703"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER 2,5 LT 470 UMBRA GREY": {
+"codes": [
+"1703"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر كود 416 2.5لتر": {
+"codes": [
+"1704"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER BOYA 2,5 LT 416 TERRACOTE": {
+"codes": [
+"1704"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر كود 655 2.5لتر": {
+"codes": [
+"1705"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER 2,5 LT 655 BITTER COFFEE": {
+"codes": [
+"1705"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر شمباني فاتح 554 2.5لتر": {
+"codes": [
+"1706"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER 2,5 LT 554 PRESTIGE CHAMPAGNE": {
+"codes": [
+"1706"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس هامر شمباني طوخ 553 2.5لتر": {
+"codes": [
+"1707"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX HAMMER 2,5 LT 553 ELEGANCE CHAMPAGNE": {
+"codes": [
+"1707"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ضد الصدأ رصاصي 2.5لتر": {
+"codes": [
+"1708"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX ANTIPAS 4 KG GRI": {
+"codes": [
+"1708"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ضد الصدأ احمر 2.5لتر": {
+"codes": [
+"1709"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX ANTIPAS 4 KG OKSID KIRMIZI": {
+"codes": [
+"1709"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ضد الصدأ ابيض 2.5لتر": {
+"codes": [
+"1710"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX ANTIPAS 4 KG BEYAZ": {
+"codes": [
+"1710"
+],
+"factor": 1,
+"fw": 1
+},
+"دوراكس ملكي ذهبي فاتح 200مل 302": {
+"codes": [
+"1711"
+],
+"factor": 1,
+"fw": 1
+},
+"DURAX PEARL GOLD 200 ML LIGHT GOLD 302": {
+"codes": [
+"1711"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس2 7,5 لتر": {
+"codes": [
+"188195"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-2 7.5LT": {
+"codes": [
+"188195"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس2 2,5 لتر": {
+"codes": [
+"188189"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-2 2.5LT": {
+"codes": [
+"188189"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء كوزميك داخلي ابيض مكس3 2,5 لتر": {
+"codes": [
+"188190"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX KOZMIK IC MIX-3 2.5LT": {
+"codes": [
+"188190"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا الداخلي ابيض 15 لتر": {
+"codes": [
+"187721"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC BEYAZ 15LT": {
+"codes": [
+"187721"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا داخلي ابيض 7,5 لتر": {
+"codes": [
+"187738"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC BEYAZ 7.5LT": {
+"codes": [
+"187738"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا داخلي ابيض 2,5 لتر": {
+"codes": [
+"187727"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC BEYAZ 2.5LT": {
+"codes": [
+"187727"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الترا داخلي مكس 1 15 لتر": {
+"codes": [
+"187722"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX ULTRA IC MIX-1 15LT": {
+"codes": [
+"187722"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون مات ابيض 20كغ": {
+"codes": [
+"1418"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SIL.MAT BEYAZ 20KG": {
+"codes": [
+"1418"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون مات ابيض 10كغ": {
+"codes": [
+"187900"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SIL.MAT BEYAZ 10KG": {
+"codes": [
+"187900"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون طافي داخلي مكس3 20كغ": {
+"codes": [
+"1666"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-3 20KG": {
+"codes": [
+"1666"
+],
+"factor": 1,
+"fw": 1
+},
+"سليكون طافي داخلي مكس3 10كغ": {
+"codes": [
+"187902"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.MAT MIX-3 10KG": {
+"codes": [
+"187902"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء بلاستيك ابيض 20 كيلوجرام": {
+"codes": [
+"1667"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PLASTIC IRAK BEYAZ 20KG": {
+"codes": [
+"1667"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء اكسترا تقان للاسقف 17.5كغم": {
+"codes": [
+"187792"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR EXTRA TAVAN 17.5KG": {
+"codes": [
+"187792"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء اخشاب مائي ابيض 2,5 لتر": {
+"codes": [
+"187960"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PANEL KAPI BEYAZ 2.5LT": {
+"codes": [
+"187960"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء اخشاب مائي ابيض 0,75 لتر": {
+"codes": [
+"187965"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PANEL KAPI B.BEYAZ 0.75LT": {
+"codes": [
+"187965"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء الاخشاب المائي مكس 1 2,5 لتر": {
+"codes": [
+"187961"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX PANEL KAPI B.MIX-1 2.5LT": {
+"codes": [
+"187961"
+],
+"factor": 1,
+"fw": 1
+},
+"معجون خارجي 25كيلوجرام": {
+"codes": [
+"188237"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR DCB MACUN 25KG": {
+"codes": [
+"188237"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي ابيض 7.5لتر": {
+"codes": [
+"170003"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWR ULTRA EXT.WHITE 7,5LT": {
+"codes": [
+"170003"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي ابيض 2.5لتر": {
+"codes": [
+"187705"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWR ULTRA EXT.WHITE 2,5LT": {
+"codes": [
+"187705"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس1 15لتر": {
+"codes": [
+"187716"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-1 15LT": {
+"codes": [
+"187716"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس1 7.5لتر": {
+"codes": [
+"187711"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-1 7,5LT": {
+"codes": [
+"187711"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس1 2.5لتر": {
+"codes": [
+"187706"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-1 2,5LT": {
+"codes": [
+"187706"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس2 15لتر": {
+"codes": [
+"187717"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-2 15LT": {
+"codes": [
+"187717"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس2 7.5لتر": {
+"codes": [
+"187712"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-2 7,5LT": {
+"codes": [
+"187712"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس2 2.5لتر": {
+"codes": [
+"187707"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-2 2,5LT": {
+"codes": [
+"187707"
+],
+"factor": 1,
+"fw": 1
+},
+"الترا خارجي مكس4 7.5لتر": {
+"codes": [
+"187714"
+],
+"factor": 1,
+"fw": 1
+},
+"IHR FWMIX ULTRA EXT.MIX-4 7,5LT": {
+"codes": [
+"187714"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي ابيض 15 لتر": {
+"codes": [
+"187938"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SIL.DCB BEYAZ 15LT": {
+"codes": [
+"187938"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي ابيض 7,5 لتر": {
+"codes": [
+"187939"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SIL.DCB BEYAZ 7.5LT": {
+"codes": [
+"187939"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي ابيض 2,5 لتر": {
+"codes": [
+"187937"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR SIL.DCB BEYAZ 2.5LT": {
+"codes": [
+"187937"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 1 15لتر": {
+"codes": [
+"187925"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-1 15LT": {
+"codes": [
+"187925"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 1 7,5لتر": {
+"codes": [
+"187933"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-1 7.5LT": {
+"codes": [
+"187933"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 2 7,5لتر": {
+"codes": [
+"187934"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-2 7.5LT": {
+"codes": [
+"187934"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سيليكون خارجي مكس 3 15لتر": {
+"codes": [
+"187927"
+],
+"factor": 1,
+"fw": 1
+},
+"FWMIX SIL.DC MIX-3 15LT": {
+"codes": [
+"187927"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خارجي تيكس جر ابيض 25كغم": {
+"codes": [
+"187786"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR GRENLI DCB BEYAZ 25 KG": {
+"codes": [
+"187786"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء خارجي تيكس جر مكس 1 25كيلوجرام": {
+"codes": [
+"187787"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR GRENLI DCB MIX-1 25 KG": {
+"codes": [
+"187787"
+],
+"factor": 1,
+"fw": 1
+},
+"مخشن خرسانة 12كيلوجرام": {
+"codes": [
+"188226"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR BRUT BETON ASTAR 12KG": {
+"codes": [
+"188226"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر PUREWHITE 07 ( لتر 1)": {
+"codes": [
+"187983"
+],
+"factor": 1,
+"fw": 1
+},
+"07 PUREWHITTE 1LT": {
+"codes": [
+"187983"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر BRILLIANTGELB 18 ( لتر 1)": {
+"codes": [
+"187989"
+],
+"factor": 1,
+"fw": 1
+},
+"18 BRILLIANTGELB 1 LT": {
+"codes": [
+"187989"
+],
+"factor": 1,
+"fw": 1
+},
+"حبر OXIDYELLOW 58 ( لتر 1)": {
+"codes": [
+"188000"
+],
+"factor": 1,
+"fw": 1
+},
+"58 OXIDYELLOW 1 LT": {
+"codes": [
+"188000"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك ابيض لامع 0,75لتر": {
+"codes": [
+"187774"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK PARLAK BEYAZ 0,75LT": {
+"codes": [
+"187774"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك مكس2 1,8لتر": {
+"codes": [
+"187776"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MIX-2 1.8LT": {
+"codes": [
+"187776"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك مكس2 0,75لتر": {
+"codes": [
+"187775"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MIX-2 0,75 LT": {
+"codes": [
+"187775"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سينتتيك ابيض طافي 2,5لتر": {
+"codes": [
+"187780"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MAT BEYAZ 2,5 LT.": {
+"codes": [
+"187780"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك 7001 2,5لتر": {
+"codes": [
+"187770"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK SIYAH (7001) 2,5LT": {
+"codes": [
+"187770"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء سينتتيك اسود طافي 9005 0,75لتر": {
+"codes": [
+"1527"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK BOYA MAT SIYAH 9005 0,75 LT.": {
+"codes": [
+"1527"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك 7016 0,75لتر": {
+"codes": [
+"1669"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK GUMUS GRISI (7016) 0,75 LT": {
+"codes": [
+"1669"
+],
+"factor": 1,
+"fw": 1
+},
+"طلاء دهني سينتتيك 7001 0,75لتر": {
+"codes": [
+"188206"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR PREMIUM SENTETIK SIYAH (7001) 0,75LT": {
+"codes": [
+"188206"
+],
+"factor": 1,
+"fw": 1
+},
+"سينتتيك ثنر 2,5لتر": {
+"codes": [
+"1676"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR.SEN.TINER 2,5LT": {
+"codes": [
+"1676"
+],
+"factor": 1,
+"fw": 1
+},
+"سينتتيك ثنر 1,5لتر": {
+"codes": [
+"187800"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR.SEN.TINER 1,5LT": {
+"codes": [
+"187800"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري ميتاليك 802 GUMUS 400مل": {
+"codes": [
+"187879"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR METALIK SPREY 802 GUMUS 400ML": {
+"codes": [
+"187879"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري مقاوم للحرارة لون ابيض 400 مل": {
+"codes": [
+"187878"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR ISIYA DAY.SPREY BOYA BEYAZ 400ML": {
+"codes": [
+"187878"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك 400ML KREM 1015 RAL": {
+"codes": [
+"187830"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR.SPREY RAL1015 KREM 400ML": {
+"codes": [
+"187830"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك رال 2004 400مل": {
+"codes": [
+"187851"
+],
+"factor": 1,
+"fw": 1,
+"manual": 1
+},
+"FWR AKR.SPREY RAL2004 TURUNCU 400ML": {
+"codes": [
+"187851"
+],
+"factor": 1,
+"fw": 1,
+"manual": 1
+},
+"سبري اكريليك 400ML MAK KIRMIZI 2002 RAL": {
+"codes": [
+"187850"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR SPREY RAL 2002 MAK KIRMIZI 400 ML": {
+"codes": [
+"187850"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك 400ML KIRMIZI 3002 RAL": {
+"codes": [
+"187852"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR.SPREY RAL3002 KIRMIZI 400ML": {
+"codes": [
+"187852"
+],
+"factor": 1,
+"fw": 1
+},
+"سبري اكريليك 400ML BORDO 3005 RAL": {
+"codes": [
+"187831"
+],
+"factor": 1,
+"fw": 1
+},
+"FWR AKR.SPREY RAL3005 BORDO 400ML": {
+"codes": [
+"187831"
+],
+"factor": 1,
+"fw": 1
+},
+"طلس اسمنتي ناعم (د/ح) رصاصي 25كغ": {
+"codes": [
+"1670"
+],
+"factor": 1,
+"fw": 1
+},
+"ISOMAT PLANFIX-FINE GREY 25KG": {
+"codes": [
+"1670"
+],
+"factor": 1,
+"fw": 1
+},
+"رولة خارجية بيليلي 25سم (25عدد)": {
+"codes": [
+"1671"
+],
+"factor": 25,
+"fw": 1
+},
+"BELLELLI DIS CEPHE RULO 25CM (25PCS)": {
+"codes": [
+"1671"
+],
+"factor": 25,
+"fw": 1
+}
+};
+/* Pure logic: normalisation, validation of a paper invoice read, comparison of two reads, mapping rules, Siraj line computation */
+const Logic = (() => {
+  const r2 = x => Math.round((x + Number.EPSILON) * 100) / 100;
+  const norm = s => String(s ?? '').replace(/[ً-ْـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[()\-–_.\/،,:]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  const num = v => (v === null || v === undefined || v === '' || isNaN(Number(v))) ? null : Number(v);
+
+  // ---- validation of one read (after user edits) ------------------------------------
+  // hard = المواد (الاسم/الكمية/المفرد/الإجمالي) لا تُتجاهل أبداً؛ soft = رأس الفاتورة والمجاميع: ملاحظات يمكن تجاهلها
+  function validate(rd) {
+    const E = [], S = [], H = rd.header || {}, L = rd.lines || [];
+    if (!L.length) E.push('لم تُقرأ أي مادة');
+    if (!H.invoice_no) S.push('رقم الفاتورة غير مقروء');
+    let sq = 0, st = 0, sp = 0, gifts = 0, lineOk = true; const pf = n => { try { return pieceFactor(n) || 1; } catch (e) { return 1; } };
+    L.forEach((l, i) => {
+      const q = num(l.qty), p = num(l.unit_price), t = num(l.total), tag = `السطر ${l.no ?? i + 1}`;
+      if (!String(l.name ?? '').trim()) E.push(`${tag}: اسم المادة غير مقروء`);
+      if (q === null || p === null || t === null) { E.push(`${tag}: كمية أو سعر أو إجمالي غير مقروء`); lineOk = false; return; }
+      // a free/promotional line (price 0 and total 0) is legitimate; anything else must be positive
+      const gift = q > 0 && p === 0 && t === 0; if (gift) gifts++;
+      if (!(q > 0) || (!gift && (!(p > 0) || !(t > 0)))) E.push(`${tag}: قيمة غير موجبة`);
+      if (Math.abs(q * p - t) > 0.5) E.push(`${tag}: الكمية × المفرد = ${r2(q * p).toLocaleString('en-US')} ولا تساوي الإجمالي ${t.toLocaleString('en-US')}`);
+      sq += q; st += t; sp += q * pf(l.name);
+    });
+    // the printed grand total catches a missing / duplicated page or a dropped line (accepted if it equals the gross, the net, or net + discount)
+    {
+      const gt = num(H.gross_total), nt = num(H.net_total), dv = num(H.discount_value) || 0;
+      if (gt !== null && lineOk && L.length) {
+        const cand = [gt, nt, nt !== null ? r2(nt + dv) : null].filter(v => v !== null);
+        if (!cand.some(v => Math.abs(st - v) <= 0.5))
+          S.unshift(`مجموع إجماليات المواد ${r2(st).toLocaleString('en-US')} لا يساوي المجموع المطبوع ${gt.toLocaleString('en-US')} (الفرق ${r2(gt - st).toLocaleString('en-US')}): غالباً صفحة ناقصة أو مكررة أو سطر لم يُقرأ؛ راجع الصفحات المرفوعة قبل المتابعة.`);
+      }
+    }
+    if (gifts) S.push(`${gifts} مادة بسعر صفر (هدايا أو دعاية): لا تُعدّ خطأً. ما لم يُطابَق منها مع صنف في سراج يُتخطّى ولا يُسجَّل، ويمكن إدراجه يدوياً في خطوة المطابقة.`);
+    const qt = num(H.qty_total);
+    const chk = lineOk && L.length > 0;
+    if (qt !== null && chk && Math.abs(sq - qt) > 0.001 && Math.abs(r2(sp) - qt) > 0.001) S.push(`إجمالي الكميات المطبوع ${qt} لا يساوي مجموع كميات المواد ${r2(sq)}` + (Math.abs(sp - sq) > 0.001 ? ` ولا مجموع القطع بعد ضرب الكراتين ${r2(sp)}` : '') + ' — قد تكون مادة ناقصة أو رقم خاطئ؛ راجع المواد');
+    return { errors: [...E, ...S], hard: E, soft: S, sumQty: sq, sumPieces: r2(sp), sumTotal: st };
+  }
+
+  // ---- compare two independent reads ----------------------------------------------------
+  function compareReads(a, b) {
+    const D = [], ha = a.header || {}, hb = b.header || {};
+    for (const k of ['invoice_no', 'qty_total']) {
+      const x = ha[k], y = hb[k];
+      const same = (num(x) !== null && num(y) !== null) ? Math.abs(num(x) - num(y)) < 0.001 : norm(x) === norm(y);
+      if (!same) D.push(`${k}: «${x ?? '—'}» مقابل «${y ?? '—'}»`);
+    }
+    const la = a.lines || [], lb = b.lines || [];
+    if (la.length !== lb.length) D.push(`عدد المواد: ${la.length} مقابل ${lb.length}`);
+    for (let i = 0; i < Math.min(la.length, lb.length); i++) {
+      for (const k of ['qty', 'unit_price', 'total']) if (!(num(la[i][k]) !== null && num(lb[i][k]) !== null && Math.abs(num(la[i][k]) - num(lb[i][k])) < 0.001)) D.push(`السطر ${i + 1} (${k}): «${la[i][k] ?? '—'}» مقابل «${lb[i][k] ?? '—'}»`);
+      if (norm(la[i].name) !== norm(lb[i].name)) D.push(`السطر ${i + 1} اسم المادة يختلف بين القراءتين`);
+    }
+    return D;
+  }
+
+
+  // ---- reconcile two reads into one: arithmetic decides numbers, names never block -------
+  function reconcile(a, b) {
+    const M = JSON.parse(JSON.stringify(a)); M.header = M.header || {}; M.lines = M.lines || [];
+    const notes = [], nameDiffs = [], hb = b.header || {}, lb = b.lines || [];
+    const ok = (q, p, t) => q !== null && p !== null && t !== null && Math.abs(q * p - t) <= 0.5;
+    if (M.lines.length !== lb.length) notes.push(`عدد المواد اختلف بين القراءتين (${M.lines.length} مقابل ${lb.length}) فاعتُمدت القراءة الأولى؛ راجع أن كل المواد موجودة.`);
+    for (let i = 0; i < Math.min(M.lines.length, lb.length); i++) {
+      const A = M.lines[i], B = lb[i];
+      const qs = [num(A.qty), num(B.qty)], ps = [num(A.unit_price), num(B.unit_price)], ts = [num(A.total), num(B.total)];
+      const differ = [0, 1, 2].some(k => [qs, ps, ts][k][0] !== [qs, ps, ts][k][1]);
+      if (differ) {
+        const sols = [];
+        for (const q of new Set(qs)) for (const p of new Set(ps)) for (const t of new Set(ts)) if (ok(q, p, t)) sols.push([q, p, t]);
+        if (sols.length === 1) { [A.qty, A.unit_price, A.total] = sols[0]; notes.push(`السطر ${i + 1}: اختلفت القراءتان في رقم وحسمه الحساب (الكمية × المفرد = الإجمالي): ${sols[0][0]} × ${sols[0][1]} = ${sols[0][2]}.`); }
+        else notes.push(`السطر ${i + 1}: اختلفت القراءتان في رقم ولم يحسمه الحساب؛ راجعه على الورقة.`);
+      }
+      // names: punctuation/digit-form differences are not differences; prefer a name found in the approved table, else the one with more Arabic text
+      if (mkey(A.name) !== mkey(B.name)) {
+        const ka = known(A.name), kb = known(B.name); let use = A.name;
+        const arc = x => (String(x || '').match(/[\u0600-\u06FF]/g) || []).length;
+        if (kb && kb.exact && !(ka && ka.exact)) use = B.name;
+        else if (!(ka && ka.exact) && arc(B.name) > arc(A.name)) use = B.name;
+        const sameKnown = ka && kb && ka.e.codes.join() === kb.e.codes.join();
+        if (!sameKnown && sim(A.name, B.name) < 0.6) nameDiffs.push({ i, a: A.name, b: B.name, used: use });
+        A.name = use;
+      }
+      // one number unreadable in both reads: the other two give it (flagged, to be checked on the paper)
+      {
+        const q = num(A.qty), p = num(A.unit_price), t = num(A.total);
+        if ([q, p, t].filter(v => v === null).length === 1) {
+          let fld = null, val = null, how = '';
+          if (q === null && p > 0 && t > 0) { const v = t / p; if (Math.abs(v - Math.round(v)) < 0.005) { fld = 'qty'; val = Math.round(v); how = `الإجمالي ${t} ÷ المفرد ${p}`; } }
+          else if (p === null && q > 0 && t > 0) { const v = r2(t / q); if (Math.abs(q * v - t) <= 0.5) { fld = 'unit_price'; val = v; how = `الإجمالي ${t} ÷ الكمية ${q}`; } }
+          else if (t === null && q > 0 && p > 0) { fld = 'total'; val = r2(q * p); how = `الكمية ${q} × المفرد ${p}`; }
+          if (fld) { A[fld] = val; notes.push(`السطر ${i + 1}: ${{ qty: 'الكمية', unit_price: 'المفرد', total: 'الإجمالي' }[fld]} غير مقروء في الصورة (تغطّيه كتابة يدوية غالباً) فحُسب من الرقمين الآخرين: ${how} = ${val}. راجعه على الورقة.`); }
+        }
+      }
+    }
+    for (const k of ['gross_total', 'net_total', 'discount_value', 'discount_percent']) if ((M.header[k] === null || M.header[k] === undefined || M.header[k] === '') && hb[k] !== null && hb[k] !== undefined && hb[k] !== '') M.header[k] = hb[k];
+    // header: if arithmetic fails, try the other read's values for the fields that differ
+    const keys = ['invoice_no', 'qty_total']
+      .filter(k => { const x = M.header[k], y = hb[k]; return (num(x) !== null && num(y) !== null) ? Math.abs(num(x) - num(y)) >= 0.001 : norm(x) !== norm(y); });
+    if (keys.length) {
+      let best = null;
+      for (let m = 0; m < (1 << keys.length); m++) {
+        const H = { ...M.header }; keys.forEach((k, j) => { if (m >> j & 1) H[k] = hb[k]; });
+        const n = validate({ header: H, lines: M.lines }).errors.length;
+        if (!best || n < best.n) best = { n, H, m };
+      }
+      const before = validate(M).errors.length;
+      if (best.n < before) { M.header = best.H; notes.push('اختلفت القراءتان في خانات الرأس ' + keys.join('، ') + '، وحسمها الفحص الحسابي.'); }
+      else if (!before) { /* arithmetic already passes with read A */ }
+      else notes.push('اختلفت القراءتان في خانات الرأس: ' + keys.join('، ') + '؛ راجعها على الورقة.');
+    }
+    return { merged: M, notes, nameDiffs };
+  }
+
+  // ---- mapping hints: paper line text -> regexes over Siraj item names ---------------
+  const RULES = [
+    [/12\.?5/, [/^نص سطل بنتلايت الياقوت/]],
+    [/3\.?6/, [/^كلن بنتلايت الياقوت/]],
+    [/سطل.*بنتلايت/, [/^سطل بنتلايت الياقوت/]],
+    [/سطل معجون/, [/^سطل معجون الياقوت/]],
+    [/غالون معجون/, [/^كلن معجون الياقوت/]],
+    [/لتر معجون/, [/^لتر معجون/]],
+    [/سطل.*(فاينل|فينيل)/, [/^سطل فاينل الياقوت/]],
+    [/(غالون|كلن).*(فاينل|فينيل)/, [/^كلن فاينل الياقوت/]],
+    [/فاينل|فينيل/, [/^سطل فاينل الياقوت/, /^كلن فاينل الياقوت/]],
+    [/سريع الجفاف/, [/فيلي/]],
+    [/برونزي.*شمباني|شمباني.*برونزي/, [/^كلن (شمباني|برونزي|فضي) المرجان/]],
+    [/غالون.*(لماع|طافي)/, [/^كلن بوية (الياقوت|سمائي ياقوت)/, /^كلن اسود طافي المرجان/]],
+    [/لتر.*برونزي/, [/^لتر (برونزي|شمباني|فضي) المرجان/]],
+    [/لتر.*(لماع|طافي)/, [/^لتر بوية الياقوت/]],
+    [/لتر.*بنتلايت/, [/^لتر بنتلايت/]],
+    [/الرصاصي|رصاصي/, [/^كلن اساس رصاصي الياقوت/]],
+    [/الاحمر|احمر/, [/^كلن اساس احمر الياقوت/]],
+    [/وارنيش.*لتر|لتر.*وارنيش/, [/^لتر وارنيش/]],
+    [/وارنيش/, [/^كلن وارنيش/]],
+    [/زيت.*كتان.*غالون|غالون.*زيت.*كتان/, [/^كلن زيت كتان/]],
+    [/زيت.*كتان/, [/^لتر زيت كتان/]],
+    [/صبغه مركزه|صبغة مركزة|طواخ/, [/^طواخ/]],
+    [/سبري|سبراي/, [/^سبري/]],
+    [/نص لتر/, [/^نص لتر/]],
+  ];
+  function hintCodes(paperName, items) {
+    const t = norm(paperName); const out = new Set();
+    for (const [rx, targets] of RULES) {
+      if (rx.test(t) || rx.test(paperName)) {
+        for (const it of items) if (targets.some(tr => tr.test(norm(it.name)) || tr.test(it.name))) out.add(it.code);
+        if (out.size) break;
+      }
+    }
+    return [...out];
+  }
+
+  // ---- known Yaqut printed names -> Siraj codes (from the verified mapping file) ----
+  const YM = (typeof YMAP !== 'undefined') ? YMAP : (typeof require !== 'undefined' ? require('./ymap.json') : {});
+  const A2L = s => String(s ?? '').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+  const mkey = s => norm(A2L(s).replace(/\(\s*\d{4,}\s*\)\s*$/, '')).replace(/[^\p{L}\p{N}½]/gu, '');
+  const KEYS = new Map(); for (const [n, e] of Object.entries(YM)) KEYS.set(mkey(n), { name: n, ...e });
+  const sig = s => (s.match(/[0-9½]/g) || []).join('');
+  const first = s => norm(s).split(' ')[0];
+  function lev(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i]; let mn = i;
+      for (let j = 1; j <= b.length; j++) { const v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); cur.push(v); if (v < mn) mn = v; }
+      if (mn > max) return max + 1; prev = cur;
+    }
+    return prev[b.length];
+  }
+  // exact (after punctuation/spacing normalisation) or a very close read (<=2 letters, same digits, same first word, unique)
+  function known(paperName) {
+    const k = mkey(paperName); if (!k) return null;
+    if (KEYS.has(k)) return { e: KEYS.get(k), exact: true };
+    let best = null, bd = 9, b2 = 9;
+    for (const [kk, e] of KEYS) {
+      if (sig(kk) !== sig(k) || first(e.name) !== first(paperName)) continue;
+      const d = lev(k, kk, 2);
+      if (d < bd) { b2 = bd; bd = d; best = e; } else if (d < b2) b2 = d;
+    }
+    if (best && bd <= 2 && b2 - bd >= 2) return { e: best, exact: false };
+    // Fawori: the printed line holds an English name and an Arabic description; the read may contain either one, or both joined.
+    // Accept a registered Fawori name found inside the read (longest wins; ambiguous when two different codes tie).
+    let hit = null, hl = 0, amb = false;
+    for (const [kk, e] of KEYS) {
+      if (!e.fw || kk.length < 10 || !k.includes(kk)) continue;
+      if (kk.length > hl) { hit = e; hl = kk.length; amb = false; }
+      else if (kk.length === hl && e.codes.join() !== hit.codes.join()) amb = true;
+    }
+    return (hit && !amb) ? { e: hit, exact: false } : null;
+  }
+  const cartonFactor = s => { const m = String(s).match(/ك\s*[*×xX]\s*(\d{1,3})/); return m ? Number(m[1]) : 1; };
+
+  // ---- the paper may print an English name and an Arabic description for the same line: keep the Arabic only (English only when there is no Arabic) ----
+  const AR = /[\u0600-\u06FF]/, LAT = /[A-Za-z]/;
+  function arName(name) {
+    let n = String(name ?? '').trim(); if (!AR.test(n) || !LAT.test(n)) return n;
+    const parts = n.split(/\s+[\/|]\s+/);
+    if (parts.length > 1) {
+      const ar = parts.filter(x => AR.test(x) && (x.match(/[\u0600-\u06FF]/g) || []).length >= (x.match(/[A-Za-z]/g) || []).length);
+      if (ar.length) return ar.join(' ').trim();
+    }
+    const m = n.match(/^([A-Za-z0-9 .,\-\/()+*&'#]+?)\s*(?=[\u0600-\u06FF])/);
+    if (m && (m[1].match(/[A-Za-z]{3,}/g) || []).length >= 2) return n.slice(m[1].length).trim();
+    return n;
+  }
+  // how many Siraj pieces one paper unit holds (carton size): from the approved table, else from a printed (ك×N) / (NNPK) mark
+  function pieceFactor(name) {
+    const kn = known(name); if (kn && kn.e.factor > 0) return Number(kn.e.factor);
+    return cartonFactor(name);
+  }
+
+  // ---- automatic matching of a paper line to ONE Siraj item (only when unambiguous) ----
+  const STOP = new Set(['جميع','الالوان','ال','من','في','على','مع','شركه','شركة','المحدوده','لانتاج','الاصباغ']);
+  const toks = s => norm(s).split(' ').filter(t => t.length > 1 && !STOP.has(t));
+  function sim(a, b) { const A = new Set(toks(a)), B = new Set(toks(b)); if (!A.size || !B.size) return 0; let i = 0; for (const t of A) if (B.has(t)) i++; return i / (A.size + B.size - i); }
+  // items: the candidate pool (already limited to the chosen company). returns {auto: code|null, hints: [codes]}
+  function autoMatch(paperName, items, groupName, lookup) {
+    const hints = new Set(); let auto = null;
+    const factor = cartonFactor(paperName);
+    if (groupName === 'شركة الياقوت' || groupName === 'بي واي' || groupName === 'فاوري') {
+      const kn = known(paperName);
+      if (kn) {
+        const e = kn.e, inPool = new Set(items.map(i => i.code));
+        const codes = e.codes.filter(c => inPool.has(c) || (e.cross && lookup && lookup(c)));
+        if (codes.length) {
+          const a = e.manual ? null : ((e.primary && codes.includes(e.primary)) ? e.primary : (codes.length === 1 ? codes[0] : null));
+          return { auto: a, hints: codes, via: kn.exact ? 'known' : 'known~', factor: e.factor || factor };
+        }
+      }
+    }
+    if (groupName === 'شركة الياقوت') {
+      const h = hintCodes(paperName, items); h.forEach(c => hints.add(c));
+      if (h.length === 1) return { auto: h[0], hints: [...hints], via: 'rule', factor };
+      if (h.length > 1) return { auto: null, hints: [...hints], via: 'rule', factor };
+    }
+    const pn = norm(paperName);
+    const exact = items.filter(it => norm(it.name) === pn);
+    if (exact.length === 1) return { auto: exact[0].code, hints: [exact[0].code], via: 'exact', factor };
+    const sc = items.map(it => [sim(paperName, it.name), it]).filter(x => x[0] > 0.34).sort((a, b) => b[0] - a[0]);
+    sc.slice(0, 8).forEach(x => hints.add(x[1].code));
+    if (sc.length && sc[0][0] >= 0.8 && (sc.length === 1 || sc[0][0] - sc[1][0] >= 0.2)) auto = sc[0][1].code;
+    return { auto, hints: [...hints], via: auto ? 'name' : null, factor };
+  }
+  function search(items, q, limit = 40) {
+    const toks = norm(q).split(' ').filter(Boolean); if (!toks.length) return [];
+    const res = [];
+    for (const it of items) { const n = it._n || (it._n = norm(it.name + ' ' + it.code)); if (toks.every(tk => n.includes(tk))) { res.push(it); if (res.length >= limit) break; } }
+    return res;
+  }
+
+  // ---- Siraj lines from paper lines + splits -------------------------------------------
+  // paper: [{qty, total, price}] effective values; map: [{factor, splits:[{code,qty}]}]
+  function sirajLines(paper, map) {
+    const out = [], errs = [];
+    paper.forEach((pl, i) => {
+      const m = map[i] || { factor: 1, splits: [] }, f = Number(m.factor) || 1;
+      const Q = r2(pl.qty * f);
+      const sp = (m.splits || []).filter(s => s.code);
+      if (!sp.length) { errs.push(`السطر ${i + 1}: لم يُربط بأي صنف`); return; }
+      let sq = 0; sp.forEach(s => { if (!(Number(s.qty) > 0)) errs.push(`السطر ${i + 1}: كمية صنف ${s.code} غير صالحة`); sq += Number(s.qty) || 0; });
+      if (Math.abs(sq - Q) > 0.0001) errs.push(`السطر ${i + 1}: مجموع الكميات الموزعة ${r2(sq)} لا يساوي ${Q}`);
+      let acc = 0;
+      sp.forEach((s, j) => {
+        const q = Number(s.qty); let t;
+        if (j === sp.length - 1) t = r2(pl.total - acc); else t = r2(pl.total * q / Q);
+        acc = r2(acc + t);
+        out.push({ code: s.code, qty: q, price: t / q, total: t, paperLine: i + 1 });
+      });
+    });
+    return { lines: out, errors: errs };
+  }
+  return { r2, norm, num, validate, arName, pieceFactor, compareReads, reconcile, hintCodes, autoMatch, search, sirajLines, known, mkey, cartonFactor };
+})();
+if (typeof module !== 'undefined') module.exports = Logic;
+
+</script>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const fmt=n=>(n===null||n===undefined||isNaN(n))?'—':Number(Math.round(n*100)/100).toLocaleString('en-US');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const S={files:[],localOk:false,reads:[],cur:null,map:[],cat:null,items:[],pool:[],group:'',allGroups:false,edited:false,sample:null,downloads:null,lim:null};
+
+/* ---------- runtime: claude.ai artifact, or standalone (GitHub Pages etc.) ---------- */
+const HAS_CLAUDE=(typeof claude!=='undefined'&&claude&&typeof claude.use==='function');
+const API_MODEL='claude-sonnet-5-5';
+const getKey=()=>{try{return localStorage.getItem('anthropic_key')||''}catch(e){return ''}};
+const idb=(mode,fn)=>new Promise((res,rej)=>{try{const o=indexedDB.open('sirajapp',1);o.onupgradeneeded=()=>o.result.createObjectStore('kv');o.onerror=()=>rej(o.error);o.onsuccess=()=>{const tx=o.result.transaction('kv',mode);const st=tx.objectStore('kv');const r=fn(st);tx.oncomplete=()=>res(r&&r.result);tx.onerror=()=>rej(tx.error);};}catch(e){rej(e)}});
+function useCatalog(rows){
+  S.cat=Siraj.load(rows);S.items=[...S.cat.items.values()];
+  const cnt={};S.items.forEach(i=>cnt[i.grp]=(cnt[i.grp]||0)+1);
+  const pref=['شركة الياقوت','بي واي','فاوري'];const names=Object.keys(cnt).sort((a,b)=>{const pa=pref.indexOf(a),pb=pref.indexOf(b);if(pa>=0||pb>=0)return (pa<0?99:pa)-(pb<0?99:pb);return cnt[b]-cnt[a];});
+  $('grp').innerHTML='<option value="">— اختر الشركة أولاً —</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)} (${cnt[n]} صنفاً)</option>`).join('');
+  $('boot').className='msg ok';$('boot').textContent='تم تحميل كتالوج الأصناف ('+S.items.length+' صنفاً) — جدول الأسماء المعتمد: '+(typeof YMAP!=='undefined'?Object.keys(YMAP).length:0)+' اسماً (الياقوت وبي واي وفاوري).';
+  updReadBtn();
+}
+function pickCatalog(msg){
+  $('boot').className='msg info';
+  $('boot').innerHTML=(msg?esc(msg)+'<br>':'')+'اختر ملف الكتالوج <b>catalog.json</b> (مرة واحدة فقط، يُحفظ في هذا الجهاز): <input type="file" id="catFile" accept=".json,application/json">';
+  $('catFile').addEventListener('change',async()=>{const f=$('catFile').files[0];if(!f)return;try{const rows=JSON.parse(await f.text());useCatalog(rows);try{await idb('readwrite',st=>st.put(rows,'catalog'))}catch(e){}}catch(e){pickCatalog('الملف غير صالح: '+e.message)}});
+}
+if(HAS_CLAUDE){
+  fetch('catalog.json').then(r=>r.json()).then(useCatalog).catch(e=>{$('boot').className='msg bad';$('boot').textContent='تعذّر تحميل كتالوج الأصناف: '+e.message;});
+  (async()=>{try{S.sample=await claude.use('sample');if(S.sample){S.lim=await S.sample.limits();}}catch(e){S.sample=null}
+   try{S.downloads=await claude.use('downloads')}catch(e){S.downloads=null}
+   if(!S.sample||!(S.lim&&S.lim.images)){$('localMsg').innerHTML='<div class="msg bad">قراءة الصور غير متاحة في هذا العرض. افتح الصفحة من claude.ai.</div>';}
+   updReadBtn();})();
+}else{
+  // standalone: catalog from this device's cache, else the same folder, else a file picker; reading through the Anthropic API with the user's own key
+  (async()=>{let rows=null;try{rows=await idb('readonly',st=>st.get('catalog'))}catch(e){}
+    if(!rows){try{const r=await fetch('catalog.json');if(r.ok)rows=await r.json();}catch(e){}}
+    if(rows)useCatalog(rows);else pickCatalog('');})();
+  const blobB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=()=>rej(r.error);r.readAsDataURL(b);});
+  S.lim={images:true};
+  S.sample=async(prompt,opt)=>{
+    const key=getKey();if(!key)throw new Error('أدخل مفتاح Anthropic API أولاً');
+    const content=[];for(const b of (opt.images||[]))content.push({type:'image',source:{type:'base64',media_type:b.type||'image/jpeg',data:await blobB64(b)}});
+    content.push({type:'text',text:prompt});
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:API_MODEL,max_tokens:16000,messages:[{role:'user',content}]})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error((r.status===401?'مفتاح API غير صحيح':'خطأ من الخدمة ('+r.status+')')+(j&&j.error&&j.error.message?': '+j.error.message:''));
+    return {text:(j.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('')};
+  };
+  S.downloads={save:async({filename,data})=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data]));a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);}};
+  const kb=document.createElement('div');kb.className='card';kb.id='keybox';
+  kb.innerHTML='<h2>مفتاح القراءة (Anthropic API)</h2><div class="row"><input type="password" id="apiKey" placeholder="sk-ant-..." style="flex:1;min-width:220px" autocomplete="off"><button id="saveKey" class="sec">حفظ المفتاح</button><span id="keySt" class="small"></span></div><div class="small" style="margin-top:6px">يُحفظ المفتاح في متصفح هذا الجهاز فقط ولا يُرسل إلا إلى Anthropic لقراءة الصور. تُحسب كلفة القراءة على صاحب المفتاح. لا تشارك مفتاحك مع أحد.</div>';
+  document.querySelector('main').insertBefore(kb,$('s1'));
+  const st=()=>{$('keySt').textContent=getKey()?'المفتاح محفوظ ✔':'لم يُدخل مفتاح';updReadBtn();};
+  $('saveKey').onclick=()=>{const v=$('apiKey').value.trim();try{if(v)localStorage.setItem('anthropic_key',v);}catch(e){}$('apiKey').value='';st();};
+  st();
+}
+$('grp').addEventListener('change',()=>{
+  resetAll();S.group=$('grp').value;S.pool=S.items.filter(i=>i.grp===S.group);
+  $('file').disabled=!S.group;$('grpInfo').textContent=S.group?'ستُطابَق مواد الفاتورة مع '+S.pool.length+' صنفاً من هذه الشركة فقط.':'';updReadBtn();
+});
+
+/* Document scanner: detect the paper quad, flatten (perspective), normalise lighting. Pure JS, no network. */
+const Scan = (() => {
+  const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+  function toSmall(bmp, max = 640) {
+    const s = Math.min(1, max / Math.max(bmp.width, bmp.height)), w = Math.round(bmp.width * s), h = Math.round(bmp.height * s);
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(bmp, 0, 0, w, h);
+    return { w, h, s, d: x.getImageData(0, 0, w, h).data };
+  }
+  function boxBlur(a, w, h, r) {            // separable box blur on Float32Array
+    const t = new Float32Array(a.length), o = new Float32Array(a.length), k = 2 * r + 1;
+    for (let y = 0; y < h; y++) { let s = 0; for (let x = -r; x <= r; x++) s += a[y * w + clamp(x, 0, w - 1)]; for (let x = 0; x < w; x++) { t[y * w + x] = s / k; s += a[y * w + clamp(x + r + 1, 0, w - 1)] - a[y * w + clamp(x - r, 0, w - 1)]; } }
+    for (let x = 0; x < w; x++) { let s = 0; for (let y = -r; y <= r; y++) s += t[clamp(y, 0, h - 1) * w + x]; for (let y = 0; y < h; y++) { o[y * w + x] = s / k; s += t[clamp(y + r + 1, 0, h - 1) * w + x] - t[clamp(y - r, 0, h - 1) * w + x]; } }
+    return o;
+  }
+  function otsu(v) { const hist = new Float64Array(256); for (const x of v) hist[clamp(Math.round(x), 0, 255)]++; const n = v.length; let sum = 0; for (let i = 0; i < 256; i++) sum += i * hist[i]; let sb = 0, wb = 0, best = 0, th = 128; for (let i = 0; i < 256; i++) { wb += hist[i]; if (!wb) continue; const wf = n - wb; if (!wf) break; sb += i * hist[i]; const mb = sb / wb, mf = (sum - sb) / wf, bt = wb * wf * (mb - mf) * (mb - mf); if (bt > best) { best = bt; th = i; } } return th; }
+  function erode(m, w, h) { const o = new Uint8Array(m.length); for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x; o[i] = m[i] & m[i - 1] & m[i + 1] & m[i - w] & m[i + w]; } return o; }
+  function dilate(m, w, h) { const o = new Uint8Array(m.length); for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x; o[i] = m[i] | m[i - 1] | m[i + 1] | m[i - w] | m[i + w]; } return o; }
+  function biggest(m, w, h) {               // largest 4-connected component, scored by area (centre-weighted)
+    const lab = new Int32Array(m.length), st = []; let best = null, id = 0;
+    for (let i = 0; i < m.length; i++) if (m[i] && !lab[i]) {
+      id++; let n = 0, sx = 0, sy = 0; st.length = 0; st.push(i); lab[i] = id;
+      while (st.length) { const p = st.pop(); n++; const x = p % w, y = (p / w) | 0; sx += x; sy += y; for (const q of [p - 1, p + 1, p - w, p + w]) { if (q < 0 || q >= m.length) continue; if ((q === p - 1 && x === 0) || (q === p + 1 && x === w - 1)) continue; if (m[q] && !lab[q]) { lab[q] = id; st.push(q); } } }
+      const cx = sx / n / w - .5, cy = sy / n / h - .5, score = n * (1 - 0.6 * Math.hypot(cx, cy));
+      if (!best || score > best.score) best = { id, n, score };
+    }
+    if (!best) return null; const out = new Uint8Array(m.length); for (let i = 0; i < m.length; i++) if (lab[i] === best.id) out[i] = 1; return { mask: out, n: best.n };
+  }
+  function hull(pts) {
+    pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lo = []; for (const p of pts) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+    const up = []; for (let i = pts.length - 1; i >= 0; i--) { const p = pts[i]; while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+    up.pop(); lo.pop(); return lo.concat(up);
+  }
+  function areaOf(p) { let a = 0; for (let i = 0; i < p.length; i++) { const q = p[(i + 1) % p.length]; a += p[i][0] * q[1] - q[0] * p[i][1]; } return Math.abs(a) / 2; }
+  function simplify4(h) {                   // repeatedly drop the vertex whose removal loses the least area until 4 remain
+    let p = h.slice(); while (p.length > 4) { let bi = 0, bl = 1e18; for (let i = 0; i < p.length; i++) { const a = p[(i + p.length - 1) % p.length], b = p[i], c = p[(i + 1) % p.length]; const loss = Math.abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) / 2; if (loss < bl) { bl = loss; bi = i; } } p.splice(bi, 1); } return p;
+  }
+  function order(q) {                       // tl,tr,br,bl in image space
+    const c = [q.reduce((s, p) => s + p[0], 0) / 4, q.reduce((s, p) => s + p[1], 0) / 4];
+    const s = q.slice().sort((a, b) => Math.atan2(a[1] - c[1], a[0] - c[0]) - Math.atan2(b[1] - c[1], b[0] - c[0]));  // clockwise from left-ish
+    let k = 0, m = 1e18; s.forEach((p, i) => { const v = p[0] + p[1]; if (v < m) { m = v; k = i; } }); return [s[k], s[(k + 1) % 4], s[(k + 2) % 4], s[(k + 3) % 4]];
+  }
+  // returns {quad:[[x,y]x4] in ORIGINAL pixel coords, conf, why}
+  function detect(bmp) {
+    const sm = toSmall(bmp), { w, h, d } = sm; const lum = new Float32Array(w * h), sat = new Float32Array(w * h);
+    for (let i = 0; i < w * h; i++) { const r = d[i * 4], g = d[i * 4 + 1], b = d[i * 4 + 2]; lum[i] = .299 * r + .587 * g + .114 * b; sat[i] = Math.max(r, g, b) - Math.min(r, g, b); }
+    const bl = boxBlur(lum, w, h, 2), th0 = otsu(bl); let best = null; const cands = [];
+    for (const [dt, ms] of [[0, 70], [12, 55], [24, 45], [-10, 70]]) {
+      const th = th0 + dt; let m = new Uint8Array(w * h); for (let i = 0; i < w * h; i++) m[i] = (bl[i] > th && sat[i] < ms) ? 1 : 0;
+      for (let k = 0; k < 2; k++) m = erode(m, w, h); for (let k = 0; k < 2; k++) m = dilate(m, w, h);
+      for (let k = 0; k < 5; k++) m = dilate(m, w, h); for (let k = 0; k < 5; k++) m = erode(m, w, h);
+      const B = biggest(m, w, h); if (!B || B.n < w * h * 0.12) continue;
+      const pts = []; const M = B.mask; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = y * w + x; if (M[i] && (x === 0 || y === 0 || x === w - 1 || y === h - 1 || !M[i - 1] || !M[i + 1] || !M[i - w] || !M[i + w])) pts.push([x, y]); }
+      const q = order(simplify4(hull(pts))), a = areaOf(q), frac = a / (w * h), fill = B.n / Math.max(a, 1);
+      const d = (p, r) => Math.hypot(p[0] - r[0], p[1] - r[1]), W = (d(q[0], q[1]) + d(q[3], q[2])) / 2, Hh = (d(q[0], q[3]) + d(q[1], q[2])) / 2, asp = Math.max(W, Hh) / Math.max(1, Math.min(W, Hh));
+      const bad = frac < 0.5 || fill < 0.8, dev = Math.abs(Math.log(asp / 1.414));
+      const cand = { q, frac, fill, asp, th, dt, bad, dev, score: dev + (bad ? 5 : 0) };
+      cands.push(cand);
+      if (!best || cand.score < best.score - 0.03) best = cand;
+    }
+    if (!best) return { quad: null, why: 'لم تُكتشف ورقة' };
+    // the paper edge must be stable: a reliable quad is found at (almost) every threshold; when the area swings wildly between thresholds the edge is lost in shadow/handwriting and the crop would cut real content
+    // compared on the two most inclusive thresholds (th0 and th0-10): on a clean edge they give the same area (±0.08), while a lost edge swings by 0.14+
+    const c0 = cands.find(c => c.dt === 0), c1 = cands.find(c => c.dt === -10), agree = (c0 && c1 && !c0.bad && !c1.bad) ? Math.abs(c0.frac - c1.frac) : 0;
+    best.unstable = agree > 0.10;
+    const sc = 1 / sm.s, quad = best.q.map(p => [p[0] * sc, p[1] * sc]);
+    return { quad, frac: best.frac, fill: best.fill, asp: best.asp, th: best.th, agree: agree, why: best.unstable && !best.bad ? 'حدود الورقة غير مستقرة (ظلّ أو إضاءة غير متساوية) فاستُعملت الصورة الأصلية دون قص' : best.bad ? (best.frac < 0.5 ? 'لم تُحدَّد حدود الورقة بثقة (المنطقة المكتشفة أصغر من نصف الصورة)' : 'شكل غير منتظم') : (best.asp > 1.75 || best.asp < 1.08 ? 'شكل غير مألوف للورقة' : '') };
+  }
+  function solve(A, b) { const n = b.length; for (let i = 0; i < n; i++) { let p = i; for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[p][i])) p = r;[A[i], A[p]] = [A[p], A[i]];[b[i], b[p]] = [b[p], b[i]]; for (let r = i + 1; r < n; r++) { const f = A[r][i] / A[i][i]; for (let c = i; c < n; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; } } const x = new Array(n); for (let i = n - 1; i >= 0; i--) { let s = b[i]; for (let c = i + 1; c < n; c++) s -= A[i][c] * x[c]; x[i] = s / A[i][i]; } return x; }
+  function homography(src, dst) {           // maps dst->src (for inverse warping)
+    const A = [], b = []; for (let i = 0; i < 4; i++) { const [x, y] = dst[i], [u, v] = src[i]; A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u); A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v); } return solve(A, b);
+  }
+  function expand(q, f) { const c = [q.reduce((s, p) => s + p[0], 0) / 4, q.reduce((s, p) => s + p[1], 0) / 4]; return q.map(p => [c[0] + (p[0] - c[0]) * (1 + f), c[1] + (p[1] - c[1]) * (1 + f)]); }
+  function warp(bmp, quad, maxSide = 2600) {
+    const [tl, tr, br, bl] = quad, d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    let W = Math.max(d(tl, tr), d(bl, br)), Hh = Math.max(d(tl, bl), d(tr, br)); const s = Math.min(1, maxSide / Math.max(W, Hh)); W = Math.round(W * s); Hh = Math.round(Hh * s);
+    const src = document.createElement('canvas'); src.width = bmp.width; src.height = bmp.height; const sx = src.getContext('2d', { willReadFrequently: true }); sx.drawImage(bmp, 0, 0); const sd = sx.getImageData(0, 0, src.width, src.height).data;
+    const hm = homography(quad, [[0, 0], [W, 0], [W, Hh], [0, Hh]]); const out = document.createElement('canvas'); out.width = W; out.height = Hh; const ox = out.getContext('2d'), od = ox.createImageData(W, Hh), o = od.data, sw = src.width, sh = src.height;
+    for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
+      const den = hm[6] * x + hm[7] * y + 1, u = (hm[0] * x + hm[1] * y + hm[2]) / den, v = (hm[3] * x + hm[4] * y + hm[5]) / den, i = (y * W + x) * 4;
+      if (u < 0 || v < 0 || u >= sw - 1 || v >= sh - 1) { o[i] = o[i + 1] = o[i + 2] = 255; o[i + 3] = 255; continue; }
+      const x0 = u | 0, y0 = v | 0, fx = u - x0, fy = v - y0, p = (y0 * sw + x0) * 4, q = p + sw * 4;
+      for (let c = 0; c < 3; c++) o[i + c] = (sd[p + c] * (1 - fx) + sd[p + 4 + c] * fx) * (1 - fy) + (sd[q + c] * (1 - fx) + sd[q + 4 + c] * fx) * fy; o[i + 3] = 255;
+    }
+    ox.putImageData(od, 0, 0); return out;
+  }
+  // 1) global white balance (paper colour -> neutral)  2) flatten uneven lighting  3) mild contrast
+  function enhance(cv) {
+    const w = cv.width, h = cv.height, x = cv.getContext('2d', { willReadFrequently: true }), id = x.getImageData(0, 0, w, h), d = id.data;
+    const hist = [new Uint32Array(256), new Uint32Array(256), new Uint32Array(256)]; const st = 7;
+    for (let i = 0; i < w * h; i += st) for (let c = 0; c < 3; c++) hist[c][d[i * 4 + c]]++;
+    const n = Math.ceil(w * h / st), P = hist.map(hs => { let acc = 0; for (let v = 255; v >= 0; v--) { acc += hs[v]; if (acc >= n * 0.25) return Math.max(v, 60); } return 255; });   // 75th percentile ~ paper
+    const ref = Math.max(P[0], P[1], P[2]), gain = P.map(p => Math.min(1.35, ref / p));
+    for (let i = 0; i < w * h; i++) for (let c = 0; c < 3; c++) { const v = d[i * 4 + c] * gain[c]; d[i * 4 + c] = v > 255 ? 255 : v; }
+    x.putImageData(id, 0, 0);
+    const sw = Math.max(32, Math.round(w / 8)), sh = Math.max(32, Math.round(h / 8)), sc = document.createElement('canvas'); sc.width = sw; sc.height = sh; const sx = sc.getContext('2d', { willReadFrequently: true }); sx.drawImage(cv, 0, 0, sw, sh);
+    const sd = sx.getImageData(0, 0, sw, sh).data, L = new Float32Array(sw * sh); for (let i = 0; i < sw * sh; i++) L[i] = Math.max(sd[i * 4], sd[i * 4 + 1], sd[i * 4 + 2]);
+    const mx = new Float32Array(sw * sh), R = 3; for (let y = 0; y < sh; y++) for (let xx = 0; xx < sw; xx++) { let m = 0; for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) { const v = L[clamp(y + dy, 0, sh - 1) * sw + clamp(xx + dx, 0, sw - 1)]; if (v > m) m = v; } mx[y * sw + xx] = m; }
+    const bg = boxBlur(mx, sw, sh, 2), bc = document.createElement('canvas'); bc.width = sw; bc.height = sh; const bcx = bc.getContext('2d'), bi = bcx.createImageData(sw, sh);
+    for (let i = 0; i < sw * sh; i++) { bi.data[i * 4] = bi.data[i * 4 + 1] = bi.data[i * 4 + 2] = clamp(bg[i], 1, 255); bi.data[i * 4 + 3] = 255; } bcx.putImageData(bi, 0, 0);
+    const big = document.createElement('canvas'); big.width = w; big.height = h; const bx = big.getContext('2d', { willReadFrequently: true }); bx.imageSmoothingQuality = 'high'; bx.drawImage(bc, 0, 0, w, h); const bd = bx.getImageData(0, 0, w, h).data, id2 = x.getImageData(0, 0, w, h), d2 = id2.data;
+    for (let i = 0; i < w * h; i++) { const k = 250 / Math.max(bd[i * 4], 40); for (let c = 0; c < 3; c++) { let v = d2[i * 4 + c] * k; v = v > 255 ? 255 : v; d2[i * 4 + c] = 255 * Math.pow(v / 255, 1.35); } }
+    x.putImageData(id2, 0, 0); return cv;
+  }
+  // Load a photo as a canvas whose size matches what is drawn (avoids the Safari EXIF-orientation size mismatch of createImageBitmap)
+  async function load(file, maxSide = 3600) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = new Image(); img.decoding = 'async'; img.src = url; await img.decode();
+      const w0 = img.naturalWidth, h0 = img.naturalHeight, s = Math.min(1, maxSide / Math.max(w0, h0)), c = document.createElement('canvas');
+      c.width = Math.round(w0 * s); c.height = Math.round(h0 * s); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); return c;
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function process(file) {
+    const bmp = (typeof HTMLCanvasElement !== 'undefined' && file instanceof HTMLCanvasElement) ? file : await load(file); const r = detect(bmp);
+    if (!r.quad || r.why) return { ok: false, why: r.why || 'لم تُكتشف ورقة', r, bmp };
+    const q = expand(r.quad, 0.012), out = enhance(warp(bmp, q)); return { ok: true, canvas: out, quad: r.quad, r, bmp };
+  }
+  /* هل الصورة مستند رقمي (طباعة من إكسل/PDF أو لقطة شاشة) لا ورقة مصوّرة؟ خلفية بيضاء نقية موحّدة حتى الحافة؛ وحدّة النص تُقاس على مربعات الحبر فقط */
+  function digital(cv) {
+    const w = cv.width, h = cv.height, x = cv.getContext('2d', { willReadFrequently: true }), d = x.getImageData(0, 0, w, h).data;
+    const st = Math.max(1, Math.floor(Math.sqrt(w * h / 160000)));
+    let n = 0, w252 = 0, w235 = 0, bn = 0, bw = 0, ink = 0; const bx = Math.max(2, Math.round(w * 0.02)), by = Math.max(2, Math.round(h * 0.02));
+    for (let yy = 0; yy < h; yy += st) for (let xx = 0; xx < w; xx += st) {
+      const i = (yy * w + xx) * 4, mn = Math.min(d[i], d[i + 1], d[i + 2]), g = (d[i] + d[i + 1] + d[i + 2]) / 3; n++;
+      if (mn >= 252) w252++; if (mn >= 235) w235++; if (g < 110) ink++;
+      if (xx < bx || xx >= w - bx || yy < by || yy >= h - by) { bn++; if (mn >= 252) bw++; }
+    }
+    const pureWhite = w252 / n, border = bn ? bw / bn : 0, uniform = w235 ? w252 / w235 : 0, inkFrac = ink / n;
+    // median Laplacian variance over 32px tiles that contain ink
+    const g = new Float32Array(w * h); for (let i = 0; i < w * h; i++) g[i] = (d[i * 4] + d[i * 4 + 1] + d[i * 4 + 2]) / 3;
+    const T = 32, vs = [];
+    for (let ty = 1; ty + T < h - 1; ty += T) for (let tx = 1; tx + T < w - 1; tx += T) {
+      let mnv = 255, m = 0, m2 = 0, c = 0;
+      for (let yy = ty; yy < ty + T; yy++) for (let xx = tx; xx < tx + T; xx++) { const i = yy * w + xx, v = g[i]; if (v < mnv) mnv = v; const l = -4 * v + g[i - 1] + g[i + 1] + g[i - w] + g[i + w]; m += l; m2 += l * l; c++; }
+      if (mnv < 140) vs.push(m2 / c - (m / c) * (m / c));
+    }
+    vs.sort((a, b) => a - b); const inkSharp = vs.length ? vs[Math.floor(vs.length / 2)] : 0;
+    return { digital: pureWhite >= 0.6 && border >= 0.97 && uniform >= 0.9 && inkFrac >= 0.002, pureWhite, border, uniform, inkFrac, inkSharp, tiles: vs.length };
+  }
+  return { detect, warp, enhance, process, expand, load, digital };
+})();
+if (typeof module !== 'undefined') module.exports = Scan;
+
+/* ---------- image checks ---------- */
+async function analyse(file,useOrig){
+  const obmp=await Scan.load(file);
+  /* مستند رقمي (طباعة من إكسل/PDF أو لقطة شاشة): بلا قصّ ولا تبييض، وفحوصه غير فحوص الورقة المصوّرة */
+  const dg=Scan.digital(obmp);
+  if(dg.digital){
+    const long=Math.max(obmp.width,obmp.height),short=Math.min(obmp.width,obmp.height),probs=[];
+    const k=Math.min(3,Math.max(1,2400/long)),big=document.createElement('canvas');
+    big.width=Math.round(obmp.width*k);big.height=Math.round(obmp.height*k);
+    const bx=big.getContext('2d');bx.imageSmoothingEnabled=true;bx.imageSmoothingQuality='high';bx.drawImage(obmp,0,0,big.width,big.height);
+    let sh=dg.inkSharp;
+    if(long>900){const c9=document.createElement('canvas'),s9=900/long;c9.width=Math.round(obmp.width*s9);c9.height=Math.round(obmp.height*s9);const x9=c9.getContext('2d');x9.imageSmoothingQuality='high';x9.drawImage(obmp,0,0,c9.width,c9.height);sh=Scan.digital(c9).inkSharp;}
+    if(long<800||short<500)probs.push('الدقة منخفضة ('+obmp.width+'×'+obmp.height+') لمستند رقمي. صدّره أو صوّره بدقة أكبر.');
+    if(sh<5000)probs.push('نص الصورة الرقمية غير حاد (مؤشر الحدّة '+Math.round(sh)+'، والمطلوب 5000 فأكثر). خذ لقطة بتكبير أكبر أو صدّر الملف بدقة أعلى.');
+    const blob=await new Promise(r=>big.toBlob(r,'image/jpeg',0.95));
+    return {blob,w:obmp.width,h:obmp.height,lapVar:sh,bright:255,probs,scanned:false,digital:true,scanWhy:'',useOrig:false,file,url:URL.createObjectURL(blob)};
+  }
+  let src=obmp,scanned=false,scanWhy='';
+  if(!useOrig){try{const r=await Scan.process(obmp);if(r.ok){src=r.canvas;scanned=true;}else scanWhy=r.why||'';}catch(e){scanWhy='تعذّر الكشف التلقائي';}}
+  const w=src.width,h=src.height;
+  const mk=(max,from)=>{from=from||src;const s=Math.min(1,max/Math.max(from.width,from.height));const c=document.createElement('canvas');c.width=Math.round(from.width*s);c.height=Math.round(from.height*s);c.getContext('2d').drawImage(from,0,0,c.width,c.height);return c;};
+  const gray=(c)=>{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data,n=c.width*c.height,g=new Float32Array(n);let sum=0;for(let i=0;i<n;i++){const v=0.299*d[i*4]+0.587*d[i*4+1]+0.114*d[i*4+2];g[i]=v;sum+=v;}return {g,W:c.width,H:c.height,mean:sum/n};};
+  const A=gray(mk(1200)),g=A.g,W=A.W,H=A.H;
+  let m=0,m2=0,n=0;
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=y*W+x;const l=-4*g[i]+g[i-1]+g[i+1]+g[i-W]+g[i+W];m+=l;m2+=l*l;n++;}
+  const lapVar=m2/n-(m/n)*(m/n);
+  const bright=scanned?gray(mk(600,obmp)).mean:A.mean; /* السطوع من الصورة الأصلية قبل التبييض */
+  const big=mk(2400);const blob=await new Promise(r=>big.toBlob(r,'image/jpeg',0.92));
+  const probs=[];
+  if(Math.max(w,h)<1600||Math.min(w,h)<1000)probs.push('الدقة منخفضة ('+w+'×'+h+'). صوّر من مسافة أقرب أو بدقة أعلى.');
+  if(lapVar<200)probs.push('الصورة ضبابية أو مهتزة (مؤشر الحدّة '+Math.round(lapVar)+'، والمطلوب 200 فأكثر).');
+  if(bright<70)probs.push('الصورة مظلمة. زد الإضاءة.');
+  if(bright>(scanned?252:235))probs.push('الصورة شديدة السطوع أو فيها لمعان. قلّل الضوء المباشر.');
+  return {blob,w,h,lapVar,bright,probs,scanned,scanWhy,useOrig:!!useOrig,file,url:URL.createObjectURL(blob)};
+}
+$('file').addEventListener('change',async e=>{
+  const fl=[...e.target.files];if(!fl.length)return;
+  $('localMsg').innerHTML='<div class="msg info">جارٍ كشف حدود الورقة وتسطيحها وفحص الجودة…</div>';
+  for(const f of fl){try{S.files.push({name:f.name,...await analyse(f,false)});}catch(err){S.files.push({name:f.name,probs:['تعذّر فتح الصورة: '+err.message],url:'',blob:null,file:f,scanned:false});}}
+  e.target.value='';
+  drawThumbs();
+});
+$('thumbs').addEventListener('click',async e=>{
+  const m=e.target.closest('button[data-mv]');
+  if(m){const i=+m.dataset.i,d=m.dataset.mv;
+    if(d==='del'){S.files.splice(i,1);}
+    else{const j=i+(d==='up'?-1:1);if(j<0||j>=S.files.length)return;[S.files[i],S.files[j]]=[S.files[j],S.files[i]];}
+    drawThumbs();return;}
+  const b=e.target.closest('button[data-i]:not([data-mv])');if(!b)return;const i=+b.dataset.i,f=S.files[i];if(!f||!f.file)return;
+  $('localMsg').innerHTML='<div class="msg info">جارٍ إعادة المعالجة…</div>';
+  try{S.files[i]={name:f.name,...await analyse(f.file,!f.useOrig)};}catch(err){}
+  drawThumbs();
+});
+$('clear').addEventListener('click',()=>{resetAll();});
+$('sortNm').addEventListener('click',()=>{S.files.sort((a,b)=>String(a.name).localeCompare(String(b.name),undefined,{numeric:true}));drawThumbs();});
+function drawThumbs(){
+  $('thumbs').innerHTML=S.files.map((f,i)=>`<div><b style="color:var(--pri)">صفحة ${i+1} من ${S.files.length}</b><img src="${f.url}"><div>${esc(f.name)}<br>${f.w?f.w+'×'+f.h:''} ${f.probs.length?'❌':'✅'}<br><span class="small">${f.digital?'✔ مستند رقمي (إكسل/PDF/لقطة شاشة): استُخدم كما هو وكُبّر لتسهيل القراءة':f.scanned?'✔ قُصّت وسُطّحت وحُسّنت تلقائياً':(f.useOrig?'الصورة الأصلية (بلا معالجة)':(f.scanWhy?'لم تُكتشف حدود الورقة ('+esc(f.scanWhy)+') — استُخدمت الأصلية':''))}</span>${f.file&&!f.digital?`<br><button class="sec" data-i="${i}" style="padding:2px 8px;font-size:12px">${f.useOrig?'اقتصاص تلقائي':'استخدم الأصلية'}</button>`:''}<br><button class="sec" data-i="${i}" data-mv="up" style="padding:2px 8px;font-size:12px"${i===0?' disabled':''}>تقديم</button> <button class="sec" data-i="${i}" data-mv="down" style="padding:2px 8px;font-size:12px"${i===S.files.length-1?' disabled':''}>تأخير</button> <button class="sec" data-i="${i}" data-mv="del" style="padding:2px 8px;font-size:12px">حذف</button></div></div>`).join('');
+  const all=S.files.flatMap((f,i)=>f.probs.map(p=>`صورة ${i+1}: ${p}`));
+  S.localOk=S.files.length>0&&all.length===0;
+  $('localMsg').innerHTML=S.files.length?(S.localOk?'<div class="msg ok">الصور مقبولة من حيث الدقة والحدّة والإضاءة.</div>':'<div class="msg bad"><b>أعد التقاط الصورة:</b><ul>'+all.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>'):'';
+  updReadBtn();
+}
+function updReadBtn(){$('readBtn').disabled=!(S.group&&S.localOk&&S.cat&&S.sample&&S.lim&&S.lim.images&&(HAS_CLAUDE||getKey()));}
+function resetAll(){S.files=[];S.reads=[];S.cur=null;S.map=[];S.edited=false;$('file').value='';$('thumbs').innerHTML='';$('localMsg').innerHTML='';['s2','s3','s4'].forEach(i=>$(i).classList.add('hidden'));S.localOk=false;updReadBtn();$('readStatus').textContent='';}
+
+/* ---------- reading with Claude (two independent passes, PRINTED text only) ---------- */
+const PROMPT=`أنت قارئ فواتير بالغ الدقة. الصور المرفقة هي فاتورة مبيعات ورقية من شركة مورِّدة (قد تكون عدة صفحات لفاتورة واحدة). استخرج ما هو مطبوع حرفياً دون أي تخمين أو حساب أو تصحيح.
+
+القواعد:
+1) اقرأ المطبوع فقط. تجاهل تجاهلاً تاماً كل ما كُتب بخط اليد: أرقام أو كلمات أو تصحيحات أو علامات صح أو دوائر أو شطب أو توقيعات أو ملاحظات هامشية أو أختام. لا تذكرها ولا تعدّل بها أي رقم مطبوع.
+2) إن غطّت كتابة يدوية أو علامة أو ختم رقماً مطبوعاً بحيث لا يُقرأ بيقين فضع null مكانه وأضف السبب في quality.problems.
+3) لا تخمّن أي رقم. إن لم يكن رقم ما مقروءاً بيقين تام فضع null وأضف سبباً في quality.problems.
+4) quality.ok تكون true فقط إذا: الفاتورة كاملة داخل الصورة بلا قص، وكل خانات الكمية والمفرد والإجمالي المطبوعة لكل المواد واضحة تماماً، وأرقام الرأس والمجموع والخصم والصافي المطبوعة واضحة، ولا يوجد ضباب أو ظل أو لمعان يخفي أي رقم مطبوع. وإلا فهي false مع بيان السبب بالعربية.
+5) أعد كل صفوف المواد بالترتيب كما هي مطبوعة، دون دمج أو حذف. name حرفياً. إن طُبع للمادة الواحدة اسم إنكليزي (أو تركي) وتحته أو بجانبه وصف بالعربية فاكتب في name الوصف العربي وحده (كما هو مطبوع بأرقامه ومقاسه) ولا تكتب الاسم الإنكليزي معه؛ ولا تكتب الاسم الإنكليزي إلا إذا لم يوجد للمادة أي نص عربي مطبوع. ولا تذكر في quality.problems أي ملاحظة عن الاسم الإنكليزي (قطعاً أو غموضاً أو غيابه) ما دام الوصف العربي مقروءاً؛ المهم عندي الكمية والمفرد والإجمالي والوصف العربي.
+6) الأرقام بلا فواصل آلاف وبنقطة عشرية عند الحاجة (مثال 22,275,000.00 تُكتب 22275000).
+7) header: supplier_name، customer_name، invoice_no (الرقم المطبوع أمام "رقم الفاتورة")، date بصيغة YYYY-MM-DD، time، gross_total ("المجموع النهائي" أو "المجموع")، qty_total ("الكميات"، وهو مجموع عدد القطع إن طُبع صراحةً؛ لا تضع هنا الوزن ولا أي مجموع آخر، وإن لم يُطبع مجموع للكميات فضع null)، discount_percent، discount_value ("ما يعادل" أو "مجموع الحسميات")، net_total ("الصافي النهائي ب الدينار" أو "صافي القائمة"). أما «الرصيد السابق» و«الرصيد الحالي» و«المبلغ المتبقي» والمبلغ المكتوب بالحروف فهي ليست من هذه الحقول: تجاهلها ولا تضعها في أي حقل.
+8) اربط كل رقم بعنوان عموده المطبوع لا بموضعه. qty هو عمود «الكمية» (أو العدد) فقط؛ unit_price عمود «السعر» أو «المفرد»؛ total عمود «الإجمالي» أو «المبلغ» لنفس السطر. تجاهل أعمدة «ت/الرقم» و«الوحدة» (سطل، علبة، كلن، لتر…) و«كارتون» (قد تكون كسراً مثل 12.50 وليست الكمية) و«قيمة الحسم». إن ظهرت في عمود «قيمة الحسم» قيمة غير صفرية لأي سطر فاذكر رقم السطر وقيمتها في quality.problems. وإن سبقت الأرقام «د.ع» أو رمز عملة فتجاهل الرمز.
+
+لا تذكر في quality.problems غياب اسم المورد (إن لم يُطبع فاتركه فارغاً) ولا رمزاً غير مقروء بجانب كلمة «مبيع» في الرأس ولا طريقة تفسير صيغة التاريخ؛ هذه ليست مشاكل.
+
+أجب بكائن JSON واحد فقط وبلا أي شرح أو علامات ماركداون، وبهذا الشكل:
+{"quality":{"ok":true,"problems":[]},"header":{"supplier_name":"","customer_name":"","invoice_no":"","date":"","time":"","gross_total":0,"qty_total":0,"discount_percent":0,"discount_value":0,"net_total":0},"lines":[{"no":1,"name":"","qty":0,"unit_price":0,"total":0}]}`;
+function parseJson(t){const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a<0||b<0)throw new Error('ردّ غير مفهوم');return JSON.parse(t.slice(a,b+1));}
+const CHUNK=3;
+function pagesNote(a,b,n){return n>1?'\n\nملاحظة عن هذه الدفعة: الصور المرفقة هنا هي الصفحات من '+(a+1)+' إلى '+b+' من أصل '+n+' صفحات لفاتورة واحدة بالترتيب. اقرأ أسطر المواد الظاهرة في هذه الصور فقط ولا تكرر سطراً مرتين. رأس الفاتورة (المورد والرقم والتاريخ) يظهر غالباً في كل صفحة، وصندوق المجاميع (المجموع والكميات والحسم والصافي) غالباً في الصفحة الأخيرة فقط: ما لم يظهر في هذه الصور فضع مكانه null ولا تخمّنه ولا تحسبه.':'';}
+function mergeParts(parts,ranges){
+  const emp=v=>v===null||v===undefined||v==='';
+  const H={};
+  ['supplier_name','customer_name','invoice_no','date','time'].forEach(k=>{const p=parts.find(x=>x.header&&!emp(x.header[k]));H[k]=p?p.header[k]:'';});
+  ['gross_total','qty_total','net_total'].forEach(k=>{const p=[...parts].reverse().find(x=>x.header&&!emp(x.header[k])&&Number(x.header[k])!==0);H[k]=p?p.header[k]:null;});
+  ['discount_percent','discount_value'].forEach(k=>{const p=[...parts].reverse().find(x=>x.header&&!emp(x.header[k]));H[k]=p?p.header[k]:null;});
+  const probs=[];
+  parts.forEach((x,i)=>((x.quality&&x.quality.problems)||[]).forEach(t=>probs.push('الصفحات '+ranges[i]+': '+t)));
+  const nos=[...new Set(parts.map(x=>x.header&&x.header.invoice_no).filter(v=>!emp(v)).map(v=>String(v).trim()))];
+  if(nos.length>1)probs.push('اختلف رقم الفاتورة بين الصفحات ('+nos.join('، ')+'): تأكد أنها كلها فاتورة واحدة.');
+  const lines=parts.flatMap(x=>x.lines||[]).map((l,i)=>({...l,no:i+1}));
+  return {quality:{ok:parts.every(x=>x.quality&&x.quality.ok)&&nos.length<=1,problems:probs},header:H,lines};
+}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function shrinkBlob(b,max,q){
+  const bm=await createImageBitmap(b),k=Math.min(1,max/Math.max(bm.width,bm.height)),c=document.createElement('canvas');
+  c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(r,'image/jpeg',q));
+}
+/* طلب القراءة: عند فشل الطلب يُعاد حتى ثلاث مرات بانتظار قصير وبصور أصغر حجماً (فشل الطلب غالباً من حجم الصور أو ازدحام الخدمة) */
+async function sampleRetry(prompt,blobs){
+  let last=null;const plan=[[null,0],[1900,.86],[1500,.8]];
+  for(let k=0;k<plan.length;k++){
+    try{
+      const imgs=plan[k][0]?await Promise.all(blobs.map(b=>shrinkBlob(b,plan[k][0],plan[k][1]))):blobs;
+      S.lastBytes=imgs.reduce((a,b)=>a+b.size,0);
+      return await S.sample(prompt,{images:imgs,modelTier:'complex',cache:false});
+    }catch(e){
+      last=e;if(e&&(e.code==='not_granted'||e.name==='AbortError'))throw e;
+      if(k<plan.length-1){const st=$('readStatus');if(st)st.textContent='تعذّر الطلب، أعيد المحاولة بصور أصغر ('+(k+2)+' من '+plan.length+')…';await sleep(3000*(k+1));}
+    }
+  }
+  throw last;
+}
+async function readOnce(prog){
+  const blobs=S.files.map(f=>f.blob),n=blobs.length,parts=[],ranges=[];
+  for(let i=0;i<n;i+=CHUNK){
+    const j=Math.min(i+CHUNK,n);if(prog)prog(i+1,j,n);
+    const r=await sampleRetry(PROMPT+pagesNote(i,j,n),blobs.slice(i,j));
+    parts.push(parseJson(r.text));ranges.push((i+1)===j?String(j):(i+1)+'-'+j);
+  }
+  const rd=parts.length===1?parts[0]:mergeParts(parts,ranges);
+  (rd.lines||[]).forEach(l=>{l.name=Logic.arName(l.name);});
+  return rd;
+}
+$('readBtn').addEventListener('click',async()=>{
+  $('readBtn').disabled=true;S.reads=[];S.cur=null;S.map=[];S.edited=false;
+  ['s2','s3','s4'].forEach(i=>$(i).classList.add('hidden'));
+  try{
+    const pr=(w)=>(x,y,n)=>{$('readStatus').textContent=w+(n>1?' — الصفحات '+x+(y>x?'-'+y:'')+' من '+n:'')+'…';};
+    const a=await readOnce(pr('القراءة الأولى'));
+    const b=await readOnce(pr('القراءة الثانية المستقلة'));
+    S.reads=[a,b];$('readStatus').textContent='';
+    afterRead();
+  }catch(err){
+    $('readStatus').textContent='';
+    $('s2').classList.remove('hidden');
+    $('gate').innerHTML='<div class="msg bad">تعذّرت القراءة: '+esc(err.message||err.code||err)+(err.code?' ['+esc(err.code)+']':'')+(S.lastBytes?' — حجم صور آخر طلب '+(S.lastBytes/1048576).toFixed(1)+' ميغابايت':'')+'. جُرّبت ثلاث محاولات تلقائياً. انتظر دقيقة ثم اضغط «اقرأ الفاتورة» من جديد؛ وإن تكرر فاقرأ الصفحات على دفعتين.</div>';$('review').innerHTML='';
+  }
+  updReadBtn();
+});
+
+function afterRead(){
+  const [a,b]=S.reads;const R=Logic.reconcile(a,b);
+  S.qtAuto=undefined;
+  S.cur=R.merged;S.cur.header=S.cur.header||{};S.cur.lines=S.cur.lines||[];S.nameDiffs=R.nameDiffs;
+  const V=Logic.validate(S.cur);
+  const qp=[...new Set([...(a.quality?.problems||[]),...(b.quality?.problems||[])])];
+  S.edited=false;
+  $('s2').classList.remove('hidden');
+  const soft=[...V.soft];
+  R.notes.forEach(x=>soft.push(x));
+  if(R.nameDiffs.length)soft.push('اختلفت القراءتان في كتابة اسم '+R.nameDiffs.length+' مادة (السطور '+R.nameDiffs.map(d=>d.i+1).join('، ')+'): تُراجَع الأسماء في خطوة المطابقة.');
+  const PGW=/مفقود|مكرر|لقطت|نفس الصفحة|ناقص|غير متتالي|ترتيب/;
+  qp.filter(x=>PGW.test(x)).reverse().forEach(x=>soft.unshift('⚠ تنبيه عن الصفحات (من القارئ): '+x));
+  qp.filter(x=>!PGW.test(x)&&!/اسم المورد|المورد غير|اسم الشركة|رمز غير مقروء|C\?\?|التاريخ مطبوع|يوم\/شهر|صيغة (?:يوم|التاريخ)|فُسِّر|فسّر/.test(x)).slice(0,4).forEach(x=>soft.push('ملاحظة القارئ: '+x));
+  let html;
+  if(V.hard.length){
+    html='<div class="msg bad"><b>مشكلة في المواد نفسها (الاسم أو الكمية أو السعر أو الإجمالي) — لا يمكن تجاوزها:</b><ul>'+V.hard.slice(0,10).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+    if(soft.length)html+='<div class="msg warn"><b>ملاحظات أخرى:</b><ul>'+soft.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+    html+='<div class="row"><button class="danger" id="retake">إعادة الالتقاط</button><button class="sec" id="manual">المتابعة بالتصحيح اليدوي</button></div>';
+    $('gate').innerHTML=html;$('review').innerHTML='';
+    $('retake').onclick=resetAll;
+    $('manual').onclick=()=>{S.edited=true;$('gate').innerHTML='<div class="msg warn">وضع التصحيح اليدوي: القيم أدناه من القراءتين. صحّح ما يلزم بحسب المطبوع في الورقة؛ لا تُتجاهل أخطاء المواد (الاسم والكمية والسعر والإجمالي) أبداً.</div>'+(soft.length?'<div class="msg warn"><ul>'+soft.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>':'');renderReview(true);};
+    return;
+  }
+  html='<div class="msg ok">المواد سليمة حسابياً: (الكمية × المفرد = الإجمالي) لكل مادة، واعتُمدت الأرقام المطبوعة وأُهمل خط اليد.</div>';
+  if(soft.length)html+='<div class="msg warn"><b>ملاحظات (لا تمنع المتابعة، راجعها ثم اضغط «تجاهل الملاحظات وتابع»):</b><ul>'+soft.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+  $('gate').innerHTML=html;
+  renderReview();
+}
+
+/* ---------- review / edit ---------- */
+function effLines(){return S.cur.lines.map(l=>({qty:Number(l.qty),price:Number(l.unit_price),total:Number(l.total)}));}
+function renderReview(openMats){
+  const H=S.cur.header,L=S.cur.lines;
+  if(S.qtAuto===undefined)S.qtAuto=(H.qty_total===null||H.qty_total===undefined||H.qty_total==='');
+  if(S.qtAuto)H.qty_total=Logic.validate(S.cur).sumPieces;
+  let h='<div class="grid2">';
+  const fld=(k,lbl,ty)=>`<div><label>${lbl}</label><input data-h="${k}" type="${ty||'text'}" value="${esc(H[k]??'')}"></div>`;
+  h+=fld('invoice_no','رقم الفاتورة (المرجع)')+fld('qty_total','إجمالي الكميات','number');
+  h+='</div><div id="qtHint" class="small" style="margin:4px 0 8px"></div><details id="mats" class="mats"'+(openMats?' open':'')+'><summary>تدقيق المواد (كما في الورقة) — '+L.length+' مادة <span class="small">اضغط للعرض والتعديل</span></summary><div class="rt-wrap" style="overflow:auto;margin-top:8px"><table class="rt"><tr class="h"><th>#</th><th>المادة (كما في الورقة)</th><th>الكمية</th><th>المفرد</th><th>الإجمالي</th></tr>';
+  L.forEach((l,i)=>{
+    h+=`<tr><td class="idx">${i+1}</td><td class="nm full" data-lb="المادة (كما في الورقة)"><input data-l="${i}" data-k="name" value="${esc(l.name)}"></td><td data-lb="الكمية"><input data-l="${i}" data-k="qty" type="number" inputmode="decimal" value="${esc(l.qty??'')}"></td><td data-lb="المفرد"><input data-l="${i}" data-k="unit_price" type="number" inputmode="decimal" value="${esc(l.unit_price??'')}"></td><td data-lb="الإجمالي"><input data-l="${i}" data-k="total" type="number" inputmode="decimal" value="${esc(l.total??'')}"></td></tr>`;
+  });
+  h+='</table></div></details><div id="vres"></div><div class="row"><button id="toMap">متابعة إلى مطابقة الأصناف</button></div>';
+  $('review').innerHTML=h;
+  $('review').querySelectorAll('input[data-h]').forEach(el=>el.addEventListener('input',()=>{const k=el.dataset.h;if(k==='qty_total')S.qtAuto=false;H[k]=el.type==='number'&&el.value!==''?Number(el.value):el.value;S.edited=true;showV();}));
+  $('review').querySelectorAll('input[data-l]').forEach(el=>el.addEventListener('input',()=>{const l=L[el.dataset.l],k=el.dataset.k;l[k]=k==='name'?el.value:(el.value===''?null:Number(el.value));S.edited=true;showV();}));
+  $('toMap').onclick=()=>{if(!showV())return;buildMap();};
+  showV();
+}
+function showV(){
+  const V=Logic.validate(S.cur);
+  const H0=S.cur.header;
+  if(S.qtAuto){H0.qty_total=V.sumPieces;const qi=document.querySelector('input[data-h="qty_total"]');if(qi&&document.activeElement!==qi)qi.value=V.sumPieces;}
+  const qh=$('qtHint');
+  if(qh){
+    if(S.qtAuto){
+      const cs=[];S.cur.lines.forEach((l,i)=>{const f=Logic.pieceFactor(l.name);if(f>1&&Number(l.qty)>0)cs.push('المادة '+(i+1)+': '+l.qty+' كرتون × '+f+' = '+Logic.r2(l.qty*f));});
+      qh.textContent='محسوب تلقائياً (لا يوجد مجموع مطبوع): مجموع القطع = '+V.sumPieces+(cs.length?' — '+cs.join('، '):'');
+    }else qh.textContent='';
+  }
+  let h='';
+  if(V.hard.length)h+='<div class="msg bad"><b>أخطاء في المواد — يجب تصحيحها (لا تُتجاهل):</b><ul>'+V.hard.map(e=>'<li>'+esc(e)+'</li>').join('')+'</ul></div>';
+  if(V.soft.length)h+='<div class="msg warn"><b>ملاحظات (لا تمنع المتابعة):</b><ul>'+V.soft.map(e=>'<li>'+esc(e)+'</li>').join('')+'</ul></div>';
+  if(!V.hard.length&&!V.soft.length)h='<div class="msg ok">نجحت كل الفحوص الحسابية: (الكمية × المفرد = الإجمالي) لكل مادة، '+(S.qtAuto?'وإجمالي الكميات محسوب من المواد (الكراتين × القطع في الكرتون).':'ومجموع الكميات مع إجمالي الكميات المطبوع.')+'</div>';
+  $('vres').innerHTML=h;$('toMap').disabled=V.hard.length>0;
+  $('toMap').textContent=V.soft.length?'تجاهل الملاحظات وتابع إلى مطابقة الأصناف':'متابعة إلى مطابقة الأصناف';
+  return V.hard.length===0;
+}
+/* ---------- mapping (only unresolved lines are shown) ---------- */
+const byCode=c=>S.cat.items.get(c);
+/* ---- remembered manual choices: paper name (+company) -> Siraj code ---- */
+const LK='learn_v1';
+const lkey=n=>S.group+'|'+Logic.mkey(n);
+function lgetAll(){try{return JSON.parse(localStorage.getItem(LK)||'{}')||{};}catch(e){return S._learn||{};}}
+function lsetAll(o){S._learn=o;try{localStorage.setItem(LK,JSON.stringify(o));}catch(e){}}
+function lcount(){return Object.keys(lgetAll()).length;}
+function pool(){return S.allGroups?S.items:S.pool;}
+function qtyLeft(i){const m=S.map[i],e=effLines()[i];const Q=Logic.r2(e.qty*m.factor);const sq=m.splits.reduce((s,x)=>s+(Number(x.qty)||0),0);return Logic.r2(Q-sq);}
+function buildMap(){
+  const eff=effLines();
+  S.map=S.cur.lines.map((l,i)=>{
+    const r=Logic.autoMatch(l.name,S.pool,S.group,byCode);
+    const L=lgetAll()[lkey(l.name)];
+    if(L&&byCode(L.code)){r.auto=L.code;r.factor=L.factor||r.factor;r.via='learned';r.hints=[L.code,...(r.hints||[]).filter(c=>c!==L.code)];}
+    const f=Math.max(1,Number(r.factor)||1);const m={factor:f,splits:[],hints:r.hints,auto:!!r.auto,via:r.via,skip:false};
+    if(!r.auto&&Number(eff[i].qty)>0&&Number(eff[i].price)===0&&Number(eff[i].total)===0)m.skip=true; /* مادة مجانية/دعائية غير مطابَقة: لا تُسجَّل */
+    if(r.auto)m.splits.push({code:r.auto,qty:Logic.r2(eff[i].qty*f)});
+    return m;});
+  $('s3').classList.remove('hidden');renderMap();$('s3').scrollIntoView({behavior:'smooth'});
+}
+function renderMap(){
+  const eff=effLines();let h='';
+  const autoIdx=[],manIdx=[];
+  const skipIdx=[];
+  S.cur.lines.forEach((l,i)=>(S.map[i].skip?skipIdx:S.map[i].auto?autoIdx:manIdx).push(i));
+  const pending=manIdx.filter(i=>!(S.map[i].splits.length&&Math.abs(qtyLeft(i))<0.0001)).length;
+  h+=`<div class="msg ${pending?'warn':'ok'}">${pending?`بقي <b>${pending}</b> من ${manIdx.length} مادة تحتاج تحديد مقابلها في سراج.`:(manIdx.length?'تم تحديد كل المواد.':'طُوبقت كل المواد تلقائياً.')} <span class="small">(طُوبق ${autoIdx.length} تلقائياً)</span></div>`;
+  h+=`<div class="small" style="margin:4px 0">المادة التي تختارها من خانة البحث تُحفظ افتراضياً لنفس الاسم في الفواتير القادمة (عند إنشاء ملف الاستيراد).</div>`;
+  h+=`<label class="small"><input type="checkbox" id="allg" ${S.allGroups?'checked':''}> ابحث في كل الشركات (لصنف ليس ضمن الشركة المختارة)</label>`;
+  manIdx.forEach(i=>{
+    const l=S.cur.lines[i],m=S.map[i],e=eff[i],Q=Logic.r2(e.qty*m.factor);const sq=m.splits.reduce((s,x)=>s+(Number(x.qty)||0),0);const rem=Logic.r2(Q-sq);
+    const done=m.splits.length&&Math.abs(rem)<0.0001;
+    h+=`<div class="pl ${done?'done':'todo'}" data-i="${i}"><div><b>${i+1}. ${esc(l.name)}</b></div>
+    <div class="small">الورقة: ${fmt(e.qty)} × ${fmt(e.price)} = ${fmt(e.total)}</div>
+    <div class="row" style="margin:6px 0"><span class="small">قطع سراج في وحدة الورقة (للكراتين):</span><input type="number" inputmode="numeric" min="1" data-f="${i}" value="${m.factor}" style="width:70px"></div><div class="stat"><span>المطلوب توزيعه: <b>${fmt(Q)}</b></span><span>الموزَّع: <b>${fmt(sq)}</b></span><span>المتبقي: <b style="color:${Math.abs(rem)<0.0001?'var(--ok)':'var(--bad)'}">${fmt(rem)}</b></span></div>`;
+    if(m.splits.length)h+='<table class="rt"><tr class="h"><th>صنف سراج</th><th>الرمز</th><th>الكمية</th><th>الإجمالي</th><th></th></tr>';
+    const pre=Logic.sirajLines([{qty:Q,total:e.total}],[{factor:1,splits:m.splits}]).lines;
+    m.splits.forEach((s,j)=>{const it=byCode(s.code);const pl=pre[j];h+=`<tr><td class="full" data-lb="صنف سراج"><b>${esc(it?it.name:s.code)}</b></td><td class="n" data-lb="الرمز">${esc(s.code)}</td><td data-lb="الكمية"><input type="number" inputmode="decimal" data-sq="${i}:${j}" value="${s.qty}"></td><td class="n" data-lb="الإجمالي">${pl&&Math.abs(rem)<0.0001?fmt(pl.total):'—'}</td><td class="full"><button class="sec" data-rm="${i}:${j}">حذف</button></td></tr>`;});
+    if(m.splits.length)h+='</table>';
+    const avail=(m.hints||[]).filter(c=>!m.splits.some(s=>s.code===c));
+    if(avail.length)h+='<div style="margin-top:6px"><span class="small">اقتراحات (اضغط للإضافة):</span> '+avail.map(c=>`<span class="chip" data-add="${i}:${c}">${esc(byCode(c).name)}</span>`).join('')+'</div>';
+    h+=`<div style="margin-top:6px"><input placeholder="ابحث عن صنف بالاسم أو الرمز" data-q="${i}" style="width:100%"><div class="sr hidden" data-sr="${i}"></div></div></div>`;
+  });
+  if(skipIdx.length){
+    h+=`<details style="margin:8px 0"><summary><b>مواد مجانية (سعر صفر) لم تُطابَق — لن تُسجَّل (${skipIdx.length})</b> — اضغط للمراجعة</summary><table class="rt" style="margin-top:6px"><tr class="h"><th>#</th><th>المادة في الورقة</th><th>الكمية</th><th></th></tr>`;
+    skipIdx.forEach(i=>{h+=`<tr><td class="idx">${i+1}</td><td class="full" data-lb="المادة في الورقة">${esc(S.cur.lines[i].name)}</td><td class="n" data-lb="الكمية">${fmt(eff[i].qty)}</td><td class="full"><button class="sec" data-unskip="${i}">إدراجها وتحديد صنفها</button></td></tr>`;});
+    h+='</table></details>';
+  }
+  if(autoIdx.length){
+    h+=`<details style="margin:8px 0"><summary><b>مواد طُوبقت تلقائياً (${autoIdx.length})</b> — راجعها إن شئت</summary><table class="rt" style="margin-top:6px"><tr class="h"><th>#</th><th>المادة في الورقة</th><th>الكمية</th><th>صنف سراج</th><th>الرمز</th><th></th></tr>`;
+    autoIdx.forEach(i=>{const m=S.map[i],it=byCode(m.splits[0].code);h+=`<tr><td class="idx">${i+1}</td><td class="full" data-lb="المادة في الورقة">${esc(S.cur.lines[i].name)}</td><td class="n" data-lb="الكمية">${fmt(eff[i].qty)}${m.factor>1?' × '+m.factor+' = '+fmt(Logic.r2(eff[i].qty*m.factor)):''}</td><td class="n" data-lb="الرمز">${esc(it.code)}</td><td class="full" data-lb="صنف سراج"><b>${esc(it.name)}</b>${m.via==='learned'?' <span class="chip" style="cursor:default">اختيارك المحفوظ</span>':''}</td><td class="full"><button class="sec" data-unauto="${i}">تغيير</button>${m.via==='learned'?' <button class="sec" data-forget="'+i+'">نسيان</button>':''}</td></tr>`;});
+    h+='</table></details>';
+  }
+  h+='<div id="mapRes"></div><div class="row"><button id="toOut">إنشاء ملف الاستيراد</button></div>';
+  $('map').innerHTML=h;
+  const root=$('map');
+  $('allg').addEventListener('change',e=>{S.allGroups=e.target.checked;});
+  root.querySelectorAll('[data-forget]').forEach(el=>el.addEventListener('click',()=>{const i=el.dataset.forget;const o=lgetAll();delete o[lkey(S.cur.lines[i].name)];lsetAll(o);S.map[i].auto=false;S.map[i].via=null;renderMap();}));
+  root.querySelectorAll('[data-unskip]').forEach(el=>el.addEventListener('click',()=>{S.map[el.dataset.unskip].skip=false;renderMap();}));
+  root.querySelectorAll('[data-unauto]').forEach(el=>el.addEventListener('click',()=>{S.map[el.dataset.unauto].auto=false;renderMap();}));
+  root.querySelectorAll('input[data-f]').forEach(el=>el.addEventListener('change',()=>{S.map[el.dataset.f].factor=Math.max(1,Number(el.value)||1);renderMap();}));
+  root.querySelectorAll('input[data-sq]').forEach(el=>el.addEventListener('change',()=>{const [i,j]=el.dataset.sq.split(':');S.map[i].splits[j].qty=Number(el.value);renderMap();}));
+  root.querySelectorAll('[data-rm]').forEach(el=>el.addEventListener('click',()=>{const [i,j]=el.dataset.rm.split(':');S.map[i].splits.splice(j,1);renderMap();}));
+  const addSplit=(i,c)=>{const m=S.map[i];if(m.splits.some(s=>s.code===c))return;const left=qtyLeft(i);m.splits.push({code:c,qty:left>0?left:1});};
+  root.querySelectorAll('[data-add]').forEach(el=>el.addEventListener('click',()=>{const [i,c]=el.dataset.add.split(':');addSplit(i,c);renderMap();}));
+  root.querySelectorAll('input[data-q]').forEach(el=>el.addEventListener('input',()=>{const i=el.dataset.q;const box=root.querySelector(`[data-sr="${i}"]`);const res=Logic.search(pool(),el.value,30);box.classList.toggle('hidden',!res.length);box.innerHTML=res.map(it=>`<div data-pick="${i}:${it.code}">${esc(it.name)} <span class="small">(${esc(it.code)} — ${esc(it.grp)})</span></div>`).join('');
+    box.querySelectorAll('[data-pick]').forEach(d=>d.addEventListener('click',()=>{const [ii,c]=d.dataset.pick.split(':');addSplit(ii,c);S.map[ii].learnCode=c;renderMap();}));}));
+  $('toOut').onclick=buildOut;
+}
+
+/* ---------- output ---------- */
+function buildOut(){
+  const effAll=effLines(),keep=effAll.map((e,i)=>i).filter(i=>!S.map[i].skip),eff=keep.map(i=>effAll[i]),MP=keep.map(i=>S.map[i]);
+  const R=Logic.sirajLines(eff.map((e,i)=>({qty:Logic.r2(e.qty*MP[i].factor),total:e.total})),MP.map(m=>({factor:1,splits:m.splits})));
+  const errs=R.errors.map(e=>e.replace(/^السطر (\d+):/,(m,k)=>'السطر '+(keep[k-1]+1)+':'));
+  const sumT=Logic.r2(R.lines.reduce((s,x)=>s+x.total,0)),effT=Logic.r2(eff.reduce((s,x)=>s+x.total,0));
+  const sumQ=Logic.r2(R.lines.reduce((s,x)=>s+x.qty,0)),effQ=Logic.r2(eff.reduce((s,x,i)=>s+x.qty*MP[i].factor,0));
+  if(!errs.length){if(Math.abs(sumT-effT)>0.001)errs.push('مجموع إجماليات سراج '+fmt(sumT)+' لا يساوي إجمالي الورقة '+fmt(effT));if(Math.abs(sumQ-effQ)>0.001)errs.push('مجموع كميات سراج لا يطابق الورقة');}
+  $('s4').classList.remove('hidden');
+  if(errs.length){$('out').innerHTML='<div class="msg bad"><b>لا يمكن إنشاء الملف:</b><ul>'+errs.map(e=>'<li>'+esc(e)+'</li>').join('')+'</ul></div>';$('s4').scrollIntoView({behavior:'smooth'});return;}
+  {const o=lgetAll();S.cur.lines.forEach((l,i)=>{const m=S.map[i];if(!m.auto&&m.learnCode&&m.splits.length===1&&m.splits[0].code===m.learnCode&&byCode(m.learnCode))o[lkey(l.name)]={code:m.splits[0].code,factor:m.factor};});lsetAll(o);}
+  const bytes=Siraj.build(S.cat,R.lines);
+  S.bytes=bytes;const H=S.cur.header;
+  let h='<div class="msg ok"><b>تم إنشاء ملف الاستيراد.</b> '+R.lines.length+' سطراً، المجموع '+fmt(sumT)+'، وهو يطابق مجموع الورقة المطبوع.</div>';
+  h+='<table class="rt"><tr class="h"><th>#</th><th>صنف سراج</th><th>الرمز</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>سطر الورقة</th></tr>';
+  R.lines.forEach((x,i)=>h+=`<tr><td class="idx">${i+1}</td><td class="full" data-lb="صنف سراج"><b>${esc(byCode(x.code).name)}</b></td><td class="n" data-lb="الرمز">${esc(x.code)}</td><td class="n" data-lb="الكمية">${fmt(x.qty)}</td><td class="n" data-lb="السعر">${fmt(x.price)}</td><td class="n" data-lb="الإجمالي">${fmt(x.total)}</td><td class="n" data-lb="سطر الورقة">${x.paperLine}</td></tr>`);
+  h+=`<tr class="tot"><td colspan="3" class="full">المجموع</td><td class="n" data-lb="الكمية">${fmt(sumQ)}</td><td class="e"></td><td class="n" data-lb="الإجمالي">${fmt(sumT)}</td><td class="e"></td></tr></table>`;
+  h+=`<div class="msg info" style="margin-top:10px"><b>ما تُدخله يدوياً في سراج بعد الاستيراد (لا يحمله الملف):</b><ul>
+  <li>المورد: <b>${esc(S.group)}</b></li><li>المرجع: <b>${esc(H.invoice_no||'')}</b></li>
+  <li>طريقة الدفع: آجل. الحسم والصافي: أدخلهما من الورقة الأصلية، ثم قارن إجمالي سراج بمجموع المواد <b>${fmt(effT)}</b>.</li></ul></div>`;
+  h+='<div class="row"><button id="dl">حفظ ملف الاستيراد</button><span id="dlst" class="small"></span></div><div class="small" style="margin-top:6px">الصفحة تحفظ الملف بالامتداد <b>.txt</b> بحكم قيود المنصة. إن لم يظهر في نافذة سراج فاختر «كل الملفات» أو احذف <b>.txt</b> من اسمه في ويندوز.</div>';
+  $('out').innerHTML=h;
+  $('dl').onclick=async()=>{
+    if(!S.downloads){$('dlst').textContent='الحفظ غير متاح في هذا العرض.';return;}
+    const nm=('فاتورة_'+(H.invoice_no||'')+'_'+S.group+'_للاستيراد').replace(/[\\/:*?"<>|\s]+/g,'_')+'.txt';
+    try{await S.downloads.save({filename:nm,data:S.bytes});$('dlst').textContent='تم الحفظ.';}catch(e){$('dlst').textContent=e&&e.code==='declined'?'أُلغي الحفظ.':'تعذّر الحفظ: '+(e&&e.message||e);}
+  };
+  $('s4').scrollIntoView({behavior:'smooth'});
+}
+})();
+</script>
+</body>
+</html>
